@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CroupGuard – Student Portfolio Project</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #f8f9fa;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    
+    /* Header */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #7c3aed;
+      text-decoration: none;
+    }
+    .nav-links a {
+      margin-left: 24px;
+      text-decoration: none;
+      color: #4b5563;
+      font-weight: 500;
+    }
+    .nav-links a:hover { color: #7c3aed; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+      color: white;
+      padding: 80px 0 70px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .hero h1 span { color: #f9a8d4; }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 650px;
+      margin: 0 auto 32px;
+      opacity: 0.95;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    /* Sections */
+    section { padding: 70px 0; }
+    .section-title {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: #6b7280;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      border: 1px solid #f3f4f6;
+    }
+    .feature-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #7c3aed;
+    }
+
+    /* About */
+    .about-box {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    .about-box p { margin-bottom: 16px; color: #374151; }
+
+    /* Disclaimer */
+    .disclaimer {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: #92400e;
+    }
+
+    /* Languages */
+    .lang-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .lang-tag {
+      background: #ede9fe;
+      color: #5b21b6;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: #1f2937;
+      color: #d1d5db;
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.95rem;
+    }
+    footer a { color: #c4b5fd; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <a href="#" class="logo">CroupGuard</a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#disclaimer">Disclaimer</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">Student Portfolio Project</div>
+      <h1>Analyze <span>croup</span> coughs instantly</h1>
+      <p>An independent concept exploring on-device AI for cough analysis, with strong focus on privacy and multilingual support for Ethiopian languages.</p>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <h2 class="section-title">Core Features</h2>
+      <p class="section-subtitle">Designed as a research-oriented prototype focused on accessibility and privacy.</p>
+      
+      <div class="features">
+        <div class="feature-card">
+          <h3>On-Device AI Analysis</h3>
+          <p>Records a short cough and estimates the likelihood of croup-like acoustic features (barking quality, pitch, duration) using local processing.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Multilingual Support</h3>
+          <p>Full interface planned for Amharic, Afaan Oromoo (Oromiffa), Tigrinya, English, and other major languages to improve health equity.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Privacy-First Design</h3>
+          <p>Audio stays on the device by default. No raw recordings are uploaded unless the user explicitly chooses to contribute data.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Symptom Tracking</h3>
+          <p>Ability to log multiple recordings over time and view trends, with option to export a simple summary for a doctor.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Smart Triage Guidance</h3>
+          <p>Quick questions (age, fever, breathing difficulty) paired with evidence-based next-step suggestions — always with strong medical disclaimers.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Educational Content</h3>
+          <p>Clear explanations of what croup is, why the cough sounds distinctive, and important red-flag warning signs.</p>
+        </div>
+      </div>
+
+      <div class="lang-tags">
+        <span class="lang-tag">Amharic</span>
+        <span class="lang-tag">Afaan Oromoo</span>
+        <span class="lang-tag">Tigrinya</span>
+        <span class="lang-tag">English</span>
+        <span class="lang-tag">+ more</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" style="background: #f3f4f6;">
+    <div class="container">
+      <h2 class="section-title">About This Project</h2>
+      <div class="about-box">
+        <p><strong>CroupGuard</strong> is an independent student portfolio project. It explores how on-device audio classification and thoughtful multilingual design could help caregivers better understand concerning coughs — especially the distinctive barking cough associated with croup.</p>
+        
+        <p>The project was created to practice product thinking, AI concept design, and accessible interface planning, with particular attention to language support for Amharic, Afaan Oromoo, and Tigrinya speakers.</p>
+        
+        <p>This is a <strong>concept / prototype</strong>, not a finished medical product. No real clinical validation has been performed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="disclaimer">
+    <div class="container">
+      <div class="disclaimer">
+        <strong>Important Medical Disclaimer:</strong><br>
+        CroupGuard is a student portfolio concept only. It is <strong>not</strong> a medical device, not clinically validated, and must never be used to diagnose or make real medical decisions. Always consult a qualified healthcare professional for any health concerns, especially breathing difficulties in children.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>CroupGuard — Student Portfolio Project</p>
+      <p style="margin-top: 8px; opacity: 0.8;">Created as an independent exploration of AI + health accessibility</p>
+    </div>
+  </footer>
+
+</body>
+</html>
