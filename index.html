@@ -6,198 +6,162 @@
   <title>CroupGuard – Student Project</title>
   <style>
     :root {
-      --bg: #0f0f13;
-      --bg-alt: #09090b;
-      --card: #18181b;
-      --border: #27272a;
-      --text: #e5e7eb;
-      --muted: #a1a1aa;
-      --accent: #ec4899;
-      --accent2: #a855f7;
+      --bg: #0f0f13; --bg-alt: #09090b; --card: #18181b; --border: #27272a;
+      --text: #e5e7eb; --muted: #a1a1aa; --accent: #ec4899; --accent2: #a855f7;
+      --font-size: 16px;
     }
     [data-theme="light"] {
-      --bg: #f8fafc;
-      --bg-alt: #f1f5f9;
-      --card: #ffffff;
-      --border: #e2e8f0;
-      --text: #0f172a;
-      --muted: #64748b;
-      --accent: #db2777;
-      --accent2: #7c3aed;
+      --bg: #f8fafc; --bg-alt: #f1f5f9; --card: #ffffff; --border: #e2e8f0;
+      --text: #0f172a; --muted: #64748b; --accent: #db2777; --accent2: #7c3aed;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      transition: background 0.3s, color 0.3s;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      font-size: var(--font-size); transition: background 0.3s, color 0.3s;
     }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
     header {
-      background: color-mix(in srgb, var(--bg) 90%, transparent);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+      padding: 14px 0; position: sticky; top: 0; z-index: 100;
     }
-    .nav { display: flex; justify-content: space-between; align-items: center; }
+    .nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
     .logo {
-      display: flex; align-items: center; gap: 12px;
-      text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.3rem;
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+      color: var(--text); font-weight: 700; font-size: 1.25rem; white-space: nowrap;
     }
-    .logo-circles { width: 34px; height: 34px; position: relative; }
+    .logo-circles { width: 32px; height: 32px; position: relative; flex-shrink: 0; }
     .logo-circles::before, .logo-circles::after {
-      content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%;
+      content: ''; position: absolute; width: 19px; height: 19px; border-radius: 50%;
     }
     .logo-circles::before { background: #f472b6; top: 0; left: 0; }
     .logo-circles::after { background: #2dd4bf; bottom: 0; right: 0; }
-    .nav-right { display: flex; align-items: center; gap: 20px; }
-    .nav-links a {
-      color: var(--muted); text-decoration: none; margin-left: 22px;
-      font-weight: 500; font-size: 0.95rem;
-    }
+
+    .nav-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav-links { display: flex; gap: 18px; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 0.9rem; }
     .nav-links a:hover { color: var(--accent); }
-    .theme-btn {
-      background: var(--card); border: 1px solid var(--border);
-      color: var(--text); width: 40px; height: 40px; border-radius: 50%;
-      cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+
+    select, .ctrl-btn {
+      background: var(--card); border: 1px solid var(--border); color: var(--text);
+      border-radius: 8px; padding: 7px 10px; font-size: 0.85rem; cursor: pointer;
     }
+    .ctrl-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
 
     .hero {
-      padding: 90px 0 80px; text-align: center;
-      background: radial-gradient(ellipse at top, color-mix(in srgb, var(--accent2) 15%, transparent), transparent 70%);
+      padding: 80px 0 70px; text-align: center;
+      background: radial-gradient(ellipse at top, color-mix(in srgb, var(--accent2) 12%, transparent), transparent 70%);
     }
-    .hero h1 {
-      font-size: 3.1rem; font-weight: 800; line-height: 1.15; margin-bottom: 18px;
-    }
+    .hero h1 { font-size: 2.9rem; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
     .hero h1 span {
       background: linear-gradient(90deg, var(--accent), var(--accent2));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .hero p { font-size: 1.2rem; color: var(--muted); max-width: 640px; margin: 0 auto 36px; }
+    .hero p { font-size: 1.15rem; color: var(--muted); max-width: 620px; margin: 0 auto 32px; }
     .btn {
-      padding: 13px 28px; border-radius: 999px; font-weight: 600; font-size: 1rem;
+      padding: 12px 26px; border-radius: 999px; font-weight: 600; font-size: 0.95rem;
       cursor: pointer; border: none; text-decoration: none; display: inline-block;
     }
-    .btn-primary {
-      background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(236,72,153,0.3); }
+    .btn-primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; }
     .btn-secondary {
-      background: transparent; color: var(--text); border: 1px solid var(--border); margin-left: 12px;
+      background: transparent; color: var(--text); border: 1px solid var(--border); margin-left: 10px;
     }
 
-    section { padding: 75px 0; }
-    .section-title { font-size: 2.1rem; font-weight: 700; text-align: center; margin-bottom: 10px; }
+    section { padding: 70px 0; }
+    .section-title { font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 8px; }
     .section-title span {
       background: linear-gradient(90deg, var(--accent), var(--accent2));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .section-subtitle { text-align: center; color: var(--muted); max-width: 600px; margin: 0 auto 44px; }
+    .section-subtitle { text-align: center; color: var(--muted); max-width: 580px; margin: 0 auto 40px; }
 
-    .why-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px;
+    .why-grid, .features, .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;
     }
-    .why-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 28px;
+    .why-card, .feature-card, .step, .about-box, .feedback-box, .privacy-box, .contact-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 26px;
     }
-    .why-card h3 { font-size: 1.15rem; margin-bottom: 10px; color: var(--accent); }
-    .why-card p { color: var(--muted); font-size: 0.95rem; }
+    .why-card h3, .feature-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--accent); }
+    .why-card p, .feature-card p, .step p { color: var(--muted); font-size: 0.95rem; }
 
-    .steps {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px;
-    }
-    .step {
-      background: var(--card); border: 1px solid var(--border); border-radius: 18px;
-      padding: 28px; text-align: center;
-    }
+    .step { text-align: center; }
     .step-num {
-      width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      width: 38px; height: 38px; background: linear-gradient(135deg, var(--accent), var(--accent2));
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-weight: 700; margin: 0 auto 14px; color: white;
+      font-weight: 700; margin: 0 auto 12px; color: white; font-size: 0.95rem;
     }
-    .step h3 { margin-bottom: 8px; }
-    .step p { color: var(--muted); font-size: 0.95rem; }
-
-    .features {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px;
-    }
-    .feature-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 26px;
-    }
-    .feature-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
-    .feature-card p { color: var(--muted); font-size: 0.95rem; }
 
     .demo-box {
-      background: var(--card); border: 1px solid var(--border); border-radius: 22px;
-      padding: 44px 36px; max-width: 580px; margin: 0 auto; text-align: center;
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 40px 32px; max-width: 560px; margin: 0 auto; text-align: center;
     }
     .record-btn {
-      width: 86px; height: 86px; border-radius: 50%;
+      width: 82px; height: 82px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border: none; color: white; font-size: 1.7rem; cursor: pointer; margin: 18px 0;
+      border: none; color: white; font-size: 1.6rem; cursor: pointer; margin: 16px 0;
     }
     .record-btn.recording { background: #ef4444; animation: pulse 1.4s infinite; }
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.45); }
-      70% { box-shadow: 0 0 0 18px rgba(239,68,68,0); }
+      70% { box-shadow: 0 0 0 16px rgba(239,68,68,0); }
       100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
     }
     .result-box {
-      display: none; margin-top: 26px; padding: 24px;
-      background: var(--bg-alt); border-radius: 14px; border: 1px solid var(--border);
+      display: none; margin-top: 24px; padding: 22px;
+      background: var(--bg-alt); border-radius: 12px; border: 1px solid var(--border);
     }
     .result-box.show { display: block; }
-    .result-percentage { font-size: 2.8rem; font-weight: 800; margin: 8px 0; }
-    .low { color: #34d399; }
-    .medium { color: #fbbf24; }
+    .result-percentage { font-size: 2.6rem; font-weight: 800; margin: 6px 0; }
+    .low { color: #34d399; } .medium { color: #fbbf24; }
 
-    .about-box {
-      max-width: 700px; margin: 0 auto; background: var(--card);
-      border: 1px solid var(--border); border-radius: 18px; padding: 36px;
-    }
-    .about-box p { color: var(--muted); margin-bottom: 16px; font-size: 1.05rem; }
+    .about-box p { color: var(--muted); margin-bottom: 14px; }
     .about-box strong { color: var(--text); }
 
-    .feedback-box {
-      max-width: 520px; margin: 0 auto; background: var(--card);
-      border: 1px solid var(--border); border-radius: 18px; padding: 32px;
+    .feedback-count-box {
+      text-align: center; background: var(--bg-alt); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; margin-bottom: 24px;
+    }
+    .feedback-count-box .num {
+      font-size: 2.4rem; font-weight: 800; color: var(--accent); display: block;
     }
     .feedback-box textarea, .feedback-box input {
       width: 100%; background: var(--bg-alt); border: 1px solid var(--border);
-      color: var(--text); border-radius: 10px; padding: 12px; margin-bottom: 14px;
+      color: var(--text); border-radius: 10px; padding: 11px; margin-bottom: 12px;
       font-family: inherit; font-size: 0.95rem;
     }
-    .feedback-box textarea { min-height: 100px; resize: vertical; }
-    .feedback-count {
-      text-align: center; margin-top: 20px; color: var(--muted); font-size: 0.95rem;
-    }
-    .feedback-count strong { color: var(--accent); font-size: 1.3rem; }
+    .feedback-box textarea { min-height: 90px; resize: vertical; }
 
-    .contact-box {
-      text-align: center; background: var(--card); border: 1px solid var(--border);
-      border-radius: 18px; padding: 32px; max-width: 420px; margin: 0 auto;
+    .privacy-box h3 { margin-bottom: 12px; }
+    .privacy-box p, .privacy-box li { color: var(--muted); margin-bottom: 10px; font-size: 0.95rem; }
+    .privacy-box ul { padding-left: 20px; margin-bottom: 12px; }
+
+    .lang-tags {
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 18px;
     }
-    .contact-box a { color: var(--accent); font-weight: 600; font-size: 1.1rem; text-decoration: none; }
+    .lang-tag {
+      background: color-mix(in srgb, var(--accent) 15%, transparent);
+      color: var(--accent); padding: 5px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 500;
+    }
+
+    .contact-box { text-align: center; max-width: 400px; margin: 0 auto; }
+    .contact-box a { color: var(--accent); font-weight: 600; font-size: 1.05rem; text-decoration: none; }
 
     .disclaimer {
-      max-width: 700px; margin: 36px auto 0; text-align: center;
-      font-size: 0.88rem; color: var(--muted); line-height: 1.5;
+      max-width: 680px; margin: 32px auto 0; text-align: center;
+      font-size: 0.85rem; color: var(--muted);
     }
 
     footer {
-      border-top: 1px solid var(--border); padding: 36px 0; text-align: center;
-      color: var(--muted); font-size: 0.9rem;
+      border-top: 1px solid var(--border); padding: 32px 0; text-align: center;
+      color: var(--muted); font-size: 0.88rem;
     }
 
-    @media (max-width: 640px) {
-      .hero h1 { font-size: 2.1rem; }
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 2rem; }
       .nav-links { display: none; }
-      .btn-secondary { margin-left: 0; margin-top: 10px; }
+      .btn-secondary { margin-left: 0; margin-top: 10px; display: inline-block; }
     }
   </style>
 </head>
@@ -207,46 +171,63 @@
   <div class="container nav">
     <a href="#" class="logo">
       <div class="logo-circles"></div>
-      CroupGuard
+      <span data-i18n="brand">CroupGuard</span>
     </a>
-    <div class="nav-right">
+    <div class="nav-controls">
       <div class="nav-links">
-        <a href="#why">Why</a>
-        <a href="#how">How it Works</a>
-        <a href="#demo">Demo</a>
-        <a href="#about">About</a>
-        <a href="#feedback">Feedback</a>
+        <a href="#why" data-i18n="nav_why">Why</a>
+        <a href="#how" data-i18n="nav_how">How</a>
+        <a href="#demo" data-i18n="nav_demo">Demo</a>
+        <a href="#about" data-i18n="nav_about">About</a>
+        <a href="#feedback" data-i18n="nav_feedback">Feedback</a>
       </div>
-      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      <select id="langSelect" onchange="changeLanguage(this.value)" title="Language">
+        <option value="en">English</option>
+        <option value="am">አማርኛ (Amharic)</option>
+        <option value="om">Afaan Oromoo</option>
+        <option value="ti">ትግርኛ (Tigrinya)</option>
+        <option value="zh">中文 (Mandarin)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="ar">العربية</option>
+        <option value="bn">বাংলা (Bengali)</option>
+        <option value="pt">Português</option>
+        <option value="ru">Русский</option>
+        <option value="ur">اردو (Urdu)</option>
+        <option value="id">Bahasa Indonesia</option>
+      </select>
+      <button class="ctrl-btn" onclick="toggleTextSize()" title="Larger text">A+</button>
+      <button class="ctrl-btn" onclick="toggleTheme()" title="Theme">🌓</button>
     </div>
   </div>
 </header>
 
 <section class="hero">
   <div class="container">
-    <h1>Making early cough guidance<br><span>more accessible</span></h1>
-    <p>A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.</p>
-    <a href="#demo" class="btn btn-primary">Try the Demo</a>
-    <a href="#why" class="btn btn-secondary">See the Goal</a>
+    <h1 data-i18n="hero_title">Making early cough guidance<br><span>more accessible</span></h1>
+    <p data-i18n="hero_sub">A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.</p>
+    <a href="#demo" class="btn btn-primary" data-i18n="btn_demo">Try the Demo</a>
+    <a href="#why" class="btn btn-secondary" data-i18n="btn_goal">See the Goal</a>
   </div>
 </section>
 
 <section id="why">
   <div class="container">
-    <h2 class="section-title">The <span>Why</span></h2>
-    <p class="section-subtitle">This project started from a clear problem and a focused goal.</p>
+    <h2 class="section-title" data-i18n="why_title">The <span>Why</span></h2>
+    <p class="section-subtitle" data-i18n="why_sub">This project started from a clear problem and a focused goal.</p>
     <div class="why-grid">
       <div class="why-card">
-        <h3>The Problem</h3>
-        <p>Parents and caregivers often struggle to tell a routine cough from one that needs closer attention. When clear information is limited by language or access, that uncertainty grows.</p>
+        <h3 data-i18n="why_p1_t">The Problem</h3>
+        <p data-i18n="why_p1_d">Parents and caregivers often struggle to tell a routine cough from one that needs closer attention. When clear information is limited by language or access, that uncertainty grows.</p>
       </div>
       <div class="why-card">
-        <h3>The Goal</h3>
-        <p>Build a simple, privacy-respecting tool that gives clearer acoustic feedback and practical next-step guidance — available in languages that matter to more families, including Amharic, Afaan Oromoo, and Tigrinya.</p>
+        <h3 data-i18n="why_p2_t">The Goal</h3>
+        <p data-i18n="why_p2_d">Build a simple, privacy-respecting tool that gives clearer acoustic feedback and practical next-step guidance — available in languages that matter to more families.</p>
       </div>
       <div class="why-card">
-        <h3>The Approach</h3>
-        <p>Focus on on-device analysis so raw audio stays private, prioritize multilingual access from the start, and keep the experience calm and usable for stressed caregivers.</p>
+        <h3 data-i18n="why_p3_t">The Approach</h3>
+        <p data-i18n="why_p3_d">Focus on on-device analysis so raw audio stays private, prioritize multilingual access from the start, and keep the experience calm and usable for stressed caregivers.</p>
       </div>
     </div>
   </div>
@@ -254,23 +235,23 @@
 
 <section id="how" style="background: var(--bg-alt);">
   <div class="container">
-    <h2 class="section-title">How it <span>Works</span></h2>
-    <p class="section-subtitle">Three straightforward steps from recording to guidance.</p>
+    <h2 class="section-title" data-i18n="how_title">How it <span>Works</span></h2>
+    <p class="section-subtitle" data-i18n="how_sub">Three straightforward steps from recording to guidance.</p>
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
-        <h3>Record</h3>
-        <p>Capture a short cough sample using the phone microphone with simple quality feedback.</p>
+        <h3 data-i18n="how_1_t">Record</h3>
+        <p data-i18n="how_1_d">Capture a short cough sample using the phone microphone with simple quality feedback.</p>
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <h3>Analyze</h3>
-        <p>On-device processing evaluates pitch, duration, and barking characteristics without uploading audio by default.</p>
+        <h3 data-i18n="how_2_t">Analyze</h3>
+        <p data-i18n="how_2_d">On-device processing evaluates pitch, duration, and barking characteristics without uploading audio by default.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
-        <h3>Guide</h3>
-        <p>Receive a clear likelihood score and practical next-step suggestions based on the results.</p>
+        <h3 data-i18n="how_3_t">Guide</h3>
+        <p data-i18n="how_3_d">Receive a clear likelihood score and practical next-step suggestions based on the results.</p>
       </div>
     </div>
   </div>
@@ -278,50 +259,66 @@
 
 <section id="features">
   <div class="container">
-    <h2 class="section-title">Designed with <span>Intention</span></h2>
-    <p class="section-subtitle">Every major choice was made to support accessibility, privacy, and real-world usability.</p>
+    <h2 class="section-title" data-i18n="feat_title">Designed with <span>Intention</span></h2>
+    <p class="section-subtitle" data-i18n="feat_sub">Every major choice was made to support accessibility, privacy, and real-world usability.</p>
     <div class="features">
       <div class="feature-card">
-        <h3>On-Device Analysis</h3>
-        <p>Audio stays on the phone by default. Privacy is treated as a core requirement, not an afterthought.</p>
+        <h3 data-i18n="feat_1_t">On-Device Analysis</h3>
+        <p data-i18n="feat_1_d">Audio stays on the phone by default. Privacy is treated as a core requirement, not an afterthought.</p>
       </div>
       <div class="feature-card">
-        <h3>Multilingual from Day One</h3>
-        <p>Interface and guidance planned for Amharic, Afaan Oromoo, Tigrinya, English, and additional languages.</p>
+        <h3 data-i18n="feat_2_t">Multilingual from Day One</h3>
+        <p data-i18n="feat_2_d">Interface planned for Amharic, Afaan Oromoo, Tigrinya, and many other widely spoken languages.</p>
       </div>
       <div class="feature-card">
-        <h3>Calm, Clear Guidance</h3>
-        <p>Results are paired with practical next steps so caregivers are not left with a number and no context.</p>
+        <h3 data-i18n="feat_3_t">Calm, Clear Guidance</h3>
+        <p data-i18n="feat_3_d">Results are paired with practical next steps so caregivers are not left with only a number.</p>
       </div>
       <div class="feature-card">
-        <h3>Symptom Tracking</h3>
-        <p>Support for logging multiple recordings to observe change over hours or days.</p>
+        <h3 data-i18n="feat_4_t">Symptom Tracking</h3>
+        <p data-i18n="feat_4_d">Support for logging multiple recordings to observe change over hours or days.</p>
       </div>
       <div class="feature-card">
-        <h3>Educational Support</h3>
-        <p>Simple explanations of croup and red-flag signs to reduce uncertainty.</p>
+        <h3 data-i18n="feat_5_t">Educational Support</h3>
+        <p data-i18n="feat_5_d">Simple explanations of croup and red-flag signs to reduce uncertainty.</p>
       </div>
       <div class="feature-card">
-        <h3>Built for Real Conditions</h3>
-        <p>Designed with the understanding that many users may have limited connectivity or be under stress.</p>
+        <h3 data-i18n="feat_6_t">Built for Real Conditions</h3>
+        <p data-i18n="feat_6_d">Designed with limited connectivity and stressed users in mind.</p>
       </div>
+    </div>
+    <div class="lang-tags">
+      <span class="lang-tag">Amharic</span>
+      <span class="lang-tag">Afaan Oromoo</span>
+      <span class="lang-tag">Tigrinya</span>
+      <span class="lang-tag">English</span>
+      <span class="lang-tag">中文</span>
+      <span class="lang-tag">हिन्दी</span>
+      <span class="lang-tag">Español</span>
+      <span class="lang-tag">Français</span>
+      <span class="lang-tag">العربية</span>
+      <span class="lang-tag">বাংলা</span>
+      <span class="lang-tag">Português</span>
+      <span class="lang-tag">Русский</span>
+      <span class="lang-tag">اردو</span>
+      <span class="lang-tag">Indonesia</span>
     </div>
   </div>
 </section>
 
 <section id="demo" style="background: var(--bg-alt);">
   <div class="container">
-    <h2 class="section-title">Interactive <span>Demo</span></h2>
-    <p class="section-subtitle">A working prototype of the analysis flow. Results are simulated for demonstration.</p>
+    <h2 class="section-title" data-i18n="demo_title">Interactive <span>Demo</span></h2>
+    <p class="section-subtitle" data-i18n="demo_sub">A working prototype of the analysis flow. Results are simulated for demonstration.</p>
     <div class="demo-box">
-      <p style="color: var(--muted); margin-bottom: 6px;">Tap to simulate a cough analysis</p>
+      <p style="color: var(--muted); margin-bottom: 6px;" data-i18n="demo_ready">Tap to simulate a cough analysis</p>
       <button class="record-btn" id="recordBtn" onclick="startAnalysis()">🎤</button>
-      <p id="statusText" style="color: var(--muted); font-size: 0.95rem;">Ready</p>
+      <p id="statusText" style="color: var(--muted); font-size: 0.95rem;" data-i18n="status_ready">Ready</p>
       <div class="result-box" id="resultBox">
-        <div style="color: var(--muted); font-size: 0.95rem;">Croup Likelihood</div>
+        <div style="color: var(--muted); font-size: 0.95rem;" data-i18n="result_label">Croup Likelihood</div>
         <div class="result-percentage low" id="percentage">12%</div>
         <p id="resultText" style="color: var(--muted); margin-top: 6px;"></p>
-        <p style="margin-top: 14px; font-size: 0.85rem; color: var(--muted);">Demonstration only. Always consult a healthcare professional for real concerns.</p>
+        <p style="margin-top: 12px; font-size: 0.85rem; color: var(--muted);" data-i18n="result_note">Demonstration only. Always consult a healthcare professional for real concerns.</p>
       </div>
     </div>
   </div>
@@ -329,40 +326,59 @@
 
 <section id="about">
   <div class="container">
-    <h2 class="section-title">About the <span>Project</span></h2>
+    <h2 class="section-title" data-i18n="about_title">About the <span>Project</span></h2>
     <div class="about-box">
-      <p>CroupGuard began as a focused student effort to explore a practical question: can thoughtful technology reduce some of the uncertainty parents face when a child develops a concerning cough, especially in settings where language or access barriers make clear information harder to obtain?</p>
-      <p>The project prioritizes <strong>privacy-first on-device analysis</strong> and <strong>multilingual access</strong> (including Amharic, Afaan Oromoo, and Tigrinya) because these choices directly affect who can use the tool and how safely it can operate.</p>
-      <p>It is an early-stage prototype built to test ideas, gather feedback, and deepen understanding of both the technical and human sides of the problem. The long-term hope is that tools in this direction can support earlier recognition and more confident decision-making for families who need it most.</p>
+      <p data-i18n="about_p1">CroupGuard began as a focused student effort to explore a practical question: can thoughtful technology reduce some of the uncertainty parents face when a child develops a concerning cough, especially in settings where language or access barriers make clear information harder to obtain?</p>
+      <p data-i18n="about_p2">The project prioritizes <strong>privacy-first on-device analysis</strong> and <strong>multilingual access</strong> (including Amharic, Afaan Oromoo, and Tigrinya) because these choices directly affect who can use the tool and how safely it can operate.</p>
+      <p data-i18n="about_p3">It is an early-stage prototype built to test ideas, gather feedback, and deepen understanding of both the technical and human sides of the problem.</p>
     </div>
   </div>
 </section>
 
 <section id="feedback" style="background: var(--bg-alt);">
   <div class="container">
-    <h2 class="section-title">Share <span>Feedback</span></h2>
-    <p class="section-subtitle">Your input helps improve the project. Only the total number of responses is shown publicly.</p>
-    <div class="feedback-box">
+    <h2 class="section-title" data-i18n="fb_title">Share <span>Feedback</span></h2>
+    <p class="section-subtitle" data-i18n="fb_sub">Your input helps improve the project. Only the total number of responses is shown publicly.</p>
+    
+    <div class="feedback-count-box">
+      <span class="num" id="fbCount">0</span>
+      <span data-i18n="fb_count_label">people have shared feedback</span>
+    </div>
+
+    <div class="feedback-box" style="max-width: 520px; margin: 0 auto;">
       <form onsubmit="submitFeedback(event)">
-        <input type="text" id="fbName" placeholder="Name (optional)" />
-        <textarea id="fbMessage" placeholder="Your feedback or suggestions..." required></textarea>
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Feedback</button>
+        <input type="text" id="fbName" data-i18n-placeholder="fb_name" placeholder="Name (optional)" />
+        <textarea id="fbMessage" data-i18n-placeholder="fb_msg" placeholder="Your feedback or suggestions..." required></textarea>
+        <button type="submit" class="btn btn-primary" style="width:100%" data-i18n="fb_send">Send Feedback</button>
       </form>
-      <div class="feedback-count">
-        Feedback received: <strong id="fbCount">0</strong>
-      </div>
     </div>
   </div>
 </section>
 
-<section id="contact">
+<section id="privacy">
   <div class="container">
-    <h2 class="section-title">Contact</h2>
+    <h2 class="section-title" data-i18n="priv_title">Privacy <span>Policy</span></h2>
+    <div class="privacy-box" style="max-width: 700px; margin: 0 auto;">
+      <p data-i18n="priv_1">CroupGuard is a student portfolio prototype. This short policy explains how the demo handles information.</p>
+      <ul>
+        <li data-i18n="priv_2"><strong>Audio:</strong> In a full version, cough audio would be processed on-device by default and would not be uploaded unless you explicitly choose to contribute data.</li>
+        <li data-i18n="priv_3"><strong>Feedback:</strong> Messages you submit are intended for the project creator only. The public page shows only the total count of responses, not the content.</li>
+        <li data-i18n="priv_4"><strong>No accounts:</strong> This prototype does not require accounts or collect personal profiles.</li>
+        <li data-i18n="priv_5"><strong>Purpose:</strong> The project exists for learning, demonstration, and gathering early input — not for medical use.</li>
+      </ul>
+      <p data-i18n="priv_6">If you have questions, contact sifanshiferaw2@gmail.com.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="background: var(--bg-alt);">
+  <div class="container">
+    <h2 class="section-title" data-i18n="contact_title">Contact</h2>
     <div class="contact-box">
-      <p style="color: var(--muted); margin-bottom: 12px;">Questions about the project:</p>
+      <p style="color: var(--muted); margin-bottom: 10px;" data-i18n="contact_sub">Questions about the project:</p>
       <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a>
     </div>
-    <p class="disclaimer">
+    <p class="disclaimer" data-i18n="disclaimer">
       CroupGuard is a student portfolio prototype. It is not a medical device and must not be used for diagnosis or treatment decisions. Always seek professional medical advice for health concerns.
     </p>
   </div>
@@ -371,83 +387,137 @@
 <footer>
   <div class="container">
     <p>CroupGuard · Student Portfolio Project</p>
-    <p style="margin-top: 6px;">Focused on accessibility, privacy, and practical support for families</p>
+    <p style="margin-top: 5px;" data-i18n="footer">Focused on accessibility, privacy, and practical support for families</p>
   </div>
 </footer>
 
 <script>
-  // Theme
-  function toggleTheme() {
-    const html = document.documentElement;
-    const current = html.getAttribute('data-theme');
-    html.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
-    localStorage.setItem('theme', html.getAttribute('data-theme'));
-  }
-  if (localStorage.getItem('theme') === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
+  // ===== Translations (key UI strings) =====
+  const i18n = {
+    en: {
+      brand: "CroupGuard", nav_why: "Why", nav_how: "How", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
+      hero_title: "Making early cough guidance<br><span>more accessible</span>",
+      hero_sub: "A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.",
+      btn_demo: "Try the Demo", btn_goal: "See the Goal",
+      why_title: "The <span>Why</span>", why_sub: "This project started from a clear problem and a focused goal.",
+      why_p1_t: "The Problem", why_p1_d: "Parents and caregivers often struggle to tell a routine cough from one that needs closer attention. When clear information is limited by language or access, that uncertainty grows.",
+      why_p2_t: "The Goal", why_p2_d: "Build a simple, privacy-respecting tool that gives clearer acoustic feedback and practical next-step guidance — available in languages that matter to more families.",
+      why_p3_t: "The Approach", why_p3_d: "Focus on on-device analysis so raw audio stays private, prioritize multilingual access from the start, and keep the experience calm and usable for stressed caregivers.",
+      how_title: "How it <span>Works</span>", how_sub: "Three straightforward steps from recording to guidance.",
+      how_1_t: "Record", how_1_d: "Capture a short cough sample using the phone microphone with simple quality feedback.",
+      how_2_t: "Analyze", how_2_d: "On-device processing evaluates pitch, duration, and barking characteristics without uploading audio by default.",
+      how_3_t: "Guide", how_3_d: "Receive a clear likelihood score and practical next-step suggestions based on the results.",
+      feat_title: "Designed with <span>Intention</span>", feat_sub: "Every major choice was made to support accessibility, privacy, and real-world usability.",
+      feat_1_t: "On-Device Analysis", feat_1_d: "Audio stays on the phone by default. Privacy is treated as a core requirement, not an afterthought.",
+      feat_2_t: "Multilingual from Day One", feat_2_d: "Interface planned for Amharic, Afaan Oromoo, Tigrinya, and many other widely spoken languages.",
+      feat_3_t: "Calm, Clear Guidance", feat_3_d: "Results are paired with practical next steps so caregivers are not left with only a number.",
+      feat_4_t: "Symptom Tracking", feat_4_d: "Support for logging multiple recordings to observe change over hours or days.",
+      feat_5_t: "Educational Support", feat_5_d: "Simple explanations of croup and red-flag signs to reduce uncertainty.",
+      feat_6_t: "Built for Real Conditions", feat_6_d: "Designed with limited connectivity and stressed users in mind.",
+      demo_title: "Interactive <span>Demo</span>", demo_sub: "A working prototype of the analysis flow. Results are simulated for demonstration.",
+      demo_ready: "Tap to simulate a cough analysis", status_ready: "Ready", result_label: "Croup Likelihood",
+      result_note: "Demonstration only. Always consult a healthcare professional for real concerns.",
+      about_title: "About the <span>Project</span>",
+      about_p1: "CroupGuard began as a focused student effort to explore a practical question: can thoughtful technology reduce some of the uncertainty parents face when a child develops a concerning cough, especially in settings where language or access barriers make clear information harder to obtain?",
+      about_p2: "The project prioritizes <strong>privacy-first on-device analysis</strong> and <strong>multilingual access</strong> (including Amharic, Afaan Oromoo, and Tigrinya) because these choices directly affect who can use the tool and how safely it can operate.",
+      about_p3: "It is an early-stage prototype built to test ideas, gather feedback, and deepen understanding of both the technical and human sides of the problem.",
+      fb_title: "Share <span>Feedback</span>", fb_sub: "Your input helps improve the project. Only the total number of responses is shown publicly.",
+      fb_count_label: "people have shared feedback", fb_name: "Name (optional)", fb_msg: "Your feedback or suggestions...", fb_send: "Send Feedback",
+      priv_title: "Privacy <span>Policy</span>",
+      priv_1: "CroupGuard is a student portfolio prototype. This short policy explains how the demo handles information.",
+      priv_2: "<strong>Audio:</strong> In a full version, cough audio would be processed on-device by default and would not be uploaded unless you explicitly choose to contribute data.",
+      priv_3: "<strong>Feedback:</strong> Messages you submit are intended for the project creator only. The public page shows only the total count of responses, not the content.",
+      priv_4: "<strong>No accounts:</strong> This prototype does not require accounts or collect personal profiles.",
+      priv_5: "<strong>Purpose:</strong> The project exists for learning, demonstration, and gathering early input — not for medical use.",
+      priv_6: "If you have questions, contact sifanshiferaw2@gmail.com.",
+      contact_title: "Contact", contact_sub: "Questions about the project:",
+      disclaimer: "CroupGuard is a student portfolio prototype. It is not a medical device and must not be used for diagnosis or treatment decisions. Always seek professional medical advice for health concerns.",
+      footer: "Focused on accessibility, privacy, and practical support for families"
+    },
+    // Simplified key strings for other languages (demo-level)
+    am: { brand: "ክሩፕጋርድ", nav_why: "ለምን", nav_how: "እንዴት", nav_demo: "ሙከራ", nav_about: "ስለ", nav_feedback: "አስተያየት", hero_title: "የሳል መመሪያን<br><span>ተደራሽ ማድረግ</span>", hero_sub: "የተማሪ ፕሮጀክት — የግላዊነት ቅድሚያ የሚሰጥ AI እና ብዙ ቋንቋዎች።", btn_demo: "ሙከራ ይጀምሩ", btn_goal: "ግቡን ይመልከቱ", status_ready: "ዝግጁ", fb_send: "አስተያየት ላክ", footer: "ተደራሽነት፣ ግላዊነት እና ቤተሰቦችን መደገፍ" },
+    om: { brand: "CroupGuard", nav_why: "Maaliif", nav_how: "Akkam", nav_demo: "Demo", nav_about: "Waa'ee", nav_feedback: "Yaada", hero_title: "Qajeelfama qufaa<br><span>saliisuu</span>", hero_sub: "Pirojektii barataa — AI fi afaanota hedduu.", btn_demo: "Demo yaali", btn_goal: "Kaayyoo ilaali", status_ready: "Qophaa'aa", fb_send: "Yaada ergi", footer: "Saliisummaa, iccitii fi deeggarsa maatii" },
+    ti: { brand: "ክሩፕጋርድ", nav_why: "ስለምን", nav_how: "ከመይ", nav_demo: "ፍረቻ", nav_about: "ብዛዕባ", nav_feedback: "ርእይቶ", hero_title: "ናይ ሳዕቢ መምርሒ<br><span>ተበጻሕነት</span>", hero_sub: "ናይ ተማሃራይ ፕሮጀክት — AI ከምኡ’ውን ብዙሓት ቋንቋታት።", btn_demo: "ፍረቻ ጀምር", btn_goal: "ዕላማ ርአ", status_ready: "ድልዱል", fb_send: "ርእይቶ ስደድ", footer: "ተበጻሕነት፣ ክብሪ ፍሉይነትን ስድራቤት ምድጋፍን" }
+  };
+
+  // Fill missing keys from English for other langs
+  ['zh','hi','es','fr','ar','bn','pt','ru','ur','id'].forEach(l => {
+    i18n[l] = { ...i18n.en, brand: "CroupGuard" };
+  });
+
+  function changeLanguage(lang) {
+    const t = i18n[lang] || i18n.en;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key]) el.innerHTML = t[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (t[key]) el.placeholder = t[key];
+    });
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
   }
 
-  // Demo analysis
+  // Theme & text size
+  function toggleTheme() {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    localStorage.setItem('theme', html.getAttribute('data-theme'));
+  }
+  function toggleTextSize() {
+    const root = document.documentElement;
+    const current = getComputedStyle(root).getPropertyValue('--font-size').trim();
+    root.style.setProperty('--font-size', current === '16px' ? '18.5px' : '16px');
+  }
+  if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  if (localStorage.getItem('lang')) {
+    document.getElementById('langSelect').value = localStorage.getItem('lang');
+    changeLanguage(localStorage.getItem('lang'));
+  }
+
+  // Demo
   function startAnalysis() {
     const btn = document.getElementById('recordBtn');
     const status = document.getElementById('statusText');
     const resultBox = document.getElementById('resultBox');
     const percentage = document.getElementById('percentage');
     const resultText = document.getElementById('resultText');
-
     resultBox.classList.remove('show');
-    btn.classList.add('recording');
-    btn.innerHTML = '⏹';
+    btn.classList.add('recording'); btn.innerHTML = '⏹';
     status.textContent = 'Listening...';
-
+    setTimeout(() => { status.textContent = 'Analyzing...'; btn.innerHTML = '⏳'; }, 1500);
     setTimeout(() => {
-      status.textContent = 'Analyzing acoustic features...';
-      btn.innerHTML = '⏳';
-    }, 1600);
-
-    setTimeout(() => {
-      btn.classList.remove('recording');
-      btn.innerHTML = '🎤';
-      status.textContent = 'Analysis complete';
-
+      btn.classList.remove('recording'); btn.innerHTML = '🎤'; status.textContent = 'Ready';
       const outcomes = [
-        { pct: 7,  cls: 'low', text: 'Very low likelihood of croup-like features. Pattern is consistent with a common cough.' },
-        { pct: 11, cls: 'low', text: 'Low likelihood of croup. Barking characteristics are not strongly present.' },
-        { pct: 15, cls: 'low', text: 'Low likelihood detected. Acoustic pattern aligns more with a regular cough.' },
-        { pct: 22, cls: 'low', text: 'Mild indicators only. Classic croup features are limited.' },
-        { pct: 29, cls: 'medium', text: 'Some features present but not strongly indicative of classic croup.' }
+        { pct: 8, cls: 'low', text: 'Very low likelihood of croup-like features.' },
+        { pct: 12, cls: 'low', text: 'Low likelihood of croup. Pattern consistent with a regular cough.' },
+        { pct: 16, cls: 'low', text: 'Low likelihood detected. Classic barking features are limited.' },
+        { pct: 24, cls: 'low', text: 'Mild indicators only.' },
+        { pct: 31, cls: 'medium', text: 'Some features present but not strongly indicative of classic croup.' }
       ];
       const r = outcomes[Math.floor(Math.random() * outcomes.length)];
       percentage.textContent = r.pct + '%';
       percentage.className = 'result-percentage ' + r.cls;
       resultText.textContent = r.text;
       resultBox.classList.add('show');
-    }, 3600);
+    }, 3400);
   }
 
-  // Feedback (stores locally + shows count)
+  // Feedback count
   function updateCount() {
-    const count = parseInt(localStorage.getItem('fbCount') || '0');
-    document.getElementById('fbCount').textContent = count;
+    document.getElementById('fbCount').textContent = localStorage.getItem('fbCount') || '0';
   }
   function submitFeedback(e) {
     e.preventDefault();
     const msg = document.getElementById('fbMessage').value.trim();
     if (!msg) return;
-
-    // Store feedback privately in localStorage (only count is public)
     let feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
-    feedbacks.push({
-      name: document.getElementById('fbName').value || 'Anonymous',
-      message: msg,
-      date: new Date().toISOString()
-    });
+    feedbacks.push({ name: document.getElementById('fbName').value || 'Anonymous', message: msg, date: new Date().toISOString() });
     localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
-
-    let count = parseInt(localStorage.getItem('fbCount') || '0') + 1;
+    const count = parseInt(localStorage.getItem('fbCount') || '0') + 1;
     localStorage.setItem('fbCount', count);
     updateCount();
-
     document.getElementById('fbName').value = '';
     document.getElementById('fbMessage').value = '';
     alert('Thank you for your feedback!');
@@ -456,4 +526,3 @@
 </script>
 </body>
 </html>
-
