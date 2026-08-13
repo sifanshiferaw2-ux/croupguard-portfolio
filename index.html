@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CroupGuard – Student Portfolio Project</title>
+  <title>CroupGuard – AI Cough Analysis</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      background: #0f0f13;
+      color: #e5e7eb;
       line-height: 1.6;
-      color: #1a1a1a;
-      background: #f8f9fa;
     }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-    
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
     /* Header */
     header {
-      background: #fff;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 16px 0;
+      background: rgba(15, 15, 19, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #27272a;
+      padding: 18px 0;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -29,228 +30,512 @@
       align-items: center;
     }
     .logo {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #7c3aed;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       text-decoration: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.35rem;
+    }
+    .logo-circles {
+      width: 36px;
+      height: 36px;
+      position: relative;
+    }
+    .logo-circles::before,
+    .logo-circles::after {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+    }
+    .logo-circles::before {
+      background: #f472b6;
+      top: 0;
+      left: 0;
+    }
+    .logo-circles::after {
+      background: #2dd4bf;
+      bottom: 0;
+      right: 0;
+      opacity: 0.9;
     }
     .nav-links a {
-      margin-left: 24px;
+      color: #a1a1aa;
       text-decoration: none;
-      color: #4b5563;
+      margin-left: 28px;
       font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
     }
-    .nav-links a:hover { color: #7c3aed; }
+    .nav-links a:hover { color: #f472b6; }
 
     /* Hero */
     .hero {
-      background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-      color: white;
-      padding: 80px 0 70px;
+      padding: 90px 0 80px;
       text-align: center;
+      background: radial-gradient(ellipse at top, #1e1b4b 0%, #0f0f13 70%);
     }
     .hero h1 {
-      font-size: 2.8rem;
+      font-size: 3.2rem;
       font-weight: 800;
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-    .hero h1 span { color: #f9a8d4; }
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 650px;
-      margin: 0 auto 32px;
-      opacity: 0.95;
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.15);
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 0.9rem;
+      line-height: 1.15;
       margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .hero h1 span {
+      background: linear-gradient(90deg, #f472b6, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      color: #a1a1aa;
+      max-width: 620px;
+      margin: 0 auto 40px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #ec4899, #a855f7);
+      color: white;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.4);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #e5e7eb;
+      border: 1px solid #3f3f46;
+    }
+    .btn-secondary:hover {
+      border-color: #f472b6;
+      color: #f472b6;
     }
 
     /* Sections */
-    section { padding: 70px 0; }
+    section { padding: 80px 0; }
     .section-title {
-      font-size: 1.9rem;
+      font-size: 2.2rem;
       font-weight: 700;
-      margin-bottom: 12px;
       text-align: center;
+      margin-bottom: 12px;
+    }
+    .section-title span {
+      background: linear-gradient(90deg, #f472b6, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .section-subtitle {
       text-align: center;
-      color: #6b7280;
-      max-width: 600px;
-      margin: 0 auto 40px;
+      color: #a1a1aa;
+      max-width: 580px;
+      margin: 0 auto 50px;
+      font-size: 1.1rem;
     }
+
+    /* How it works */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 28px;
+    }
+    .step {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .step:hover { border-color: #7c3aed; }
+    .step-num {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin: 0 auto 18px;
+    }
+    .step h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #f4f4f5;
+    }
+    .step p { color: #a1a1aa; font-size: 0.95rem; }
 
     /* Features */
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
     }
     .feature-card {
-      background: white;
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      border: 1px solid #f3f4f6;
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 20px;
+      padding: 30px;
+      transition: all 0.2s;
+    }
+    .feature-card:hover {
+      border-color: #7c3aed;
+      transform: translateY(-3px);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 18px;
     }
     .feature-card h3 {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       margin-bottom: 10px;
-      color: #7c3aed;
+      color: #f4f4f5;
+    }
+    .feature-card p { color: #a1a1aa; font-size: 0.95rem; }
+
+    /* Demo Section */
+    .demo-box {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .record-btn {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      margin: 20px 0;
+      transition: all 0.2s;
+      box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4);
+    }
+    .record-btn.recording {
+      animation: pulse 1.5s infinite;
+      background: #ef4444;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+      70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    .result-box {
+      display: none;
+      margin-top: 30px;
+      padding: 28px;
+      background: #09090b;
+      border-radius: 16px;
+      border: 1px solid #27272a;
+    }
+    .result-box.show { display: block; }
+    .result-percentage {
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 10px 0;
+    }
+    .low { color: #34d399; }
+    .medium { color: #fbbf24; }
+    .high { color: #f87171; }
+    .result-label {
+      font-size: 1.1rem;
+      color: #a1a1aa;
+      margin-bottom: 8px;
     }
 
     /* About */
-    .about-box {
-      background: white;
-      border-radius: 16px;
-      padding: 40px;
-      max-width: 800px;
+    .about-content {
+      max-width: 720px;
       margin: 0 auto;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 20px;
+      padding: 40px;
     }
-    .about-box p { margin-bottom: 16px; color: #374151; }
+    .about-content p {
+      color: #a1a1aa;
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+    }
+    .about-content strong { color: #f4f4f5; }
+
+    /* Contact */
+    .contact-box {
+      text-align: center;
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .contact-box a {
+      color: #f472b6;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.15rem;
+    }
+    .contact-box a:hover { text-decoration: underline; }
 
     /* Disclaimer */
     .disclaimer {
-      background: #fef3c7;
-      border: 1px solid #f59e0b;
+      background: #1c1917;
+      border: 1px solid #44403c;
       border-radius: 12px;
-      padding: 20px;
-      margin-top: 40px;
-      font-size: 0.95rem;
-      color: #92400e;
-    }
-
-    /* Languages */
-    .lang-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    .lang-tag {
-      background: #ede9fe;
-      color: #5b21b6;
-      padding: 6px 14px;
-      border-radius: 999px;
+      padding: 18px 24px;
       font-size: 0.9rem;
-      font-weight: 500;
+      color: #a8a29e;
+      max-width: 800px;
+      margin: 40px auto 0;
+      text-align: center;
     }
 
     /* Footer */
     footer {
-      background: #1f2937;
-      color: #d1d5db;
+      border-top: 1px solid #27272a;
+      padding: 40px 0;
       text-align: center;
-      padding: 40px 20px;
-      font-size: 0.95rem;
+      color: #71717a;
+      font-size: 0.9rem;
     }
-    footer a { color: #c4b5fd; }
 
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 2rem; }
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2.2rem; }
       .nav-links { display: none; }
+      .demo-box { padding: 32px 20px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Header -->
   <header>
     <div class="container nav">
-      <a href="#" class="logo">CroupGuard</a>
+      <a href="#" class="logo">
+        <div class="logo-circles"></div>
+        CroupGuard
+      </a>
       <div class="nav-links">
+        <a href="#how">How it Works</a>
         <a href="#features">Features</a>
+        <a href="#demo">Try Demo</a>
         <a href="#about">About</a>
-        <a href="#disclaimer">Disclaimer</a>
+        <a href="#contact">Contact</a>
       </div>
     </div>
   </header>
 
+  <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <div class="badge">Student Portfolio Project</div>
-      <h1>Analyze <span>croup</span> coughs instantly</h1>
-      <p>An independent concept exploring on-device AI for cough analysis, with strong focus on privacy and multilingual support for Ethiopian languages.</p>
+      <h1>Analyze <span>croup</span> coughs<br>instantly</h1>
+      <p>Advanced on-device AI designed to help parents and caregivers better understand concerning coughs — with strong support for multilingual families.</p>
+      <div class="hero-buttons">
+        <a href="#demo" class="btn btn-primary">Try the Demo</a>
+        <a href="#how" class="btn btn-secondary">See How it Works</a>
+      </div>
     </div>
   </section>
 
-  <section id="features">
+  <!-- How it Works -->
+  <section id="how">
     <div class="container">
-      <h2 class="section-title">Core Features</h2>
-      <p class="section-subtitle">Designed as a research-oriented prototype focused on accessibility and privacy.</p>
-      
+      <h2 class="section-title">How it <span>Works</span></h2>
+      <p class="section-subtitle">Three simple steps from cough to clear guidance.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Record the Cough</h3>
+          <p>Hold your phone near the child and record a short cough sample using the built-in microphone.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>On-Device Analysis</h3>
+          <p>The AI evaluates pitch, duration, and barking characteristics privately on your device.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Get Clear Results</h3>
+          <p>Receive a likelihood score, feature breakdown, and practical next-step guidance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" style="background: #09090b;">
+    <div class="container">
+      <h2 class="section-title">Designed for <span>Health Equity</span></h2>
+      <p class="section-subtitle">Built to make useful respiratory guidance more accessible to families everywhere.</p>
       <div class="features">
         <div class="feature-card">
-          <h3>On-Device AI Analysis</h3>
-          <p>Records a short cough and estimates the likelihood of croup-like acoustic features (barking quality, pitch, duration) using local processing.</p>
+          <div class="feature-icon" style="background: #3b0764; color: #e879f9;">🧠</div>
+          <h3>Real-Time AI Analysis</h3>
+          <p>Instant cough classification that evaluates croup likelihood and key acoustic features locally on the device.</p>
         </div>
         <div class="feature-card">
+          <div class="feature-icon" style="background: #134e4a; color: #2dd4bf;">🌐</div>
           <h3>Multilingual Support</h3>
-          <p>Full interface planned for Amharic, Afaan Oromoo (Oromiffa), Tigrinya, English, and other major languages to improve health equity.</p>
+          <p>Full interface support planned for Amharic, Afaan Oromoo, Tigrinya, English and additional languages.</p>
         </div>
         <div class="feature-card">
+          <div class="feature-icon" style="background: #1e3a5f; color: #60a5fa;">🔒</div>
           <h3>Privacy-First Design</h3>
-          <p>Audio stays on the device by default. No raw recordings are uploaded unless the user explicitly chooses to contribute data.</p>
+          <p>Audio is processed on-device by default. Raw recordings never leave the phone unless you choose to share them.</p>
         </div>
         <div class="feature-card">
+          <div class="feature-icon" style="background: #3f2a1e; color: #fb923c;">📈</div>
           <h3>Symptom Tracking</h3>
-          <p>Ability to log multiple recordings over time and view trends, with option to export a simple summary for a doctor.</p>
+          <p>Log multiple recordings over time to see whether patterns are improving, stable, or changing.</p>
         </div>
         <div class="feature-card">
-          <h3>Smart Triage Guidance</h3>
-          <p>Quick questions (age, fever, breathing difficulty) paired with evidence-based next-step suggestions — always with strong medical disclaimers.</p>
+          <div class="feature-icon" style="background: #1e3a2f; color: #4ade80;">📋</div>
+          <h3>Practical Guidance</h3>
+          <p>Clear next-step suggestions based on the analysis and simple questions about the child’s condition.</p>
         </div>
         <div class="feature-card">
+          <div class="feature-icon" style="background: #3b1f3b; color: #e879f9;">📚</div>
           <h3>Educational Content</h3>
-          <p>Clear explanations of what croup is, why the cough sounds distinctive, and important red-flag warning signs.</p>
+          <p>Straightforward explanations of croup, what the cough sounds like, and important warning signs.</p>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="lang-tags">
-        <span class="lang-tag">Amharic</span>
-        <span class="lang-tag">Afaan Oromoo</span>
-        <span class="lang-tag">Tigrinya</span>
-        <span class="lang-tag">English</span>
-        <span class="lang-tag">+ more</span>
+  <!-- Interactive Demo -->
+  <section id="demo">
+    <div class="container">
+      <h2 class="section-title">Try the <span>Demo</span></h2>
+      <p class="section-subtitle">This is an interactive prototype. Click the button to simulate a cough analysis.</p>
+      
+      <div class="demo-box">
+        <p style="color: #a1a1aa; margin-bottom: 8px;">Tap the button to start a simulated analysis</p>
+        <button class="record-btn" id="recordBtn" onclick="startAnalysis()">🎤</button>
+        <p id="statusText" style="color: #71717a; font-size: 0.95rem;">Ready to analyze</p>
+
+        <div class="result-box" id="resultBox">
+          <div class="result-label">Croup Likelihood</div>
+          <div class="result-percentage low" id="percentage">12%</div>
+          <p id="resultText" style="color: #a1a1aa; margin-top: 8px;">
+            Low likelihood of croup-like features detected. The acoustic pattern is more consistent with a regular cough.
+          </p>
+          <p style="margin-top: 16px; font-size: 0.85rem; color: #71717a;">
+            This is a demonstration only. Always consult a healthcare professional for real concerns.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="about" style="background: #f3f4f6;">
+  <!-- About -->
+  <section id="about" style="background: #09090b;">
     <div class="container">
-      <h2 class="section-title">About This Project</h2>
-      <div class="about-box">
-        <p><strong>CroupGuard</strong> is an independent student portfolio project. It explores how on-device audio classification and thoughtful multilingual design could help caregivers better understand concerning coughs — especially the distinctive barking cough associated with croup.</p>
+      <h2 class="section-title">About the <span>Project</span></h2>
+      <div class="about-content">
+        <p>CroupGuard was created to explore how accessible technology can help families better understand concerning coughs, especially in communities where specialist care or clear health information can be harder to reach.</p>
         
-        <p>The project was created to practice product thinking, AI concept design, and accessible interface planning, with particular attention to language support for Amharic, Afaan Oromoo, and Tigrinya speakers.</p>
+        <p>The project focuses on making useful guidance available in languages that matter to many families — including <strong>Amharic</strong>, <strong>Afaan Oromoo</strong>, and <strong>Tigrinya</strong> — while keeping privacy at the center through on-device processing.</p>
         
-        <p>This is a <strong>concept / prototype</strong>, not a finished medical product. No real clinical validation has been performed.</p>
+        <p>It began as a student initiative driven by the belief that practical health tools should not be limited by language barriers or limited resources. The goal is to support caregivers with clearer information so they can make more confident decisions and seek timely care when needed.</p>
       </div>
     </div>
   </section>
 
-  <section id="disclaimer">
+  <!-- Contact -->
+  <section id="contact">
     <div class="container">
+      <h2 class="section-title">Get in <span>Touch</span></h2>
+      <div class="contact-box">
+        <p style="color: #a1a1aa; margin-bottom: 16px;">For questions about this project:</p>
+        <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a>
+      </div>
+
       <div class="disclaimer">
-        <strong>Important Medical Disclaimer:</strong><br>
-        CroupGuard is a student portfolio concept only. It is <strong>not</strong> a medical device, not clinically validated, and must never be used to diagnose or make real medical decisions. Always consult a qualified healthcare professional for any health concerns, especially breathing difficulties in children.
+        <strong>Note:</strong> CroupGuard is a student portfolio project and interactive prototype. It is not a medical device and should not be used for diagnosis or treatment decisions. Always seek professional medical advice for health concerns.
       </div>
     </div>
   </section>
 
+  <!-- Footer -->
   <footer>
     <div class="container">
-      <p>CroupGuard — Student Portfolio Project</p>
-      <p style="margin-top: 8px; opacity: 0.8;">Created as an independent exploration of AI + health accessibility</p>
+      <p>CroupGuard · Student Portfolio Project</p>
+      <p style="margin-top: 6px;">Built with a focus on accessibility, privacy, and practical support for families</p>
     </div>
   </footer>
 
+  <script>
+    function startAnalysis() {
+      const btn = document.getElementById('recordBtn');
+      const status = document.getElementById('statusText');
+      const resultBox = document.getElementById('resultBox');
+      const percentage = document.getElementById('percentage');
+      const resultText = document.getElementById('resultText');
+
+      // Reset
+      resultBox.classList.remove('show');
+      btn.classList.add('recording');
+      btn.innerHTML = '⏹';
+      status.textContent = 'Listening... hold steady';
+
+      // Simulate recording
+      setTimeout(() => {
+        status.textContent = 'Analyzing acoustic features...';
+        btn.innerHTML = '⏳';
+      }, 1800);
+
+      // Show result (mostly low likelihood)
+      setTimeout(() => {
+        btn.classList.remove('recording');
+        btn.innerHTML = '🎤';
+        status.textContent = 'Analysis complete';
+
+        // Weighted toward low results
+        const outcomes = [
+          { pct: 8,  cls: 'low',  text: 'Very low likelihood of croup-like features. The pattern is consistent with a common cough.' },
+          { pct: 11, cls: 'low',  text: 'Low likelihood of croup. Acoustic characteristics do not strongly match the typical barking pattern.' },
+          { pct: 14, cls: 'low',  text: 'Low likelihood of croup-like features detected. The acoustic pattern is more consistent with a regular cough.' },
+          { pct: 19, cls: 'low',  text: 'Low to mild indicators. Monitoring is reasonable, but the signature barking quality is not clearly present.' },
+          { pct: 27, cls: 'medium', text: 'Mild features detected. Some acoustic elements are present but not strongly indicative of classic croup.' }
+        ];
+        const result = outcomes[Math.floor(Math.random() * outcomes.length)];
+
+        percentage.textContent = result.pct + '%';
+        percentage.className = 'result-percentage ' + result.cls;
+        resultText.textContent = result.text;
+        resultBox.classList.add('show');
+      }, 3800);
+    }
+  </script>
 </body>
 </html>
+
