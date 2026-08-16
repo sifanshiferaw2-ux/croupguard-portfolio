@@ -31,11 +31,7 @@
       --shadow: 0 15px 30px -8px rgba(124, 58, 237, 0.15);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -55,7 +51,6 @@
       padding: 30px 20px 80px;
     }
 
-    /* Logo */
     .logo-wrap {
       display: flex;
       justify-content: center;
@@ -249,9 +244,7 @@
       font-weight: 500;
     }
 
-    .large-text {
-      font-size: 1.18em;
-    }
+    .large-text { font-size: 1.18em; }
 
     @media (max-width: 600px) {
       .logo-text { font-size: 2.1rem; }
@@ -411,6 +404,7 @@
       }, 1600);
     }
 
+    // ========== WORKING FEEDBACK (Count + Email) ==========
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -432,12 +426,17 @@
       }
 
       try {
+        // Send to your email
         await fetch(FORMSPREE_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
           body: JSON.stringify({ message: message })
         });
 
+        // Increase public count
         const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`);
         const data = await res.json();
         document.getElementById("feedback-count").innerText = data.value;
@@ -451,6 +450,7 @@
 
     loadFeedbackCount();
 
+    // ========== WORKING LANGUAGES ==========
     const translations = {
       en: {
         tagline: "A student project helping families understand concerning coughs earlier — with privacy and language access in mind.",
@@ -558,7 +558,9 @@
       const t = translations[lang] || translations.en;
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (t[key]) el.innerText = t[key];
+        if (t[key]) {
+          el.innerText = t[key];
+        }
       });
     }
   </script>
