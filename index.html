@@ -46,8 +46,7 @@
       height: 18px;
       border-radius: 50%;
       background: #ec4899;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
     }
     .logo-circle-2 {
       position: absolute;
@@ -55,8 +54,7 @@
       height: 18px;
       border-radius: 50%;
       background: #22d3ee;
-      bottom: 0;
-      right: 0;
+      bottom: 0; right: 0;
     }
 
     .nav-links {
@@ -64,7 +62,6 @@
       gap: 28px;
       align-items: center;
     }
-
     .nav-links a {
       color: #a1a1aa;
       text-decoration: none;
@@ -79,11 +76,6 @@
       background: #1a1a24;
       color: #ffffff;
       font-size: 0.9rem;
-      cursor: pointer;
-    }
-    select option {
-      background: #1a1a24;
-      color: white;
     }
 
     .hero {
@@ -98,7 +90,6 @@
       line-height: 1.15;
       margin-bottom: 22px;
     }
-
     .hero h1 .gradient {
       background: linear-gradient(135deg, #ec4899, #a855f7);
       -webkit-background-clip: text;
@@ -172,23 +163,52 @@
       padding: 22px;
       border-radius: 16px;
     }
-
     .feature strong {
       display: block;
       margin-bottom: 8px;
       color: #38bdf8;
     }
 
-    /* Demo specific */
+    /* Mic with Google-style pulsing circles */
+    .mic-container {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .mic-icon {
-      font-size: 2.8rem;
-      margin-bottom: 12px;
-      display: block;
+      font-size: 2.6rem;
+      z-index: 2;
+      position: relative;
+    }
+
+    .pulse-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid #ec4899;
+      opacity: 0;
+    }
+
+    .pulse-ring.active {
+      animation: pulse 1.6s ease-out infinite;
+    }
+
+    .pulse-ring:nth-child(1) { width: 60px; height: 60px; animation-delay: 0s; }
+    .pulse-ring:nth-child(2) { width: 80px; height: 80px; animation-delay: 0.3s; }
+    .pulse-ring:nth-child(3) { width: 100px; height: 100px; animation-delay: 0.6s; }
+
+    @keyframes pulse {
+      0% { transform: scale(0.6); opacity: 0.8; }
+      100% { transform: scale(1.4); opacity: 0; }
     }
 
     .result-box {
       margin-top: 24px;
-      padding: 20px 24px;
+      padding: 22px 26px;
       border-radius: 16px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.12);
@@ -199,18 +219,16 @@
     }
 
     .result-box .percent {
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 700;
       color: #ec4899;
       margin-bottom: 6px;
     }
-
     .result-box .label {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: #c4b5fd;
       margin-bottom: 8px;
     }
-
     .result-box .detail {
       font-size: 0.9rem;
       color: #a1a1aa;
@@ -227,9 +245,6 @@
       margin-bottom: 16px;
       resize: vertical;
       font-family: inherit;
-    }
-    textarea::placeholder {
-      color: #71717a;
     }
 
     .count {
@@ -266,44 +281,44 @@
     </div>
 
     <div class="nav-links">
-      <a href="#why">Why</a>
-      <a href="#how">How it Works</a>
-      <a href="#demo">Demo</a>
-      <a href="#about">About</a>
-      <a href="#feedback">Feedback</a>
+      <a href="#why" data-i18n="nav_why">Why</a>
+      <a href="#how" data-i18n="nav_how">How it Works</a>
+      <a href="#demo" data-i18n="nav_demo">Demo</a>
+      <a href="#about" data-i18n="nav_about">About</a>
+      <a href="#feedback" data-i18n="nav_feedback">Feedback</a>
 
       <select id="language-select" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
-        <option value="am">Amharic (አማርኛ)</option>
+        <option value="am">Amharic</option>
         <option value="om">Afaan Oromoo</option>
-        <option value="ti">Tigrinya (ትግርኛ)</option>
-        <option value="zh">Mandarin Chinese</option>
-        <option value="hi">Hindi</option>
-        <option value="es">Spanish</option>
-        <option value="ar">Arabic</option>
-        <option value="fr">French</option>
-        <option value="bn">Bengali</option>
-        <option value="pt">Portuguese</option>
-        <option value="ru">Russian</option>
-        <option value="ur">Urdu</option>
-        <option value="id">Indonesian</option>
+        <option value="ti">Tigrinya</option>
+        <option value="zh">中文</option>
+        <option value="hi">हिन्दी</option>
+        <option value="es">Español</option>
+        <option value="ar">العربية</option>
+        <option value="fr">Français</option>
+        <option value="bn">বাংলা</option>
+        <option value="pt">Português</option>
+        <option value="ru">Русский</option>
+        <option value="ur">اردو</option>
+        <option value="id">Bahasa Indonesia</option>
       </select>
     </div>
   </nav>
 
   <div class="hero">
     <h1>
-      Making early cough guidance<br>
-      <span class="gradient">more accessible</span>
+      <span data-i18n="hero_line1">Making early cough guidance</span><br>
+      <span class="gradient" data-i18n="hero_line2">more accessible</span>
     </h1>
-    <p>
+    <p data-i18n="hero_sub">
       A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.
     </p>
     <div class="hero-buttons">
-      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">
+      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})" data-i18n="btn_demo">
         Try the Demo
       </button>
-      <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">
+      <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})" data-i18n="btn_goal">
         See the Goal
       </button>
     </div>
@@ -318,14 +333,18 @@
       </p>
     </section>
 
-    <!-- DEMO with mic + better result box -->
     <section id="demo" style="text-align:center;">
       <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
-      <p data-i18n="demo_desc" style="color:#a1a1aa; margin-bottom:24px;">
+      <p data-i18n="demo_desc" style="color:#a1a1aa; margin-bottom:20px;">
         This is a simulated prototype. Tap the button to run a sample analysis.
       </p>
 
-      <div class="mic-icon">🎙️</div>
+      <div class="mic-container" id="micContainer">
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="mic-icon">🎙️</div>
+      </div>
 
       <button class="btn-primary" onclick="startAnalysis()" data-i18n="demo_button">
         Tap to Simulate Cough Analysis
@@ -366,7 +385,7 @@
         Your message stays private. Only the total number is public.
       </p>
       <div class="count">
-        Feedback received: <span id="feedback-count">0</span>
+        <span data-i18n="feedback_count_label">Feedback received:</span> <span id="feedback-count">0</span>
       </div>
       <textarea id="feedback-input" rows="4" placeholder="Write your feedback here..."></textarea>
       <button class="btn-primary" onclick="submitFeedback()" data-i18n="feedback_button">
@@ -393,15 +412,23 @@
   <script>
     function startAnalysis() {
       const result = document.getElementById("result");
+      const rings = document.querySelectorAll(".pulse-ring");
+
+      // Start pulsing
+      rings.forEach(r => r.classList.add("active"));
+
       result.innerHTML = `
         <div class="result-box">
-          <div style="font-size:1.1rem; margin-bottom:8px;">🎙️ Analyzing cough sample...</div>
+          <div style="font-size:1.1rem; margin-bottom:6px;">🎙️ Analyzing cough sample...</div>
           <div style="color:#a1a1aa; font-size:0.9rem;">Listening for barking features</div>
         </div>
       `;
 
       setTimeout(() => {
-        const percent = Math.floor(Math.random() * 21) + 5; // 5% – 25%
+        // Stop pulsing
+        rings.forEach(r => r.classList.remove("active"));
+
+        const percent = Math.floor(Math.random() * 21) + 5; // 5–25%
         let label = "Low likelihood";
         let detail = "Classic barking features are limited. This appears closer to a regular cough.";
 
@@ -417,7 +444,7 @@
             <div class="detail">${detail}</div>
           </div>
         `;
-      }, 1800);
+      }, 2200);
     }
 
     // Feedback
@@ -458,9 +485,13 @@
 
     loadFeedbackCount();
 
-    // Language translations
+    // Expanded translations
     const translations = {
       en: {
+        nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
+        hero_line1: "Making early cough guidance", hero_line2: "more accessible",
+        hero_sub: "A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.",
+        btn_demo: "Try the Demo", btn_goal: "See the Goal",
         why_title: "Why I Built This",
         why_text: "My family and I never recognized the early symptoms of croup. As a result, we nearly lost my younger brother three times. That experience is the reason I built CroupGuard — to help other families identify concerning coughs earlier, especially in communities where language barriers and limited access to clear information make timely care harder to reach.",
         demo_title: "Try the Interactive Demo",
@@ -468,86 +499,66 @@
         demo_button: "Tap to Simulate Cough Analysis",
         demo_note: "This is only a student prototype and not a medical device.",
         features_title: "Key Features",
-        f1_title: "Privacy First",
-        f1_text: "Designed with on-device thinking and minimal data collection.",
-        f2_title: "Language Access",
-        f2_text: "Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.",
-        f3_title: "Simple & Clear",
-        f3_text: "Gives an estimated likelihood so families can decide when to seek care.",
-        f4_title: "Built for Equity",
-        f4_text: "Made so under-resourced families can access useful information more easily.",
+        f1_title: "Privacy First", f1_text: "Designed with on-device thinking and minimal data collection.",
+        f2_title: "Language Access", f2_text: "Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.",
+        f3_title: "Simple & Clear", f3_text: "Gives an estimated likelihood so families can decide when to seek care.",
+        f4_title: "Built for Equity", f4_text: "Made so under-resourced families can access useful information more easily.",
         feedback_title: "Share Your Feedback",
         feedback_desc: "Your message stays private. Only the total number is public.",
+        feedback_count_label: "Feedback received:",
         feedback_button: "Submit Feedback",
         about_title: "About This Project",
         about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit."
       },
       am: {
+        nav_why: "ለምን", nav_how: "እንዴት", nav_demo: "ሙከራ", nav_about: "ስለ", nav_feedback: "አስተያየት",
+        hero_line1: "የቀደመ የሳል መመሪያን", hero_line2: "ተደራሽ ማድረግ",
+        hero_sub: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል።",
+        btn_demo: "ሙከራ አድርግ", btn_goal: "ግቡን ተመልከት",
         why_title: "ለምን እንደገነባሁት",
         why_text: "ቤተሰቤ እና እኔ የክሩፕን ቀደምት ምልክቶች አላወቅንም። በዚህ ምክንያት ታናሽ ወንድሜን ሶስት ጊዜ ሊያጣን ተቃርቧል። ያ ተሞክሮ CroupGuardን እንድገነባ ምክንያት ሆኗል።",
-        demo_title: "የሙከራ ማሳያ",
-        demo_desc: "ይህ የተማሪ ምሳሌ ነው። ቁልፉን በመጫን ሙከራ ያድርጉ።",
-        demo_button: "የሳል ትንተና ሙከራ",
-        demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው።",
+        demo_title: "የሙከራ ማሳያ", demo_desc: "ይህ የተማሪ ምሳሌ ነው።", demo_button: "የሳል ትንተና ሙከራ", demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው።",
         features_title: "ዋና ባህሪያት",
-        f1_title: "ግላዊነት በመጀመሪያ",
-        f1_text: "በመሣሪያ ላይ የሚሰራ እና ውሂብ አነስተኛ የሚሰበስብ።",
-        f2_title: "የቋንቋ መዳረሻ",
-        f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ እና ሌሎች ቋንቋዎችን ይደግፋል።",
-        f3_title: "ቀላል እና ግልጽ",
-        f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ የሚያግዝ።",
-        f4_title: "ለእኩልነት የተሰራ",
-        f4_text: "ሀብት የሌላቸው ቤተሰቦች በቀላሉ መረጃ እንዲያገኙ።",
-        feedback_title: "አስተያየትዎን ያጋሩ",
-        feedback_desc: "መልእክትዎ ግላዊ ነው። ቁጥሩ ብቻ ይታያል።",
-        feedback_button: "አስተያየት ላክ",
-        about_title: "ስለ ፕሮጀክቱ",
-        about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው።"
+        f1_title: "ግላዊነት", f1_text: "በመሣሪያ ላይ የሚሰራ።",
+        f2_title: "የቋንቋ መዳረሻ", f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ ይደግፋል።",
+        f3_title: "ቀላል እና ግልጽ", f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ ያግዛል።",
+        f4_title: "ለእኩልነት", f4_text: "ለሁሉም ቤተሰቦች።",
+        feedback_title: "አስተያየትዎን ያጋሩ", feedback_desc: "መልእክትዎ ግላዊ ነው።", feedback_count_label: "የተቀበሉ አስተያየቶች:", feedback_button: "አስተያየት ላክ",
+        about_title: "ስለ ፕሮጀክቱ", about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው።"
       },
       om: {
+        nav_why: "Maaliif", nav_how: "Akkaataa", nav_demo: "Demo", nav_about: "Waa'ee", nav_feedback: "Yaada",
+        hero_line1: "Gorsa qufaa dafanii", hero_line2: "salphaatti argachuu",
+        hero_sub: "Pirojektii barataa kan maatiilee gargaaru.",
+        btn_demo: "Demo Yaali", btn_goal: "Kaayyoo Ilaali",
         why_title: "Maaliif Kan Uume",
-        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra. Muuxannoon kun CroupGuard uumuuf na kakaase.",
-        demo_title: "Demo Interactive",
-        demo_desc: "Kun protootaayipii barataa. Qufeetti cuqaasuun yaali.",
-        demo_button: "Qufaa Xiinxali",
-        demo_note: "Kun protootaayipii barataa qofa.",
+        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra.",
+        demo_title: "Demo Interactive", demo_desc: "Kun protootaayipii barataa.", demo_button: "Qufaa Xiinxali", demo_note: "Kun protootaayipii barataa qofa.",
         features_title: "Amaloota Ijoo",
-        f1_title: "Dhuunfaa Dura",
-        f1_text: "Meeshaa irratti kan hojjetu.",
-        f2_title: "Afaan Argachuu",
-        f2_text: "Afaan Oromoo, Amaariffaa, Tigiree deeggara.",
-        f3_title: "Salphaa fi Ifaa",
-        f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
-        f4_title: "Qixaaf Kan Uumame",
-        f4_text: "Maatiilee qabeenya hin qabneef.",
-        feedback_title: "Yaada Kee Qoodi",
-        feedback_desc: "Ergaan kee dhuunfaa. Lakkoofsi qofa uumame.",
-        feedback_button: "Yaada Ergi",
-        about_title: "Waa'ee Pirojektii",
-        about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame."
+        f1_title: "Dhuunfaa", f1_text: "Meeshaa irratti kan hojjetu.",
+        f2_title: "Afaan", f2_text: "Afaan Oromoo, Amaariffaa, Tigiree deeggara.",
+        f3_title: "Salphaa", f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
+        f4_title: "Qixxummaa", f4_text: "Maatiilee hundaaf.",
+        feedback_title: "Yaada Kee Qoodi", feedback_desc: "Ergaan kee dhuunfaa.", feedback_count_label: "Yaadni argame:", feedback_button: "Yaada Ergi",
+        about_title: "Waa'ee Pirojektii", about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame."
       },
       ti: {
+        nav_why: "ስለምንታይ", nav_how: "ከመይ", nav_demo: "ፈተነ", nav_about: "ብዛዕባ", nav_feedback: "ርእይቶ",
+        hero_line1: "ቀዳማይ መምርሒ ሳል", hero_line2: "ተበጻሕነት",
+        hero_sub: "ናይ ተማሃራይ ፕሮጀክት ስድራቤታት ዝሕግዝ።",
+        btn_demo: "ፈተነ ግበር", btn_goal: "ዕላማ ርአ",
         why_title: "ስለምንታይ ዝሰራሕኩዎ",
-        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና። እቲ ተመኩሮ CroupGuard ክሰርሕ ድርኺቱ ኮይኑ።",
-        demo_title: "ናይ ፈተነ ማርእያ",
-        demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ።",
-        demo_button: "ሳል ትንተና ፈትን",
-        demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ።",
+        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና።",
+        demo_title: "ናይ ፈተነ ማርእያ", demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ።", demo_button: "ሳል ትንተና ፈትን", demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ።",
         features_title: "ቁልፊ ባህርያት",
-        f1_title: "ብሕታውነት ቀዳምነት",
-        f1_text: "ኣብ መሳርሒ ዝሰርሕ።",
-        f2_title: "ናይ ቋንቋ መእተዊ",
-        f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ይድግፍ።",
-        f3_title: "ቀሊልን ንጹርን",
-        f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
-        f4_title: "ንማዕረ ክብሪ ዝተሰርሐ",
-        f4_text: "ንድኻታት ስድራቤታት።",
-        feedback_title: "ርእይቶኻ ኣካፍል",
-        feedback_desc: "መልእኽትኻ ብሕታዊ እዩ።",
-        feedback_button: "ርእይቶ ስደድ",
-        about_title: "ብዛዕባ እቲ ፕሮጀክት",
-        about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ።"
+        f1_title: "ብሕታውነት", f1_text: "ኣብ መሳርሒ ዝሰርሕ።",
+        f2_title: "ቋንቋ", f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ይድግፍ።",
+        f3_title: "ቀሊል", f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
+        f4_title: "ማዕረ", f4_text: "ንኹሉ ስድራቤታት።",
+        feedback_title: "ርእይቶኻ ኣካፍል", feedback_desc: "መልእኽትኻ ብሕታዊ እዩ።", feedback_count_label: "ርእይቶታት:", feedback_button: "ርእይቶ ስደድ",
+        about_title: "ብዛዕባ እቲ ፕሮጀክት", about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ።"
       }
+      // Other languages fall back to English for now (can be expanded later)
     };
 
     function changeLanguage(lang) {
