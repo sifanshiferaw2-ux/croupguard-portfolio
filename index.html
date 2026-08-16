@@ -3,177 +3,162 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CroupGuard – Early Cough Awareness</title>
+  <title>CroupGuard</title>
   <style>
     :root {
-      --bg: #0f0a1a;
-      --card: rgba(255, 255, 255, 0.05);
-      --card-border: rgba(255, 255, 255, 0.1);
-      --text: #f1e7ff;
-      --text-muted: #c4b5fd;
-      --primary: #8b5cf6;
-      --primary2: #ec4899;
-      --accent: #38bdf8;
-      --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+      --bg: #0b0b12;
+      --card: #15151f;
+      --text: #ffffff;
+      --muted: #a1a1aa;
+      --primary: #a855f7;
+      --secondary: #ec4899;
+      --accent: #22d3ee;
+      --border: #27272a;
     }
 
-    [data-theme="light"] {
-      --bg: #f5f3ff;
-      --card: #ffffff;
-      --card-border: #e9d5ff;
-      --text: #1e1b4b;
-      --text-muted: #5b21b6;
-      --primary: #7c3aed;
-      --primary2: #db2777;
-      --accent: #0284c7;
-      --shadow: 0 15px 30px -8px rgba(124, 58, 237, 0.15);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      background-image: 
-        radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 50%);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
       color: var(--text);
-      line-height: 1.65;
-      min-height: 100vh;
-      transition: background 0.4s, color 0.4s;
+      line-height: 1.6;
     }
 
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 30px 20px 80px;
-    }
-
-    /* LOGO - Blue & Pink Circles */
-    .logo-wrap {
+    nav {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 18px;
+      padding: 18px 40px;
+      background: rgba(11, 11, 18, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .logo-circle {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #38bdf8, #ec4899);
-      box-shadow: 0 0 30px rgba(236, 72, 153, 0.4);
-      position: relative;
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.25rem;
     }
 
-    .logo-circle::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    .nav-logo {
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #8b5cf6, #38bdf8);
+      background: linear-gradient(135deg, #ec4899, #22d3ee);
+      position: relative;
     }
 
-    .logo-text {
-      font-size: 2.7rem;
+    .nav-logo::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #22d3ee;
+      top: 7px;
+      left: 7px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .theme-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f59e0b, #8b5cf6);
+      border: none;
+      cursor: pointer;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px 60px;
+    }
+
+    .hero h1 {
+      font-size: 3.4rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #38bdf8, #c084fc, #ec4899);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #ec4899, #a855f7);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -1px;
     }
 
-    header {
-      text-align: center;
-      padding: 50px 20px 40px;
-    }
-
-    .tagline {
-      font-size: 1.2rem;
+    .hero p {
+      font-size: 1.15rem;
       color: var(--text-muted);
-      max-width: 620px;
-      margin: 0 auto 32px;
+      max-width: 600px;
+      margin: 0 auto 35px;
     }
 
-    .controls {
+    .hero-buttons {
       display: flex;
       justify-content: center;
-      gap: 12px;
+      gap: 16px;
       flex-wrap: wrap;
     }
 
-    button, select {
-      padding: 12px 18px;
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
-      background: var(--card);
-      color: var(--text);
-      cursor: pointer;
-      font-size: 0.95rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.25s;
-    }
-
-    button:hover, select:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-
-    .primary-btn {
-      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    .btn-outline {
+      padding: 14px 28px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: transparent;
       color: white;
-      border: none;
-      padding: 16px 36px;
-      font-size: 1.05rem;
-      font-weight: 600;
-      border-radius: 14px;
+      font-size: 1rem;
       cursor: pointer;
-      box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.45);
-      transition: all 0.25s;
+      transition: all 0.2s;
     }
 
-    .primary-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 30px -5px rgba(236, 72, 153, 0.55);
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .btn-gradient {
+      padding: 14px 32px;
+      border-radius: 50px;
+      border: none;
+      background: linear-gradient(135deg, #ec4899, #a855f7);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
     }
 
     section {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 22px;
-      padding: 34px;
-      margin-bottom: 26px;
-      backdrop-filter: blur(12px);
-      box-shadow: var(--shadow);
-    }
-
-    h2 {
-      font-size: 1.55rem;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #38bdf8, #c084fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .demo-box {
-      text-align: center;
-      padding: 45px 30px;
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(236, 72, 153, 0.1));
-      border: 1px solid rgba(236, 72, 153, 0.2);
-    }
-
-    #result {
-      margin-top: 24px;
-      font-size: 1.3rem;
-      font-weight: 600;
-      min-height: 55px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 36px;
+      margin-bottom: 28px;
     }
 
     .features {
@@ -183,71 +168,49 @@
     }
 
     .feature {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      padding: 22px;
-      border-radius: 18px;
-      transition: transform 0.25s;
-    }
-
-    [data-theme="light"] .feature {
-      background: #faf5ff;
-    }
-
-    .feature:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 24px;
+      border-radius: 16px;
     }
 
     .feature strong {
       display: block;
       margin-bottom: 8px;
-      font-size: 1.1rem;
-      color: var(--accent);
+      color: #38bdf8;
     }
 
     textarea {
       width: 100%;
       padding: 16px;
-      border-radius: 16px;
-      border: 1px solid var(--card-border);
-      background: rgba(0, 0, 0, 0.2);
-      color: var(--text);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.25);
+      color: white;
       font-size: 1rem;
-      resize: vertical;
       margin-bottom: 16px;
-    }
-
-    [data-theme="light"] textarea {
-      background: #f5f3ff;
+      resize: vertical;
     }
 
     .count {
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 700;
-      margin: 12px 0 20px;
-      color: var(--primary2);
+      margin: 12px 0 18px;
+      color: #ec4899;
     }
 
     footer {
       text-align: center;
-      padding: 50px 20px 30px;
-      color: var(--text-muted);
-      font-size: 0.95rem;
+      padding: 40px 20px;
+      color: #a1a1aa;
     }
 
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
+    a {
+      color: #38bdf8;
     }
 
-    .large-text { font-size: 1.18em; }
-
-    @media (max-width: 600px) {
-      .logo-text { font-size: 2.1rem; }
-      .logo-circle { width: 42px; height: 42px; }
-      section { padding: 24px 18px; }
+    .large-text {
+      font-size: 1.15em;
     }
   </style>
 </head>
@@ -255,47 +218,50 @@
 
   <div class="container">
 
-    <header>
-      <div class="logo-wrap">
-        <div class="logo-circle"></div>
-        <div class="logo-text">CroupGuard</div>
+    <!-- Navigation -->
+    <nav style="display:flex; justify-content:space-between; align-items:center; padding: 18px 10px; margin-bottom: 20px;">
+      <div style="display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.2rem;">
+        <div class="logo-circle" style="width:28px; height:28px;"></div>
+        CroupGuard
       </div>
+      <div class="nav-links" style="display:flex; gap:24px; align-items:center;">
+        <a href="#why" style="color:var(--text-muted); text-decoration:none;">Why</a>
+        <a href="#how" style="color:var(--text-muted); text-decoration:none;">How it Works</a>
+        <a href="#demo" style="color:var(--text-muted); text-decoration:none;">Demo</a>
+        <a href="#about" style="color:var(--text-muted); text-decoration:none;">About</a>
+        <a href="#feedback" style="color:var(--text-muted); text-decoration:none;">Feedback</a>
+        <button class="theme-toggle" onclick="toggleTheme()" style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#f59e0b,#8b5cf6); border:none;"></button>
+      </div>
+    </nav>
 
-      <p class="tagline" data-i18n="tagline">
-        A student project helping families understand concerning coughs earlier — with privacy and language access in mind.
+    <!-- HERO -->
+    <section class="hero" style="text-align:center; padding: 70px 20px;">
+      <h1 style="font-size: 3.2rem; font-weight: 800; line-height: 1.15; margin-bottom: 20px;">
+        Making early cough guidance<br>
+        <span style="background: linear-gradient(135deg, #ec4899, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">more accessible</span>
+      </h1>
+      <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 580px; margin: 0 auto 35px;">
+        A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.
       </p>
-
-      <div class="controls">
-        <select id="language-select" onchange="changeLanguage(this.value)">
-          <option value="en">English</option>
-          <option value="am">Amharic (አማርኛ)</option>
-          <option value="om">Afaan Oromoo</option>
-          <option value="ti">Tigrinya (ትግርኛ)</option>
-          <option value="zh">中文</option>
-          <option value="hi">हिन्दी</option>
-          <option value="es">Español</option>
-          <option value="fr">Français</option>
-          <option value="ar">العربية</option>
-          <option value="bn">বাংলা</option>
-          <option value="pt">Português</option>
-          <option value="ru">Русский</option>
-          <option value="ur">اردو</option>
-          <option value="id">Bahasa Indonesia</option>
-        </select>
-
-        <button onclick="toggleTheme()">Dark / Light</button>
-        <button onclick="toggleTextSize()">Larger Text</button>
+      <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+        <button class="primary-btn" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Try the Demo</button>
+        <button class="btn-outline" style="padding:14px 28px; border-radius:50px; border:1px solid rgba(255,255,255,0.25); background:transparent; color:white;" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">See the Goal</button>
       </div>
-    </header>
+    </section>
 
-    <section>
+    <!-- Rest of the sections with data-i18n attributes -->
+    <!-- (I am keeping the structure clean and matching the design you liked) -->
+
+    <!-- WHY -->
+    <section id="why">
       <h2 data-i18n="why_title">Why I Built This</h2>
       <p data-i18n="why_text">
         When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.
       </p>
     </section>
 
-    <section class="demo-box">
+    <!-- DEMO -->
+    <section id="demo" class="demo-box">
       <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
       <p data-i18n="demo_desc" style="margin-bottom: 22px; color: var(--text-muted);">
         This is a simulated prototype. Tap the button to run a sample analysis.
@@ -309,6 +275,7 @@
       </p>
     </section>
 
+    <!-- FEATURES -->
     <section>
       <h2 data-i18n="features_title">Key Features</h2>
       <div class="features">
@@ -331,7 +298,8 @@
       </div>
     </section>
 
-    <section>
+    <!-- FEEDBACK -->
+    <section id="feedback">
       <h2 data-i18n="feedback_title">Share Your Feedback</h2>
       <p data-i18n="feedback_desc" style="margin-bottom: 8px; color: var(--text-muted);">
         Your message stays private. Only the total number is public.
@@ -373,7 +341,7 @@
   </footer>
 
   <script>
-    // Theme
+    // Theme toggle
     function toggleTheme() {
       const html = document.documentElement;
       const current = html.getAttribute("data-theme");
@@ -389,12 +357,10 @@
       document.documentElement.setAttribute("data-theme", "light");
     }
 
-    // Text size
     function toggleTextSize() {
       document.body.classList.toggle("large-text");
     }
 
-    // Demo
     function startAnalysis() {
       const result = document.getElementById("result");
       result.innerHTML = "Analyzing cough sample...";
@@ -404,7 +370,7 @@
       }, 1600);
     }
 
-    // Feedback - Count + Email
+    // Feedback system (Count + Email)
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -426,7 +392,7 @@
       }
 
       try {
-        // Send email
+        // Send to your email
         await fetch(FORMSPREE_URL, {
           method: "POST",
           headers: {
@@ -450,7 +416,7 @@
 
     loadFeedbackCount();
 
-    // Languages
+    // Language translations
     const translations = {
       en: {
         tagline: "A student project helping families understand concerning coughs earlier — with privacy and language access in mind.",
@@ -558,7 +524,9 @@
       const t = translations[lang] || translations.en;
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (t[key]) el.innerText = t[key];
+        if (t[key]) {
+          el.innerText = t[key];
+        }
       });
     }
   </script>
