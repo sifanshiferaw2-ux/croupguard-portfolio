@@ -169,12 +169,12 @@
       color: #38bdf8;
     }
 
-    /* Mic with Google-style pulsing circles */
+    /* Mic with orange breathing circle */
     .mic-container {
       position: relative;
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 20px;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 24px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -186,24 +186,25 @@
       position: relative;
     }
 
-    .pulse-ring {
+    .breathing-circle {
       position: absolute;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
-      border: 2px solid #ec4899;
+      background: rgba(249, 115, 22, 0.25);
+      border: 2px solid #f97316;
       opacity: 0;
+      transform: scale(0.7);
     }
 
-    .pulse-ring.active {
-      animation: pulse 1.6s ease-out infinite;
+    .breathing-circle.active {
+      animation: breathe 1.4s ease-in-out infinite;
     }
 
-    .pulse-ring:nth-child(1) { width: 60px; height: 60px; animation-delay: 0s; }
-    .pulse-ring:nth-child(2) { width: 80px; height: 80px; animation-delay: 0.3s; }
-    .pulse-ring:nth-child(3) { width: 100px; height: 100px; animation-delay: 0.6s; }
-
-    @keyframes pulse {
-      0% { transform: scale(0.6); opacity: 0.8; }
-      100% { transform: scale(1.4); opacity: 0; }
+    @keyframes breathe {
+      0%   { transform: scale(0.7); opacity: 0.6; }
+      50%  { transform: scale(1.15); opacity: 0.9; }
+      100% { transform: scale(0.7); opacity: 0.6; }
     }
 
     .result-box {
@@ -339,10 +340,8 @@
         This is a simulated prototype. Tap the button to run a sample analysis.
       </p>
 
-      <div class="mic-container" id="micContainer">
-        <div class="pulse-ring"></div>
-        <div class="pulse-ring"></div>
-        <div class="pulse-ring"></div>
+      <div class="mic-container">
+        <div class="breathing-circle" id="breathingCircle"></div>
         <div class="mic-icon">🎙️</div>
       </div>
 
@@ -412,10 +411,10 @@
   <script>
     function startAnalysis() {
       const result = document.getElementById("result");
-      const rings = document.querySelectorAll(".pulse-ring");
+      const circle = document.getElementById("breathingCircle");
 
-      // Start pulsing
-      rings.forEach(r => r.classList.add("active"));
+      // Start breathing animation
+      circle.classList.add("active");
 
       result.innerHTML = `
         <div class="result-box">
@@ -425,8 +424,8 @@
       `;
 
       setTimeout(() => {
-        // Stop pulsing
-        rings.forEach(r => r.classList.remove("active"));
+        // Stop breathing
+        circle.classList.remove("active");
 
         const percent = Math.floor(Math.random() * 21) + 5; // 5–25%
         let label = "Low likelihood";
@@ -485,7 +484,7 @@
 
     loadFeedbackCount();
 
-    // Expanded translations
+    // Full translations
     const translations = {
       en: {
         nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
@@ -513,52 +512,72 @@
       am: {
         nav_why: "ለምን", nav_how: "እንዴት", nav_demo: "ሙከራ", nav_about: "ስለ", nav_feedback: "አስተያየት",
         hero_line1: "የቀደመ የሳል መመሪያን", hero_line2: "ተደራሽ ማድረግ",
-        hero_sub: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል።",
+        hero_sub: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል — በተለይ የቋንቋ እና የመረጃ እጥረት ባለባቸው አካባቢዎች።",
         btn_demo: "ሙከራ አድርግ", btn_goal: "ግቡን ተመልከት",
         why_title: "ለምን እንደገነባሁት",
-        why_text: "ቤተሰቤ እና እኔ የክሩፕን ቀደምት ምልክቶች አላወቅንም። በዚህ ምክንያት ታናሽ ወንድሜን ሶስት ጊዜ ሊያጣን ተቃርቧል። ያ ተሞክሮ CroupGuardን እንድገነባ ምክንያት ሆኗል።",
-        demo_title: "የሙከራ ማሳያ", demo_desc: "ይህ የተማሪ ምሳሌ ነው።", demo_button: "የሳል ትንተና ሙከራ", demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው።",
+        why_text: "ቤተሰቤ እና እኔ የክሩፕን ቀደምት ምልክቶች አላወቅንም። በዚህ ምክንያት ታናሽ ወንድሜን ሶስት ጊዜ ሊያጣን ተቃርቧል። ያ ተሞክሮ CroupGuardን እንድገነባ ምክንያት ሆኗል — ሌሎች ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲለዩ ለመርዳት።",
+        demo_title: "የሙከራ ማሳያ",
+        demo_desc: "ይህ የተማሪ ምሳሌ ነው። ቁልፉን በመጫን ሙከራ ያድርጉ።",
+        demo_button: "የሳል ትንተና ሙከራ",
+        demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው፣ የሕክምና መሣሪያ አይደለም።",
         features_title: "ዋና ባህሪያት",
-        f1_title: "ግላዊነት", f1_text: "በመሣሪያ ላይ የሚሰራ።",
-        f2_title: "የቋንቋ መዳረሻ", f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ ይደግፋል።",
-        f3_title: "ቀላል እና ግልጽ", f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ ያግዛል።",
-        f4_title: "ለእኩልነት", f4_text: "ለሁሉም ቤተሰቦች።",
-        feedback_title: "አስተያየትዎን ያጋሩ", feedback_desc: "መልእክትዎ ግላዊ ነው።", feedback_count_label: "የተቀበሉ አስተያየቶች:", feedback_button: "አስተያየት ላክ",
-        about_title: "ስለ ፕሮጀክቱ", about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው።"
+        f1_title: "ግላዊነት በመጀመሪያ", f1_text: "በመሣሪያ ላይ የሚሰራ እና ውሂብ አነስተኛ የሚሰበስብ።",
+        f2_title: "የቋንቋ መዳረሻ", f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ እና ሌሎች ቋንቋዎችን ይደግፋል።",
+        f3_title: "ቀላል እና ግልጽ", f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ የሚያግዝ ግምት ይሰጣል።",
+        f4_title: "ለእኩልነት የተሰራ", f4_text: "ሀብት የሌላቸው ቤተሰቦች በቀላሉ መረጃ እንዲያገኙ የተሰራ።",
+        feedback_title: "አስተያየትዎን ያጋሩ",
+        feedback_desc: "መልእክትዎ ግላዊ ነው። ቁጥሩ ብቻ ይታያል።",
+        feedback_count_label: "የተቀበሉ አስተያየቶች:",
+        feedback_button: "አስተያየት ላክ",
+        about_title: "ስለ ፕሮጀክቱ",
+        about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው። ከግል ቤተሰብ ተሞክሮ ተነስቶ ለቀደመ ግንዛቤ፣ ግላዊነት እና የቋንቋ ተደራሽነት ያተኮረ መሳሪያ ሆኗል። አሁንም ፕሮቶታይፕ ነው እና የሕክምና መሣሪያ አይደለም። ግቡ ተጨማሪ ቤተሰቦች እንዲጠቀሙበት ማሻሻል ነው።"
       },
       om: {
         nav_why: "Maaliif", nav_how: "Akkaataa", nav_demo: "Demo", nav_about: "Waa'ee", nav_feedback: "Yaada",
         hero_line1: "Gorsa qufaa dafanii", hero_line2: "salphaatti argachuu",
-        hero_sub: "Pirojektii barataa kan maatiilee gargaaru.",
+        hero_sub: "Pirojektii barataa kan maatiilee dhukkuba qufaa dafanii akka hubatan gargaaru — keessattuu bakka afaan fi odeeffannoo hanqate.",
         btn_demo: "Demo Yaali", btn_goal: "Kaayyoo Ilaali",
         why_title: "Maaliif Kan Uume",
-        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra.",
-        demo_title: "Demo Interactive", demo_desc: "Kun protootaayipii barataa.", demo_button: "Qufaa Xiinxali", demo_note: "Kun protootaayipii barataa qofa.",
+        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra. Muuxannoon kun CroupGuard uumuuf na kakaase — maatiilee biroo qufaa yaaddessaa dafanii akka adda baasan gargaaruuf.",
+        demo_title: "Demo Interactive",
+        demo_desc: "Kun protootaayipii barataa. Qufeetti cuqaasuun yaali.",
+        demo_button: "Qufaa Xiinxali",
+        demo_note: "Kun protootaayipii barataa qofa, meeshaa fayyaa miti.",
         features_title: "Amaloota Ijoo",
-        f1_title: "Dhuunfaa", f1_text: "Meeshaa irratti kan hojjetu.",
-        f2_title: "Afaan", f2_text: "Afaan Oromoo, Amaariffaa, Tigiree deeggara.",
-        f3_title: "Salphaa", f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
-        f4_title: "Qixxummaa", f4_text: "Maatiilee hundaaf.",
-        feedback_title: "Yaada Kee Qoodi", feedback_desc: "Ergaan kee dhuunfaa.", feedback_count_label: "Yaadni argame:", feedback_button: "Yaada Ergi",
-        about_title: "Waa'ee Pirojektii", about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame."
+        f1_title: "Dhuunfaa Dura", f1_text: "Meeshaa irratti kan hojjetu fi daataa xiqqaa qabu.",
+        f2_title: "Afaan Argachuu", f2_text: "Afaan Oromoo, Amaariffaa, Tigiree fi afaanota biroo deeggara.",
+        f3_title: "Salphaa fi Ifaa", f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
+        f4_title: "Qixaaf Kan Uumame", f4_text: "Maatiilee qabeenya hin qabneef odeeffannoo salphaatti akka argatan.",
+        feedback_title: "Yaada Kee Qoodi",
+        feedback_desc: "Ergaan kee dhuunfaa. Lakkoofsi qofa uumame.",
+        feedback_count_label: "Yaadni argame:",
+        feedback_button: "Yaada Ergi",
+        about_title: "Waa'ee Pirojektii",
+        about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame. Muuxannoo maatii irraa ka'ee gara meeshaa dafanii beekumsa, dhuunfaa fi afaan argachuu irratti xiyyeeffate. Ammaas protootaayipii dha, meeshaa fayyaa miti. Kaayyoon isaa maatiilee dabalataa akka fayyadaman fooyyessuu dha."
       },
       ti: {
         nav_why: "ስለምንታይ", nav_how: "ከመይ", nav_demo: "ፈተነ", nav_about: "ብዛዕባ", nav_feedback: "ርእይቶ",
         hero_line1: "ቀዳማይ መምርሒ ሳል", hero_line2: "ተበጻሕነት",
-        hero_sub: "ናይ ተማሃራይ ፕሮጀክት ስድራቤታት ዝሕግዝ።",
+        hero_sub: "ናይ ተማሃራይ ፕሮጀክት ስድራቤታት ኣሳሳቢ ሳል ቅድሚ ምርዳእ ዝሕግዝ — ብፍላይ ኣብቲ ቋንቋን ሓበሬታን ዝጎድለሉ ቦታታት።",
         btn_demo: "ፈተነ ግበር", btn_goal: "ዕላማ ርአ",
         why_title: "ስለምንታይ ዝሰራሕኩዎ",
-        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና።",
-        demo_title: "ናይ ፈተነ ማርእያ", demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ።", demo_button: "ሳል ትንተና ፈትን", demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ።",
+        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና። እቲ ተመኩሮ CroupGuard ክሰርሕ ድርኺቱ ኮይኑ — ንኻልኦት ስድራቤታት ኣሳሳቢ ሳል ቅድሚ ምልላይ ንምሕጋዝ።",
+        demo_title: "ናይ ፈተነ ማርእያ",
+        demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ። ቁልፊ ጠዊቕካ ፈተነ ግበር።",
+        demo_button: "ሳል ትንተና ፈትን",
+        demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ፣ ናይ ሕክምና መሳርሒ ኣይኮነን።",
         features_title: "ቁልፊ ባህርያት",
-        f1_title: "ብሕታውነት", f1_text: "ኣብ መሳርሒ ዝሰርሕ።",
-        f2_title: "ቋንቋ", f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ይድግፍ።",
-        f3_title: "ቀሊል", f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
-        f4_title: "ማዕረ", f4_text: "ንኹሉ ስድራቤታት።",
-        feedback_title: "ርእይቶኻ ኣካፍል", feedback_desc: "መልእኽትኻ ብሕታዊ እዩ።", feedback_count_label: "ርእይቶታት:", feedback_button: "ርእይቶ ስደድ",
-        about_title: "ብዛዕባ እቲ ፕሮጀክት", about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ።"
+        f1_title: "ብሕታውነት ቀዳምነት", f1_text: "ኣብ መሳርሒ ዝሰርሕን ውሱን ዳታ ዘለዎን።",
+        f2_title: "ናይ ቋንቋ መእተዊ", f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ካልኦት ቋንቋታትን ይድግፍ።",
+        f3_title: "ቀሊልን ንጹርን", f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
+        f4_title: "ንማዕረ ክብሪ ዝተሰርሐ", f4_text: "ንድኻታት ስድራቤታት ሓበሬታ ቀሊል ክረኽቡ።",
+        feedback_title: "ርእይቶኻ ኣካፍል",
+        feedback_desc: "መልእኽትኻ ብሕታዊ እዩ። ቁጽሪ ጥራይ ይረአ።",
+        feedback_count_label: "ርእይቶታት:",
+        feedback_button: "ርእይቶ ስደድ",
+        about_title: "ብዛዕባ እቲ ፕሮጀክት",
+        about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ። ካብ ናይ ስድራቤት ተመኩሮ ተበጊሱ ናብ መሳርሒ ቀዳማይ ምርዳእ፣ ብሕታውነትን ናይ ቋንቋ ተበጻሕነትን ዝተሓጽረ ኮይኑ። ገና ፕሮቶታይፕ እዩ እሞ ናይ ሕክምና መሳርሒ ኣይኮነን። ዕላማኡ ዝያዳ ስድራቤታት ክጥቀሙሉ ምምሕያሽ እዩ።"
       }
-      // Other languages fall back to English for now (can be expanded later)
     };
 
     function changeLanguage(lang) {
