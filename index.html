@@ -169,7 +169,6 @@
       color: #38bdf8;
     }
 
-    /* Solid orange breathing mic */
     .mic-container {
       position: relative;
       width: 110px;
@@ -420,10 +419,8 @@
       btn.style.opacity = "0.6";
 
       try {
-        // Ask for microphone permission
         mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-        // Permission granted → start visual recording
         circle.classList.add("active");
 
         const messages = [
@@ -449,18 +446,16 @@
           }
         }, 1000);
 
-        // Record for ~5.5 seconds then stop
         setTimeout(() => {
           clearInterval(statusInterval);
           circle.classList.remove("active");
 
-          // Stop the microphone
           if (mediaStream) {
             mediaStream.getTracks().forEach(track => track.stop());
             mediaStream = null;
           }
 
-          const percent = Math.floor(Math.random() * 21) + 5; // 5–25%
+          const percent = Math.floor(Math.random() * 21) + 5;
           let label = "Low likelihood";
           let detail = "Classic barking features are limited. This appears closer to a regular cough.";
 
@@ -482,7 +477,6 @@
         }, 5500);
 
       } catch (err) {
-        // Permission denied or error
         circle.classList.remove("active");
         result.innerHTML = `
           <div class="result-box">
@@ -497,7 +491,6 @@
       }
     }
 
-    // Feedback system
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -535,7 +528,6 @@
 
     loadFeedbackCount();
 
-    // Translations
     const translations = {
       en: {
         nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
@@ -581,7 +573,7 @@
         feedback_count_label: "የተቀበሉ አስተያየቶች:",
         feedback_button: "አስተያየት ላክ",
         about_title: "ስለ ፕሮጀክቱ",
-        about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው።"
+        about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው። ከግል ቤተሰብ ተሞክሮ ተነስቶ ለቀደመ ግንዛቤ፣ ግላዊነት እና የቋንቋ ተደራሽነት ያተኮረ መሳሪያ ሆኗል። አሁንም ፕሮቶታይፕ ነው እና የሕክምና መሣሪያ አይደለም። ግቡ ተጨማሪ ቤተሰቦች እንዲጠቀሙበት ማሻሻል ነው።"
       },
       om: {
         nav_why: "Maaliif", nav_how: "Akkaataa", nav_demo: "Demo", nav_about: "Waa'ee", nav_feedback: "Yaada",
@@ -604,7 +596,7 @@
         feedback_count_label: "Yaadni argame:",
         feedback_button: "Yaada Ergi",
         about_title: "Waa'ee Pirojektii",
-        about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame."
+        about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame. Muuxannoo maatii irraa ka'ee gara meeshaa dafanii beekumsa, dhuunfaa fi afaan argachuu irratti xiyyeeffate. Ammaas protootaayipii dha, meeshaa fayyaa miti. Kaayyoon isaa maatiilee dabalataa akka fayyadaman fooyyessuu dha."
       },
       ti: {
         nav_why: "ስለምንታይ", nav_how: "ከመይ", nav_demo: "ፈተነ", nav_about: "ብዛዕባ", nav_feedback: "ርእይቶ",
@@ -627,7 +619,7 @@
         feedback_count_label: "ርእይቶታት:",
         feedback_button: "ርእይቶ ስደድ",
         about_title: "ብዛዕባ እቲ ፕሮጀክት",
-        about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ።"
+        about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ። ካብ ናይ ስድራቤት ተመኩሮ ተበጊሱ ናብ መሳርሒ ቀዳማይ ምርዳእ፣ ብሕታውነትን ናይ ቋንቋ ተበጻሕነትን ዝተሓጽረ ኮይኑ። ገና ፕሮቶታይፕ እዩ እሞ ናይ ሕክምና መሳርሒ ኣይኮነን። ዕላማኡ ዝያዳ ስድራቤታት ክጥቀሙሉ ምምሕያሽ እዩ።"
       }
     };
 
