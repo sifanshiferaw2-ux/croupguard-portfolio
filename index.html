@@ -7,7 +7,6 @@
   <style>
     :root {
       --bg: #0f0a1a;
-      --bg2: #1a1025;
       --card: rgba(255, 255, 255, 0.05);
       --card-border: rgba(255, 255, 255, 0.1);
       --text: #f1e7ff;
@@ -20,7 +19,6 @@
 
     [data-theme="light"] {
       --bg: #f5f3ff;
-      --bg2: #ede9fe;
       --card: #ffffff;
       --card-border: #e9d5ff;
       --text: #1e1b4b;
@@ -51,6 +49,7 @@
       padding: 30px 20px 80px;
     }
 
+    /* LOGO - Blue & Pink Circles */
     .logo-wrap {
       display: flex;
       justify-content: center;
@@ -64,9 +63,6 @@
       height: 52px;
       border-radius: 50%;
       background: linear-gradient(135deg, #38bdf8, #ec4899);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       box-shadow: 0 0 30px rgba(236, 72, 153, 0.4);
       position: relative;
     }
@@ -74,11 +70,13 @@
     .logo-circle::after {
       content: "";
       position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 28px;
       height: 28px;
       border-radius: 50%;
       background: linear-gradient(135deg, #8b5cf6, #38bdf8);
-      opacity: 0.9;
     }
 
     .logo-text {
@@ -189,7 +187,7 @@
       border: 1px solid var(--card-border);
       padding: 22px;
       border-radius: 18px;
-      transition: transform 0.25s, border-color 0.25s;
+      transition: transform 0.25s;
     }
 
     [data-theme="light"] .feature {
@@ -375,6 +373,7 @@
   </footer>
 
   <script>
+    // Theme
     function toggleTheme() {
       const html = document.documentElement;
       const current = html.getAttribute("data-theme");
@@ -386,15 +385,16 @@
         localStorage.setItem("theme", "light");
       }
     }
-
     if (localStorage.getItem("theme") === "light") {
       document.documentElement.setAttribute("data-theme", "light");
     }
 
+    // Text size
     function toggleTextSize() {
       document.body.classList.toggle("large-text");
     }
 
+    // Demo
     function startAnalysis() {
       const result = document.getElementById("result");
       result.innerHTML = "Analyzing cough sample...";
@@ -404,7 +404,7 @@
       }, 1600);
     }
 
-    // Feedback (count + email)
+    // Feedback - Count + Email
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -426,6 +426,7 @@
       }
 
       try {
+        // Send email
         await fetch(FORMSPREE_URL, {
           method: "POST",
           headers: {
@@ -435,6 +436,7 @@
           body: JSON.stringify({ message: message })
         });
 
+        // Update public count
         const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`);
         const data = await res.json();
         document.getElementById("feedback-count").innerText = data.value;
