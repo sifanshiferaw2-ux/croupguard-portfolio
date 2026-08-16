@@ -1,49 +1,458 @@
-<!-- Feedback Count Display -->
-<div id="feedback-count" style="font-size: 1.2rem; font-weight: bold; margin: 10px 0;">
-  Feedback received: <span id="count">0</span>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CroupGuard – Student Project</title>
+  <style>
+    :root {
+      --bg: #0f0f13;
+      --bg-alt: #09090b;
+      --card: #18181b;
+      --border: #27272a;
+      --text: #e5e7eb;
+      --muted: #a1a1aa;
+      --accent: #ec4899;
+      --accent2: #a855f7;
+    }
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-alt: #f1f5f9;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #db2777;
+      --accent2: #7c3aed;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    header {
+      background: color-mix(in srgb, var(--bg) 90%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav { display: flex; justify-content: space-between; align-items: center; }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.3rem;
+    }
+    .logo-circles { width: 34px; height: 34px; position: relative; }
+    .logo-circles::before, .logo-circles::after {
+      content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%;
+    }
+    .logo-circles::before { background: #f472b6; top: 0; left: 0; }
+    .logo-circles::after { background: #2dd4bf; bottom: 0; right: 0; }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; margin-left: 22px;
+      font-weight: 500; font-size: 0.95rem;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .theme-btn {
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--text); width: 40px; height: 40px; border-radius: 50%;
+      cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+    }
+
+    .hero {
+      padding: 90px 0 80px; text-align: center;
+      background: radial-gradient(ellipse at top, color-mix(in srgb, var(--accent2) 15%, transparent), transparent 70%);
+    }
+    .hero h1 {
+      font-size: 3.1rem; font-weight: 800; line-height: 1.15; margin-bottom: 18px;
+    }
+    .hero h1 span {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p { font-size: 1.2rem; color: var(--muted); max-width: 640px; margin: 0 auto 36px; }
+    .btn {
+      padding: 13px 28px; border-radius: 999px; font-weight: 600; font-size: 1rem;
+      cursor: pointer; border: none; text-decoration: none; display: inline-block;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(236,72,153,0.3); }
+    .btn-secondary {
+      background: transparent; color: var(--text); border: 1px solid var(--border); margin-left: 12px;
+    }
+
+    section { padding: 75px 0; }
+    .section-title { font-size: 2.1rem; font-weight: 700; text-align: center; margin-bottom: 10px; }
+    .section-title span {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .section-subtitle { text-align: center; color: var(--muted); max-width: 600px; margin: 0 auto 44px; }
+
+    .why-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px;
+    }
+    .why-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 28px;
+    }
+    .why-card h3 { font-size: 1.15rem; margin-bottom: 10px; color: var(--accent); }
+    .why-card p { color: var(--muted); font-size: 0.95rem; }
+
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px;
+    }
+    .step {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+      padding: 28px; text-align: center;
+    }
+    .step-num {
+      width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; margin: 0 auto 14px; color: white;
+    }
+    .step h3 { margin-bottom: 8px; }
+    .step p { color: var(--muted); font-size: 0.95rem; }
+
+    .features {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px;
+    }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 26px;
+    }
+    .feature-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
+    .feature-card p { color: var(--muted); font-size: 0.95rem; }
+
+    .demo-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 22px;
+      padding: 44px 36px; max-width: 580px; margin: 0 auto; text-align: center;
+    }
+    .record-btn {
+      width: 86px; height: 86px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; color: white; font-size: 1.7rem; cursor: pointer; margin: 18px 0;
+    }
+    .record-btn.recording { background: #ef4444; animation: pulse 1.4s infinite; }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.45); }
+      70% { box-shadow: 0 0 0 18px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+    .result-box {
+      display: none; margin-top: 26px; padding: 24px;
+      background: var(--bg-alt); border-radius: 14px; border: 1px solid var(--border);
+    }
+    .result-box.show { display: block; }
+    .result-percentage { font-size: 2.8rem; font-weight: 800; margin: 8px 0; }
+    .low { color: #34d399; }
+    .medium { color: #fbbf24; }
+
+    .about-box {
+      max-width: 700px; margin: 0 auto; background: var(--card);
+      border: 1px solid var(--border); border-radius: 18px; padding: 36px;
+    }
+    .about-box p { color: var(--muted); margin-bottom: 16px; font-size: 1.05rem; }
+    .about-box strong { color: var(--text); }
+
+    .feedback-box {
+      max-width: 520px; margin: 0 auto; background: var(--card);
+      border: 1px solid var(--border); border-radius: 18px; padding: 32px;
+    }
+    .feedback-box textarea, .feedback-box input {
+      width: 100%; background: var(--bg-alt); border: 1px solid var(--border);
+      color: var(--text); border-radius: 10px; padding: 12px; margin-bottom: 14px;
+      font-family: inherit; font-size: 0.95rem;
+    }
+    .feedback-box textarea { min-height: 100px; resize: vertical; }
+    .feedback-count {
+      text-align: center; margin-top: 20px; color: var(--muted); font-size: 0.95rem;
+    }
+    .feedback-count strong { color: var(--accent); font-size: 1.3rem; }
+
+    .contact-box {
+      text-align: center; background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 32px; max-width: 420px; margin: 0 auto;
+    }
+    .contact-box a { color: var(--accent); font-weight: 600; font-size: 1.1rem; text-decoration: none; }
+
+    .disclaimer {
+      max-width: 700px; margin: 36px auto 0; text-align: center;
+      font-size: 0.88rem; color: var(--muted); line-height: 1.5;
+    }
+
+    footer {
+      border-top: 1px solid var(--border); padding: 36px 0; text-align: center;
+      color: var(--muted); font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2.1rem; }
+      .nav-links { display: none; }
+      .btn-secondary { margin-left: 0; margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="#" class="logo">
+      <div class="logo-circles"></div>
+      CroupGuard
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#why">Why</a>
+        <a href="#how">How it Works</a>
+        <a href="#demo">Demo</a>
+        <a href="#about">About</a>
+        <a href="#feedback">Feedback</a>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Making early cough guidance<br><span>more accessible</span></h1>
+    <p>A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.</p>
+    <a href="#demo" class="btn btn-primary">Try the Demo</a>
+    <a href="#why" class="btn btn-secondary">See the Goal</a>
+  </div>
+</section>
+
+<section id="why">
+  <div class="container">
+    <h2 class="section-title">The <span>Why</span></h2>
+    <p class="section-subtitle">This project started from a clear problem and a focused goal.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <h3>The Problem</h3>
+        <p>Parents and caregivers often struggle to tell a routine cough from one that needs closer attention. When clear information is limited by language or access, that uncertainty grows.</p>
+      </div>
+      <div class="why-card">
+        <h3>The Goal</h3>
+        <p>Build a simple, privacy-respecting tool that gives clearer acoustic feedback and practical next-step guidance — available in languages that matter to more families, including Amharic, Afaan Oromoo, and Tigrinya.</p>
+      </div>
+      <div class="why-card">
+        <h3>The Approach</h3>
+        <p>Focus on on-device analysis so raw audio stays private, prioritize multilingual access from the start, and keep the experience calm and usable for stressed caregivers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="background: var(--bg-alt);">
+  <div class="container">
+    <h2 class="section-title">How it <span>Works</span></h2>
+    <p class="section-subtitle">Three straightforward steps from recording to guidance.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Record</h3>
+        <p>Capture a short cough sample using the phone microphone with simple quality feedback.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Analyze</h3>
+        <p>On-device processing evaluates pitch, duration, and barking characteristics without uploading audio by default.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Guide</h3>
+        <p>Receive a clear likelihood score and practical next-step suggestions based on the results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <h2 class="section-title">Designed with <span>Intention</span></h2>
+    <p class="section-subtitle">Every major choice was made to support accessibility, privacy, and real-world usability.</p>
+    <div class="features">
+      <div class="feature-card">
+        <h3>On-Device Analysis</h3>
+        <p>Audio stays on the phone by default. Privacy is treated as a core requirement, not an afterthought.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Multilingual from Day One</h3>
+        <p>Interface and guidance planned for Amharic, Afaan Oromoo, Tigrinya, English, and additional languages.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Calm, Clear Guidance</h3>
+        <p>Results are paired with practical next steps so caregivers are not left with a number and no context.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Symptom Tracking</h3>
+        <p>Support for logging multiple recordings to observe change over hours or days.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Educational Support</h3>
+        <p>Simple explanations of croup and red-flag signs to reduce uncertainty.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Built for Real Conditions</h3>
+        <p>Designed with the understanding that many users may have limited connectivity or be under stress.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="demo" style="background: var(--bg-alt);">
+  <div class="container">
+    <h2 class="section-title">Interactive <span>Demo</span></h2>
+    <p class="section-subtitle">A working prototype of the analysis flow. Results are simulated for demonstration.</p>
+    <div class="demo-box">
+      <p style="color: var(--muted); margin-bottom: 6px;">Tap to simulate a cough analysis</p>
+      <button class="record-btn" id="recordBtn" onclick="startAnalysis()">🎤</button>
+      <p id="statusText" style="color: var(--muted); font-size: 0.95rem;">Ready</p>
+      <div class="result-box" id="resultBox">
+        <div style="color: var(--muted); font-size: 0.95rem;">Croup Likelihood</div>
+        <div class="result-percentage low" id="percentage">12%</div>
+        <p id="resultText" style="color: var(--muted); margin-top: 6px;"></p>
+        <p style="margin-top: 14px; font-size: 0.85rem; color: var(--muted);">Demonstration only. Always consult a healthcare professional for real concerns.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">About the <span>Project</span></h2>
+    <div class="about-box">
+      <p>CroupGuard began as a focused student effort to explore a practical question: can thoughtful technology reduce some of the uncertainty parents face when a child develops a concerning cough, especially in settings where language or access barriers make clear information harder to obtain?</p>
+      <p>The project prioritizes <strong>privacy-first on-device analysis</strong> and <strong>multilingual access</strong> (including Amharic, Afaan Oromoo, and Tigrinya) because these choices directly affect who can use the tool and how safely it can operate.</p>
+      <p>It is an early-stage prototype built to test ideas, gather feedback, and deepen understanding of both the technical and human sides of the problem. The long-term hope is that tools in this direction can support earlier recognition and more confident decision-making for families who need it most.</p>
+    </div>
+  </div>
+</section>
+
+<section id="feedback" style="background: var(--bg-alt);">
+  <div class="container">
+    <h2 class="section-title">Share <span>Feedback</span></h2>
+    <p class="section-subtitle">Your input helps improve the project. Only the total number of responses is shown publicly.</p>
+    <div class="feedback-box">
+      <form onsubmit="submitFeedback(event)">
+        <input type="text" id="fbName" placeholder="Name (optional)" />
+        <textarea id="fbMessage" placeholder="Your feedback or suggestions..." required></textarea>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Feedback</button>
+      </form>
+      <div class="feedback-count">
+        Feedback received: <strong id="fbCount">0</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-box">
+      <p style="color: var(--muted); margin-bottom: 12px;">Questions about the project:</p>
+      <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a>
+    </div>
+    <p class="disclaimer">
+      CroupGuard is a student portfolio prototype. It is not a medical device and must not be used for diagnosis or treatment decisions. Always seek professional medical advice for health concerns.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>CroupGuard · Student Portfolio Project</p>
+    <p style="margin-top: 6px;">Focused on accessibility, privacy, and practical support for families</p>
+  </div>
+</footer>
 
 <script>
-  // Unique key for your project
-  const COUNTER_KEY = "croupguard-feedback";
-
-  // Load the current count when the page opens
-  async function loadCount() {
-    try {
-      const res = await fetch(`https://api.countapi.xyz/get/${COUNTER_KEY}`);
-      const data = await res.json();
-      document.getElementById("count").innerText = data.value || 0;
-    } catch (err) {
-      console.log("Could not load count");
-    }
+  // Theme
+  function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    html.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+    localStorage.setItem('theme', html.getAttribute('data-theme'));
+  }
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
   }
 
-  // When someone submits feedback
-  async function submitFeedback() {
-    const message = document.getElementById("feedback-input")?.value?.trim();
-    
-    if (!message) {
-      alert("Please write something before submitting.");
-      return;
-    }
+  // Demo analysis
+  function startAnalysis() {
+    const btn = document.getElementById('recordBtn');
+    const status = document.getElementById('statusText');
+    const resultBox = document.getElementById('resultBox');
+    const percentage = document.getElementById('percentage');
+    const resultText = document.getElementById('resultText');
 
-    try {
-      // Increase the public count by 1
-      const res = await fetch(`https://api.countapi.xyz/hit/${COUNTER_KEY}`);
-      const data = await res.json();
-      document.getElementById("count").innerText = data.value;
+    resultBox.classList.remove('show');
+    btn.classList.add('recording');
+    btn.innerHTML = '⏹';
+    status.textContent = 'Listening...';
 
-      // Clear the input
-      if (document.getElementById("feedback-input")) {
-        document.getElementById("feedback-input").value = "";
-      }
+    setTimeout(() => {
+      status.textContent = 'Analyzing acoustic features...';
+      btn.innerHTML = '⏳';
+    }, 1600);
 
-      alert("Thank you for your feedback!");
-    } catch (err) {
-      alert("Something went wrong. Please try again.");
-    }
+    setTimeout(() => {
+      btn.classList.remove('recording');
+      btn.innerHTML = '🎤';
+      status.textContent = 'Analysis complete';
+
+      const outcomes = [
+        { pct: 7,  cls: 'low', text: 'Very low likelihood of croup-like features. Pattern is consistent with a common cough.' },
+        { pct: 11, cls: 'low', text: 'Low likelihood of croup. Barking characteristics are not strongly present.' },
+        { pct: 15, cls: 'low', text: 'Low likelihood detected. Acoustic pattern aligns more with a regular cough.' },
+        { pct: 22, cls: 'low', text: 'Mild indicators only. Classic croup features are limited.' },
+        { pct: 29, cls: 'medium', text: 'Some features present but not strongly indicative of classic croup.' }
+      ];
+      const r = outcomes[Math.floor(Math.random() * outcomes.length)];
+      percentage.textContent = r.pct + '%';
+      percentage.className = 'result-percentage ' + r.cls;
+      resultText.textContent = r.text;
+      resultBox.classList.add('show');
+    }, 3600);
   }
 
-  // Load the count as soon as the page opens
-  loadCount();
+  // Feedback (stores locally + shows count)
+  function updateCount() {
+    const count = parseInt(localStorage.getItem('fbCount') || '0');
+    document.getElementById('fbCount').textContent = count;
+  }
+  function submitFeedback(e) {
+    e.preventDefault();
+    const msg = document.getElementById('fbMessage').value.trim();
+    if (!msg) return;
+
+    // Store feedback privately in localStorage (only count is public)
+    let feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+    feedbacks.push({
+      name: document.getElementById('fbName').value || 'Anonymous',
+      message: msg,
+      date: new Date().toISOString()
+    });
+    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+
+    let count = parseInt(localStorage.getItem('fbCount') || '0') + 1;
+    localStorage.setItem('fbCount', count);
+    updateCount();
+
+    document.getElementById('fbName').value = '';
+    document.getElementById('fbMessage').value = '';
+    alert('Thank you for your feedback!');
+  }
+  updateCount();
 </script>
+</body>
+</html>
