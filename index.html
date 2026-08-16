@@ -181,7 +181,7 @@
     <!-- HEADER -->
     <header>
       <div class="logo">CroupGuard</div>
-      <p class="tagline" data-i18n="tagline">
+      <p class="tagline">
         A student project helping families understand concerning coughs earlier — with privacy and language access in mind.
       </p>
 
@@ -210,54 +210,54 @@
 
     <!-- WHY -->
     <section>
-      <h2 data-i18n="why_title">Why I Built This</h2>
-      <p data-i18n="why_text">
+      <h2>Why I Built This</h2>
+      <p>
         When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.
       </p>
     </section>
 
     <!-- DEMO -->
     <section class="demo-box">
-      <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
-      <p data-i18n="demo_desc" style="margin-bottom: 20px;">
+      <h2>Try the Interactive Demo</h2>
+      <p style="margin-bottom: 20px;">
         This is a simulated prototype. Tap the button to run a sample analysis.
       </p>
-      <button class="primary-btn" onclick="startAnalysis()" data-i18n="demo_button">
+      <button class="primary-btn" onclick="startAnalysis()">
         Tap to Simulate Cough Analysis
       </button>
       <div id="result"></div>
-      <p style="margin-top: 12px; font-size: 0.9rem; opacity: 0.75;" data-i18n="demo_note">
+      <p style="margin-top: 12px; font-size: 0.9rem; opacity: 0.75;">
         This is only a student prototype and not a medical device.
       </p>
     </section>
 
     <!-- FEATURES -->
     <section>
-      <h2 data-i18n="features_title">Key Features</h2>
+      <h2>Key Features</h2>
       <div class="features">
         <div class="feature">
-          <strong data-i18n="f1_title">Privacy First</strong>
-          <p data-i18n="f1_text">Designed with on-device thinking and minimal data collection.</p>
+          <strong>Privacy First</strong>
+          <p>Designed with on-device thinking and minimal data collection.</p>
         </div>
         <div class="feature">
-          <strong data-i18n="f2_title">Language Access</strong>
-          <p data-i18n="f2_text">Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.</p>
+          <strong>Language Access</strong>
+          <p>Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.</p>
         </div>
         <div class="feature">
-          <strong data-i18n="f3_title">Simple & Clear</strong>
-          <p data-i18n="f3_text">Gives an estimated likelihood so families can decide when to seek care.</p>
+          <strong>Simple & Clear</strong>
+          <p>Gives an estimated likelihood so families can decide when to seek care.</p>
         </div>
         <div class="feature">
-          <strong data-i18n="f4_title">Built for Equity</strong>
-          <p data-i18n="f4_text">Made so under-resourced families can access useful information more easily.</p>
+          <strong>Built for Equity</strong>
+          <p>Made so under-resourced families can access useful information more easily.</p>
         </div>
       </div>
     </section>
 
-    <!-- FEEDBACK (NOW PUBLIC & SHARED) -->
+    <!-- FEEDBACK -->
     <section>
-      <h2 data-i18n="feedback_title">Share Your Feedback</h2>
-      <p data-i18n="feedback_desc" style="margin-bottom: 8px;">
+      <h2>Share Your Feedback</h2>
+      <p style="margin-bottom: 8px;">
         Your message stays private. Only the total number is public.
       </p>
 
@@ -267,15 +267,15 @@
 
       <textarea id="feedback-input" rows="4" placeholder="Write your feedback here..."></textarea>
       <br>
-      <button class="primary-btn" onclick="submitFeedback()" data-i18n="feedback_button">
+      <button class="primary-btn" onclick="submitFeedback()">
         Submit Feedback
       </button>
     </section>
 
     <!-- ABOUT -->
     <section>
-      <h2 data-i18n="about_title">About This Project</h2>
-      <p data-i18n="about_text">
+      <h2>About This Project</h2>
+      <p>
         CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.
       </p>
       <p style="margin-top: 12px;">
@@ -285,9 +285,9 @@
 
     <!-- PRIVACY -->
     <section>
-      <h2 data-i18n="privacy_title">Privacy Note</h2>
-      <p data-i18n="privacy_text">
-        This prototype does not collect or store personal health data on a server. Feedback messages are not saved publicly. Only a simple count of how many people submitted feedback is kept. Always consult a healthcare professional for medical concerns.
+      <h2>Privacy Note</h2>
+      <p>
+        This prototype does not collect or store personal health data on a server. Feedback messages are sent privately to the creator. Only a simple count of how many people submitted feedback is kept public. Always consult a healthcare professional for medical concerns.
       </p>
     </section>
 
@@ -299,7 +299,7 @@
   </footer>
 
   <script>
-    // ========== THEME ==========
+    // Theme
     function toggleTheme() {
       const html = document.documentElement;
       const current = html.getAttribute("data-theme");
@@ -310,23 +310,24 @@
       document.documentElement.setAttribute("data-theme", "dark");
     }
 
-    // ========== TEXT SIZE ==========
+    // Text size
     function toggleTextSize() {
       document.body.classList.toggle("large-text");
     }
 
-    // ========== DEMO ==========
+    // Demo
     function startAnalysis() {
       const result = document.getElementById("result");
       result.innerHTML = "Analyzing cough sample...";
       setTimeout(() => {
-        const percent = Math.floor(Math.random() * 18) + 6; // keeps results realistically low
+        const percent = Math.floor(Math.random() * 18) + 6;
         result.innerHTML = `Low likelihood of croup-like features detected: <strong>${percent}%</strong><br><small>Classic barking features are limited.</small>`;
       }, 1600);
     }
 
-    // ========== PUBLIC SHARED FEEDBACK COUNT ==========
+    // ========== PUBLIC COUNT + SEND TO EMAIL ==========
     const COUNTER_KEY = "croupguard-feedback-2026";
+    const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
     async function loadFeedbackCount() {
       try {
@@ -346,9 +347,22 @@
       }
 
       try {
+        // 1. Send the real message to your email
+        await fetch(FORMSPREE_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({ message: message })
+        });
+
+        // 2. Increase the public count
         const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`);
         const data = await res.json();
         document.getElementById("feedback-count").innerText = data.value;
+
+        // 3. Clear the box
         document.getElementById("feedback-input").value = "";
         alert("Thank you! Your feedback was received.");
       } catch (e) {
@@ -359,10 +373,7 @@
     // Load count when page opens
     loadFeedbackCount();
 
-    // ========== LANGUAGE SWITCHER (basic) ==========
     function changeLanguage(lang) {
-      // For now the main content stays in English.
-      // The dropdown is present so reviewers can see the language support.
       console.log("Language selected:", lang);
     }
   </script>
