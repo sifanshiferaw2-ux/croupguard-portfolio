@@ -169,42 +169,42 @@
       color: #38bdf8;
     }
 
-    /* Mic with orange breathing circle */
+    /* Solid orange breathing mic */
     .mic-container {
       position: relative;
-      width: 100px;
-      height: 100px;
+      width: 110px;
+      height: 110px;
       margin: 0 auto 24px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .mic-icon {
-      font-size: 2.6rem;
-      z-index: 2;
-      position: relative;
-    }
-
     .breathing-circle {
       position: absolute;
-      width: 70px;
-      height: 70px;
+      width: 78px;
+      height: 78px;
       border-radius: 50%;
-      background: rgba(249, 115, 22, 0.25);
-      border: 2px solid #f97316;
+      background: #f97316;
       opacity: 0;
-      transform: scale(0.7);
+      transform: scale(0.75);
     }
 
     .breathing-circle.active {
-      animation: breathe 1.4s ease-in-out infinite;
+      animation: breathe 1.5s ease-in-out infinite;
     }
 
     @keyframes breathe {
-      0%   { transform: scale(0.7); opacity: 0.6; }
-      50%  { transform: scale(1.15); opacity: 0.9; }
-      100% { transform: scale(0.7); opacity: 0.6; }
+      0%   { transform: scale(0.75); opacity: 0.85; }
+      50%  { transform: scale(1.18); opacity: 1; }
+      100% { transform: scale(0.75); opacity: 0.85; }
+    }
+
+    .mic-icon {
+      font-size: 1.7rem;
+      z-index: 2;
+      position: relative;
+      color: white;
     }
 
     .result-box {
@@ -345,7 +345,7 @@
         <div class="mic-icon">🎙️</div>
       </div>
 
-      <button class="btn-primary" onclick="startAnalysis()" data-i18n="demo_button">
+      <button class="btn-primary" id="analyzeBtn" onclick="startAnalysis()" data-i18n="demo_button">
         Tap to Simulate Cough Analysis
       </button>
 
@@ -409,44 +409,95 @@
   </footer>
 
   <script>
-    function startAnalysis() {
+    let mediaStream = null;
+
+    async function startAnalysis() {
       const result = document.getElementById("result");
       const circle = document.getElementById("breathingCircle");
+      const btn = document.getElementById("analyzeBtn");
 
-      // Start breathing animation
-      circle.classList.add("active");
+      btn.disabled = true;
+      btn.style.opacity = "0.6";
 
-      result.innerHTML = `
-        <div class="result-box">
-          <div style="font-size:1.1rem; margin-bottom:6px;">🎙️ Analyzing cough sample...</div>
-          <div style="color:#a1a1aa; font-size:0.9rem;">Listening for barking features</div>
-        </div>
-      `;
+      try {
+        // Ask for microphone permission
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      setTimeout(() => {
-        // Stop breathing
-        circle.classList.remove("active");
+        // Permission granted → start visual recording
+        circle.classList.add("active");
 
-        const percent = Math.floor(Math.random() * 21) + 5; // 5–25%
-        let label = "Low likelihood";
-        let detail = "Classic barking features are limited. This appears closer to a regular cough.";
+        const messages = [
+          "🎙️ Recording... speak or cough now",
+          "Analyzing cough sample...",
+          "Listening for barking features...",
+          "Evaluating for high-pitched breathing...",
+          "Almost there...",
+          "Finalizing analysis..."
+        ];
 
-        if (percent >= 16) {
-          label = "Mild indicators detected";
-          detail = "Some bark-like qualities were found. Consider monitoring closely.";
-        }
-
+        let i = 0;
         result.innerHTML = `
           <div class="result-box">
-            <div class="percent">${percent}%</div>
-            <div class="label">${label}</div>
-            <div class="detail">${detail}</div>
+            <div id="statusText" style="font-size:1.1rem;">${messages[0]}</div>
           </div>
         `;
-      }, 2200);
+
+        const statusInterval = setInterval(() => {
+          i++;
+          if (i < messages.length) {
+            document.getElementById("statusText").innerText = messages[i];
+          }
+        }, 1000);
+
+        // Record for ~5.5 seconds then stop
+        setTimeout(() => {
+          clearInterval(statusInterval);
+          circle.classList.remove("active");
+
+          // Stop the microphone
+          if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+            mediaStream = null;
+          }
+
+          const percent = Math.floor(Math.random() * 21) + 5; // 5–25%
+          let label = "Low likelihood";
+          let detail = "Classic barking features are limited. This appears closer to a regular cough.";
+
+          if (percent >= 16) {
+            label = "Mild indicators detected";
+            detail = "Some bark-like qualities were found. Consider monitoring closely.";
+          }
+
+          result.innerHTML = `
+            <div class="result-box">
+              <div class="percent">${percent}%</div>
+              <div class="label">${label}</div>
+              <div class="detail">${detail}</div>
+            </div>
+          `;
+
+          btn.disabled = false;
+          btn.style.opacity = "1";
+        }, 5500);
+
+      } catch (err) {
+        // Permission denied or error
+        circle.classList.remove("active");
+        result.innerHTML = `
+          <div class="result-box">
+            <div style="font-size:1.05rem; margin-bottom:8px;">Microphone access was not allowed</div>
+            <div style="color:#a1a1aa; font-size:0.9rem;">
+              You can still try the demo. Please allow microphone access in your browser settings if you want the full experience.
+            </div>
+          </div>
+        `;
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
     }
 
-    // Feedback
+    // Feedback system
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -484,7 +535,7 @@
 
     loadFeedbackCount();
 
-    // Full translations
+    // Translations
     const translations = {
       en: {
         nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
@@ -512,71 +563,71 @@
       am: {
         nav_why: "ለምን", nav_how: "እንዴት", nav_demo: "ሙከራ", nav_about: "ስለ", nav_feedback: "አስተያየት",
         hero_line1: "የቀደመ የሳል መመሪያን", hero_line2: "ተደራሽ ማድረግ",
-        hero_sub: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል — በተለይ የቋንቋ እና የመረጃ እጥረት ባለባቸው አካባቢዎች።",
+        hero_sub: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል።",
         btn_demo: "ሙከራ አድርግ", btn_goal: "ግቡን ተመልከት",
         why_title: "ለምን እንደገነባሁት",
-        why_text: "ቤተሰቤ እና እኔ የክሩፕን ቀደምት ምልክቶች አላወቅንም። በዚህ ምክንያት ታናሽ ወንድሜን ሶስት ጊዜ ሊያጣን ተቃርቧል። ያ ተሞክሮ CroupGuardን እንድገነባ ምክንያት ሆኗል — ሌሎች ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲለዩ ለመርዳት።",
+        why_text: "ቤተሰቤ እና እኔ የክሩፕን ቀደምት ምልክቶች አላወቅንም። በዚህ ምክንያት ታናሽ ወንድሜን ሶስት ጊዜ ሊያጣን ተቃርቧል። ያ ተሞክሮ CroupGuardን እንድገነባ ምክንያት ሆኗል።",
         demo_title: "የሙከራ ማሳያ",
         demo_desc: "ይህ የተማሪ ምሳሌ ነው። ቁልፉን በመጫን ሙከራ ያድርጉ።",
         demo_button: "የሳል ትንተና ሙከራ",
-        demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው፣ የሕክምና መሣሪያ አይደለም።",
+        demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው።",
         features_title: "ዋና ባህሪያት",
-        f1_title: "ግላዊነት በመጀመሪያ", f1_text: "በመሣሪያ ላይ የሚሰራ እና ውሂብ አነስተኛ የሚሰበስብ።",
-        f2_title: "የቋንቋ መዳረሻ", f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ እና ሌሎች ቋንቋዎችን ይደግፋል።",
-        f3_title: "ቀላል እና ግልጽ", f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ የሚያግዝ ግምት ይሰጣል።",
-        f4_title: "ለእኩልነት የተሰራ", f4_text: "ሀብት የሌላቸው ቤተሰቦች በቀላሉ መረጃ እንዲያገኙ የተሰራ።",
+        f1_title: "ግላዊነት በመጀመሪያ", f1_text: "በመሣሪያ ላይ የሚሰራ።",
+        f2_title: "የቋንቋ መዳረሻ", f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ ይደግፋል።",
+        f3_title: "ቀላል እና ግልጽ", f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ ያግዛል።",
+        f4_title: "ለእኩልነት", f4_text: "ለሁሉም ቤተሰቦች።",
         feedback_title: "አስተያየትዎን ያጋሩ",
-        feedback_desc: "መልእክትዎ ግላዊ ነው። ቁጥሩ ብቻ ይታያል።",
+        feedback_desc: "መልእክትዎ ግላዊ ነው።",
         feedback_count_label: "የተቀበሉ አስተያየቶች:",
         feedback_button: "አስተያየት ላክ",
         about_title: "ስለ ፕሮጀክቱ",
-        about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው። ከግል ቤተሰብ ተሞክሮ ተነስቶ ለቀደመ ግንዛቤ፣ ግላዊነት እና የቋንቋ ተደራሽነት ያተኮረ መሳሪያ ሆኗል። አሁንም ፕሮቶታይፕ ነው እና የሕክምና መሣሪያ አይደለም። ግቡ ተጨማሪ ቤተሰቦች እንዲጠቀሙበት ማሻሻል ነው።"
+        about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው።"
       },
       om: {
         nav_why: "Maaliif", nav_how: "Akkaataa", nav_demo: "Demo", nav_about: "Waa'ee", nav_feedback: "Yaada",
         hero_line1: "Gorsa qufaa dafanii", hero_line2: "salphaatti argachuu",
-        hero_sub: "Pirojektii barataa kan maatiilee dhukkuba qufaa dafanii akka hubatan gargaaru — keessattuu bakka afaan fi odeeffannoo hanqate.",
+        hero_sub: "Pirojektii barataa kan maatiilee gargaaru.",
         btn_demo: "Demo Yaali", btn_goal: "Kaayyoo Ilaali",
         why_title: "Maaliif Kan Uume",
-        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra. Muuxannoon kun CroupGuard uumuuf na kakaase — maatiilee biroo qufaa yaaddessaa dafanii akka adda baasan gargaaruuf.",
+        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra.",
         demo_title: "Demo Interactive",
-        demo_desc: "Kun protootaayipii barataa. Qufeetti cuqaasuun yaali.",
+        demo_desc: "Kun protootaayipii barataa.",
         demo_button: "Qufaa Xiinxali",
-        demo_note: "Kun protootaayipii barataa qofa, meeshaa fayyaa miti.",
+        demo_note: "Kun protootaayipii barataa qofa.",
         features_title: "Amaloota Ijoo",
-        f1_title: "Dhuunfaa Dura", f1_text: "Meeshaa irratti kan hojjetu fi daataa xiqqaa qabu.",
-        f2_title: "Afaan Argachuu", f2_text: "Afaan Oromoo, Amaariffaa, Tigiree fi afaanota biroo deeggara.",
-        f3_title: "Salphaa fi Ifaa", f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
-        f4_title: "Qixaaf Kan Uumame", f4_text: "Maatiilee qabeenya hin qabneef odeeffannoo salphaatti akka argatan.",
+        f1_title: "Dhuunfaa", f1_text: "Meeshaa irratti kan hojjetu.",
+        f2_title: "Afaan", f2_text: "Afaan Oromoo, Amaariffaa, Tigiree deeggara.",
+        f3_title: "Salphaa", f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
+        f4_title: "Qixxummaa", f4_text: "Maatiilee hundaaf.",
         feedback_title: "Yaada Kee Qoodi",
-        feedback_desc: "Ergaan kee dhuunfaa. Lakkoofsi qofa uumame.",
+        feedback_desc: "Ergaan kee dhuunfaa.",
         feedback_count_label: "Yaadni argame:",
         feedback_button: "Yaada Ergi",
         about_title: "Waa'ee Pirojektii",
-        about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame. Muuxannoo maatii irraa ka'ee gara meeshaa dafanii beekumsa, dhuunfaa fi afaan argachuu irratti xiyyeeffate. Ammaas protootaayipii dha, meeshaa fayyaa miti. Kaayyoon isaa maatiilee dabalataa akka fayyadaman fooyyessuu dha."
+        about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame."
       },
       ti: {
         nav_why: "ስለምንታይ", nav_how: "ከመይ", nav_demo: "ፈተነ", nav_about: "ብዛዕባ", nav_feedback: "ርእይቶ",
         hero_line1: "ቀዳማይ መምርሒ ሳል", hero_line2: "ተበጻሕነት",
-        hero_sub: "ናይ ተማሃራይ ፕሮጀክት ስድራቤታት ኣሳሳቢ ሳል ቅድሚ ምርዳእ ዝሕግዝ — ብፍላይ ኣብቲ ቋንቋን ሓበሬታን ዝጎድለሉ ቦታታት።",
+        hero_sub: "ናይ ተማሃራይ ፕሮጀክት ስድራቤታት ዝሕግዝ።",
         btn_demo: "ፈተነ ግበር", btn_goal: "ዕላማ ርአ",
         why_title: "ስለምንታይ ዝሰራሕኩዎ",
-        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና። እቲ ተመኩሮ CroupGuard ክሰርሕ ድርኺቱ ኮይኑ — ንኻልኦት ስድራቤታት ኣሳሳቢ ሳል ቅድሚ ምልላይ ንምሕጋዝ።",
+        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና።",
         demo_title: "ናይ ፈተነ ማርእያ",
-        demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ። ቁልፊ ጠዊቕካ ፈተነ ግበር።",
+        demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ።",
         demo_button: "ሳል ትንተና ፈትን",
-        demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ፣ ናይ ሕክምና መሳርሒ ኣይኮነን።",
+        demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ።",
         features_title: "ቁልፊ ባህርያት",
-        f1_title: "ብሕታውነት ቀዳምነት", f1_text: "ኣብ መሳርሒ ዝሰርሕን ውሱን ዳታ ዘለዎን።",
-        f2_title: "ናይ ቋንቋ መእተዊ", f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ካልኦት ቋንቋታትን ይድግፍ።",
-        f3_title: "ቀሊልን ንጹርን", f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
-        f4_title: "ንማዕረ ክብሪ ዝተሰርሐ", f4_text: "ንድኻታት ስድራቤታት ሓበሬታ ቀሊል ክረኽቡ።",
+        f1_title: "ብሕታውነት", f1_text: "ኣብ መሳርሒ ዝሰርሕ።",
+        f2_title: "ቋንቋ", f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ይድግፍ።",
+        f3_title: "ቀሊል", f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
+        f4_title: "ማዕረ", f4_text: "ንኹሉ ስድራቤታት።",
         feedback_title: "ርእይቶኻ ኣካፍል",
-        feedback_desc: "መልእኽትኻ ብሕታዊ እዩ። ቁጽሪ ጥራይ ይረአ።",
+        feedback_desc: "መልእኽትኻ ብሕታዊ እዩ።",
         feedback_count_label: "ርእይቶታት:",
         feedback_button: "ርእይቶ ስደድ",
         about_title: "ብዛዕባ እቲ ፕሮጀክት",
-        about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ። ካብ ናይ ስድራቤት ተመኩሮ ተበጊሱ ናብ መሳርሒ ቀዳማይ ምርዳእ፣ ብሕታውነትን ናይ ቋንቋ ተበጻሕነትን ዝተሓጽረ ኮይኑ። ገና ፕሮቶታይፕ እዩ እሞ ናይ ሕክምና መሳርሒ ኣይኮነን። ዕላማኡ ዝያዳ ስድራቤታት ክጥቀሙሉ ምምሕያሽ እዩ።"
+        about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ።"
       }
     };
 
@@ -584,9 +635,7 @@
       const t = translations[lang] || translations.en;
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (t[key]) {
-          el.innerText = t[key];
-        }
+        if (t[key]) el.innerText = t[key];
       });
     }
   </script>
