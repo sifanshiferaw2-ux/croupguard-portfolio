@@ -12,24 +12,24 @@
     }
 
     body {
-      font-family: Inter, system-ui, -apple-system, sans-serif;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       background: #0b0b12;
       color: #ffffff;
       line-height: 1.6;
     }
 
-    /* Navigation */
+    /* ========== NAVIGATION (matches screenshot) ========== */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 16px 40px;
-      background: rgba(11, 11, 18, 0.9);
+      background: rgba(11, 11, 18, 0.92);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255,255,255,0.08);
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 100;
     }
 
     .nav-brand {
@@ -40,28 +40,28 @@
       font-size: 1.2rem;
     }
 
+    /* Logo circles - pink + teal */
     .logo-dot {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       background: linear-gradient(135deg, #ec4899, #22d3ee);
       position: relative;
     }
-
     .logo-dot::after {
       content: "";
       position: absolute;
-      width: 11px;
-      height: 11px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: #22d3ee;
-      top: 5.5px;
-      left: 5.5px;
+      top: 6px;
+      left: 6px;
     }
 
     .nav-links {
       display: flex;
-      gap: 28px;
+      gap: 26px;
       align-items: center;
     }
 
@@ -69,10 +69,10 @@
       color: #a1a1aa;
       text-decoration: none;
       font-size: 0.95rem;
+      transition: color 0.2s;
     }
-
     .nav-links a:hover {
-      color: white;
+      color: #ffffff;
     }
 
     .theme-btn {
@@ -84,65 +84,86 @@
       cursor: pointer;
     }
 
-    /* Hero */
+    select {
+      padding: 7px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: #ffffff;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    /* ========== HERO (matches screenshot) ========== */
     .hero {
       text-align: center;
-      padding: 90px 20px 70px;
-      background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+      padding: 100px 20px 80px;
+      background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
     }
 
     .hero h1 {
-      font-size: 3.5rem;
+      font-size: 3.6rem;
       font-weight: 800;
       line-height: 1.15;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
-    .hero h1 .pink {
+    .hero h1 .gradient {
       background: linear-gradient(135deg, #ec4899, #a855f7);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero p {
       font-size: 1.15rem;
       color: #a1a1aa;
-      max-width: 580px;
-      margin: 0 auto 36px;
+      max-width: 600px;
+      margin: 0 auto 38px;
     }
 
     .hero-buttons {
       display: flex;
       justify-content: center;
       gap: 16px;
+      flex-wrap: wrap;
     }
 
     .btn-primary {
-      padding: 14px 32px;
+      padding: 15px 34px;
       border-radius: 50px;
       border: none;
       background: linear-gradient(135deg, #ec4899, #a855f7);
       color: white;
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.35);
     }
 
     .btn-outline {
-      padding: 14px 28px;
+      padding: 15px 28px;
       border-radius: 50px;
       border: 1px solid rgba(255,255,255,0.25);
       background: transparent;
       color: white;
-      font-size: 1rem;
+      font-size: 1.05rem;
       cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.08);
     }
 
-    /* Sections */
+    /* ========== CONTENT SECTIONS ========== */
     .container {
-      max-width: 900px;
+      max-width: 920px;
       margin: 0 auto;
-      padding: 0 20px 80px;
+      padding: 0 20px 90px;
     }
 
     section {
@@ -199,7 +220,7 @@
 
     footer {
       text-align: center;
-      padding: 40px 20px;
+      padding: 50px 20px;
       color: #a1a1aa;
       font-size: 0.95rem;
     }
@@ -208,77 +229,106 @@
       color: #38bdf8;
     }
 
-    /* Language select */
-    select {
-      padding: 8px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.05);
-      color: white;
-      margin-left: 12px;
+    @media (max-width: 700px) {
+      nav {
+        flex-direction: column;
+        gap: 14px;
+        padding: 16px 20px;
+      }
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation matching the screenshot -->
+  <!-- NAVIGATION -->
   <nav>
     <div class="nav-brand">
       <div class="logo-dot"></div>
       CroupGuard
     </div>
+
     <div class="nav-links">
       <a href="#why">Why</a>
       <a href="#how">How it Works</a>
       <a href="#demo">Demo</a>
       <a href="#about">About</a>
       <a href="#feedback">Feedback</a>
+
+      <!-- LANGUAGE SELECTOR -->
       <select id="language-select" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
-        <option value="am">Amharic</option>
+        <option value="am">Amharic (አማርኛ)</option>
         <option value="om">Afaan Oromoo</option>
-        <option value="ti">Tigrinya</option>
+        <option value="ti">Tigrinya (ትግርኛ)</option>
+        <option value="zh">Mandarin Chinese</option>
+        <option value="hi">Hindi</option>
+        <option value="es">Spanish</option>
+        <option value="ar">Arabic</option>
+        <option value="fr">French</option>
+        <option value="bn">Bengali</option>
+        <option value="pt">Portuguese</option>
+        <option value="ru">Russian</option>
+        <option value="ur">Urdu</option>
+        <option value="id">Indonesian</option>
       </select>
-      <button class="theme-btn" onclick="toggleTheme()"></button>
+
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"></button>
     </div>
   </nav>
 
-  <!-- Hero matching the screenshot -->
+  <!-- HERO -->
   <div class="hero">
     <h1>
       Making early cough guidance<br>
-      <span class="pink">more accessible</span>
+      <span class="gradient">more accessible</span>
     </h1>
     <p>
       A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.
     </p>
     <div class="hero-buttons">
-      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Try the Demo</button>
-      <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">See the Goal</button>
+      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">
+        Try the Demo
+      </button>
+      <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">
+        See the Goal
+      </button>
     </div>
   </div>
 
   <div class="container">
 
+    <!-- WHY -->
     <section id="why">
       <h2 data-i18n="why_title">Why I Built This</h2>
       <p data-i18n="why_text">
-        When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard.
+        When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.
       </p>
     </section>
 
+    <!-- DEMO -->
     <section id="demo">
       <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
       <p data-i18n="demo_desc" style="color:#a1a1aa; margin-bottom:20px;">
         This is a simulated prototype. Tap the button to run a sample analysis.
       </p>
-      <button class="btn-primary" onclick="startAnalysis()" data-i18n="demo_button">Tap to Simulate Cough Analysis</button>
-      <div id="result" style="margin-top:20px; font-size:1.2rem;"></div>
+      <button class="btn-primary" onclick="startAnalysis()" data-i18n="demo_button">
+        Tap to Simulate Cough Analysis
+      </button>
+      <div id="result" style="margin-top:22px; font-size:1.25rem; font-weight:600;"></div>
       <p style="margin-top:12px; font-size:0.9rem; color:#a1a1aa;" data-i18n="demo_note">
         This is only a student prototype and not a medical device.
       </p>
     </section>
 
+    <!-- HOW IT WORKS / FEATURES -->
     <section id="how">
       <h2 data-i18n="features_title">Key Features</h2>
       <div class="features">
@@ -288,7 +338,7 @@
         </div>
         <div class="feature">
           <strong data-i18n="f2_title">Language Access</strong>
-          <p data-i18n="f2_text">Supports Amharic, Afaan Oromoo, Tigrinya and other languages.</p>
+          <p data-i18n="f2_text">Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.</p>
         </div>
         <div class="feature">
           <strong data-i18n="f3_title">Simple & Clear</strong>
@@ -301,6 +351,7 @@
       </div>
     </section>
 
+    <!-- FEEDBACK -->
     <section id="feedback">
       <h2 data-i18n="feedback_title">Share Your Feedback</h2>
       <p data-i18n="feedback_desc" style="color:#a1a1aa; margin-bottom:8px;">
@@ -310,15 +361,18 @@
         Feedback received: <span id="feedback-count">0</span>
       </div>
       <textarea id="feedback-input" rows="4" placeholder="Write your feedback here..."></textarea>
-      <button class="btn-primary" onclick="submitFeedback()" data-i18n="feedback_button">Submit Feedback</button>
+      <button class="btn-primary" onclick="submitFeedback()" data-i18n="feedback_button">
+        Submit Feedback
+      </button>
     </section>
 
+    <!-- ABOUT -->
     <section id="about">
       <h2 data-i18n="about_title">About This Project</h2>
       <p data-i18n="about_text">
-        CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device.
+        CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.
       </p>
-      <p style="margin-top:14px;">
+      <p style="margin-top:16px;">
         Contact: <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a>
       </p>
     </section>
@@ -330,18 +384,25 @@
   </footer>
 
   <script>
+    // Theme toggle (simple)
     function toggleTheme() {
-      // simple toggle for now
-      document.body.style.background = document.body.style.background === "white" ? "#0b0b12" : "white";
-      document.body.style.color = document.body.style.color === "black" ? "white" : "black";
+      const body = document.body;
+      if (body.style.background === "white" || body.style.background === "rgb(255, 255, 255)") {
+        body.style.background = "#0b0b12";
+        body.style.color = "#ffffff";
+      } else {
+        body.style.background = "white";
+        body.style.color = "#111";
+      }
     }
 
+    // Demo - percentages stay low
     function startAnalysis() {
       const result = document.getElementById("result");
       result.innerHTML = "Analyzing cough sample...";
       setTimeout(() => {
-        const percent = Math.floor(Math.random() * 18) + 6;
-        result.innerHTML = `Low likelihood of croup-like features detected: <strong>${percent}%</strong>`;
+        const percent = Math.floor(Math.random() * 15) + 5; // 5% – 19%
+        result.innerHTML = `Low likelihood of croup-like features detected: <strong>${percent}%</strong><br><small style="color:#a1a1aa">Classic barking features are limited.</small>`;
       }, 1500);
     }
 
@@ -367,12 +428,17 @@
       }
 
       try {
+        // Send to your email
         await fetch(FORMSPREE_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
           body: JSON.stringify({ message: message })
         });
 
+        // Increase public count
         const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`);
         const data = await res.json();
         document.getElementById("feedback-count").innerText = data.value;
@@ -386,11 +452,11 @@
 
     loadFeedbackCount();
 
-    // Languages
+    // Language translations (main content)
     const translations = {
       en: {
         why_title: "Why I Built This",
-        why_text: "When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard.",
+        why_text: "When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.",
         demo_title: "Try the Interactive Demo",
         demo_desc: "This is a simulated prototype. Tap the button to run a sample analysis.",
         demo_button: "Tap to Simulate Cough Analysis",
@@ -399,7 +465,7 @@
         f1_title: "Privacy First",
         f1_text: "Designed with on-device thinking and minimal data collection.",
         f2_title: "Language Access",
-        f2_text: "Supports Amharic, Afaan Oromoo, Tigrinya and other languages.",
+        f2_text: "Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.",
         f3_title: "Simple & Clear",
         f3_text: "Gives an estimated likelihood so families can decide when to seek care.",
         f4_title: "Built for Equity",
@@ -408,7 +474,7 @@
         feedback_desc: "Your message stays private. Only the total number is public.",
         feedback_button: "Submit Feedback",
         about_title: "About This Project",
-        about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device."
+        about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit."
       },
       am: {
         why_title: "ለምን እንደገነባሁት",
@@ -421,7 +487,7 @@
         f1_title: "ግላዊነት በመጀመሪያ",
         f1_text: "በመሣሪያ ላይ የሚሰራ እና ውሂብ አነስተኛ የሚሰበስብ።",
         f2_title: "የቋንቋ መዳረሻ",
-        f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ ይደግፋል።",
+        f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ እና ሌሎች ቋንቋዎችን ይደግፋል።",
         f3_title: "ቀላል እና ግልጽ",
         f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ የሚያግዝ።",
         f4_title: "ለእኩልነት የተሰራ",
@@ -482,7 +548,9 @@
       const t = translations[lang] || translations.en;
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (t[key]) el.innerText = t[key];
+        if (t[key]) {
+          el.innerText = t[key];
+        }
       });
     }
   </script>
