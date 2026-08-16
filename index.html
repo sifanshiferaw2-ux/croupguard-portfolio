@@ -6,58 +6,71 @@
   <title>CroupGuard – Early Cough Awareness</title>
   <style>
     :root {
-      --bg: #f1f5f9;
+      --bg: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+      --bg-solid: #f1f5f9;
       --text: #0f172a;
       --card: #ffffff;
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --border: #e2e8f0;
-      --accent: #3b82f6;
+      --shadow: 0 10px 25px -5px rgb(0 0 0 / 0.08);
     }
 
     [data-theme="dark"] {
-      --bg: #0f172a;
+      --bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --bg-solid: #0f172a;
       --text: #f1f5f9;
       --card: #1e293b;
       --primary: #3b82f6;
       --primary-dark: #2563eb;
       --border: #334155;
-      --accent: #60a5fa;
+      --shadow: 0 10px 25px -5px rgb(0 0 0 / 0.4);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
+      background: var(--bg-solid);
+      background-image: var(--bg);
       color: var(--text);
       line-height: 1.65;
+      min-height: 100vh;
       transition: background 0.3s, color 0.3s;
     }
 
     .container {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 24px 20px 60px;
+      padding: 30px 20px 70px;
     }
 
     header {
       text-align: center;
-      padding: 50px 20px 30px;
+      padding: 50px 20px 35px;
     }
 
     .logo {
-      font-size: 2.8rem;
+      font-size: 3rem;
       font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -0.5px;
-      margin-bottom: 12px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+      letter-spacing: -1px;
+    }
+
+    [data-theme="dark"] .logo {
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .tagline {
       font-size: 1.2rem;
       opacity: 0.9;
-      max-width: 640px;
+      max-width: 650px;
       margin: 0 auto 30px;
     }
 
@@ -66,62 +79,70 @@
       justify-content: center;
       gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 10px;
     }
 
     button, select {
-      padding: 11px 18px;
-      border-radius: 10px;
+      padding: 12px 18px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: var(--card);
       color: var(--text);
       cursor: pointer;
       font-size: 0.95rem;
+      box-shadow: var(--shadow);
       transition: all 0.2s;
     }
 
     button:hover, select:hover {
+      transform: translateY(-1px);
       border-color: var(--primary);
     }
 
     .primary-btn {
-      background: var(--primary);
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
       color: white;
       border: none;
-      padding: 15px 32px;
+      padding: 16px 34px;
       font-size: 1.05rem;
       font-weight: 600;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background 0.2s;
+      box-shadow: 0 8px 20px -4px rgb(37 99 235 / 0.4);
+      transition: all 0.2s;
     }
 
     .primary-btn:hover {
-      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px -4px rgb(37 99 235 / 0.5);
     }
 
     section {
       background: var(--card);
-      border-radius: 18px;
-      padding: 32px;
+      border-radius: 20px;
+      padding: 34px;
       margin-bottom: 28px;
       border: 1px solid var(--border);
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+      box-shadow: var(--shadow);
     }
 
     h2 {
       margin-bottom: 16px;
-      font-size: 1.55rem;
+      font-size: 1.6rem;
       color: var(--primary);
     }
 
     .demo-box {
       text-align: center;
-      padding: 40px 25px;
+      padding: 45px 25px;
+      background: linear-gradient(135deg, rgb(37 99 235 / 0.05), rgb(124 58 237 / 0.05));
+    }
+
+    [data-theme="dark"] .demo-box {
+      background: linear-gradient(135deg, rgb(59 130 246 / 0.1), rgb(167 139 250 / 0.1));
     }
 
     #result {
-      margin-top: 22px;
+      margin-top: 24px;
       font-size: 1.35rem;
       font-weight: 600;
       min-height: 55px;
@@ -134,24 +155,30 @@
     }
 
     .feature {
-      background: var(--bg);
-      padding: 22px;
-      border-radius: 14px;
+      background: var(--bg-solid);
+      padding: 24px;
+      border-radius: 16px;
       border: 1px solid var(--border);
+      transition: transform 0.2s;
+    }
+
+    .feature:hover {
+      transform: translateY(-3px);
     }
 
     .feature strong {
       display: block;
       margin-bottom: 8px;
       font-size: 1.1rem;
+      color: var(--primary);
     }
 
     textarea {
       width: 100%;
       padding: 16px;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--bg-solid);
       color: var(--text);
       font-size: 1rem;
       resize: vertical;
@@ -159,7 +186,7 @@
     }
 
     .count {
-      font-size: 1.45rem;
+      font-size: 1.5rem;
       font-weight: 700;
       margin: 14px 0 20px;
       color: var(--primary);
@@ -172,12 +199,12 @@
       font-size: 0.95rem;
     }
 
-    a { color: var(--primary); }
+    a { color: var(--primary); font-weight: 500; }
 
     .large-text { font-size: 1.18em; }
 
     @media (max-width: 600px) {
-      .logo { font-size: 2.2rem; }
+      .logo { font-size: 2.3rem; }
       section { padding: 24px 18px; }
     }
   </style>
@@ -186,7 +213,6 @@
 
   <div class="container">
 
-    <!-- HEADER -->
     <header>
       <div class="logo">CroupGuard</div>
       <p class="tagline" data-i18n="tagline">
@@ -216,7 +242,6 @@
       </div>
     </header>
 
-    <!-- WHY -->
     <section>
       <h2 data-i18n="why_title">Why I Built This</h2>
       <p data-i18n="why_text">
@@ -224,7 +249,6 @@
       </p>
     </section>
 
-    <!-- DEMO -->
     <section class="demo-box">
       <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
       <p data-i18n="demo_desc" style="margin-bottom: 22px; opacity: 0.9;">
@@ -239,7 +263,6 @@
       </p>
     </section>
 
-    <!-- FEATURES -->
     <section>
       <h2 data-i18n="features_title">Key Features</h2>
       <div class="features">
@@ -262,7 +285,6 @@
       </div>
     </section>
 
-    <!-- FEEDBACK -->
     <section>
       <h2 data-i18n="feedback_title">Share Your Feedback</h2>
       <p data-i18n="feedback_desc" style="margin-bottom: 8px;">
@@ -280,7 +302,6 @@
       </button>
     </section>
 
-    <!-- ABOUT -->
     <section>
       <h2 data-i18n="about_title">About This Project</h2>
       <p data-i18n="about_text">
@@ -291,7 +312,6 @@
       </p>
     </section>
 
-    <!-- PRIVACY -->
     <section>
       <h2 data-i18n="privacy_title">Privacy Note</h2>
       <p data-i18n="privacy_text">
@@ -307,7 +327,6 @@
   </footer>
 
   <script>
-    // Theme
     function toggleTheme() {
       const html = document.documentElement;
       const current = html.getAttribute("data-theme");
@@ -318,12 +337,10 @@
       document.documentElement.setAttribute("data-theme", "dark");
     }
 
-    // Text size
     function toggleTextSize() {
       document.body.classList.toggle("large-text");
     }
 
-    // Demo
     function startAnalysis() {
       const result = document.getElementById("result");
       result.innerHTML = "Analyzing cough sample...";
@@ -333,7 +350,6 @@
       }, 1600);
     }
 
-    // Public count + Formspree
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -355,17 +371,12 @@
       }
 
       try {
-        // Send message to your email
         await fetch(FORMSPREE_URL, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
           body: JSON.stringify({ message: message })
         });
 
-        // Increase public count
         const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`);
         const data = await res.json();
         document.getElementById("feedback-count").innerText = data.value;
@@ -379,7 +390,7 @@
 
     loadFeedbackCount();
 
-    // ========== LANGUAGE TRANSLATIONS ==========
+    // Working translations
     const translations = {
       en: {
         tagline: "A student project helping families understand concerning coughs earlier — with privacy and language access in mind.",
@@ -407,9 +418,9 @@
         privacy_text: "This prototype does not collect or store personal health data on a server. Feedback messages are sent privately to the creator. Only a simple count of how many people submitted feedback is kept public. Always consult a healthcare professional for medical concerns."
       },
       am: {
-        tagline: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል።",
+        tagline: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል — በግላዊነት እና በቋንቋ መዳረሻ።",
         why_title: "ለምን እንደገነባሁት",
-        why_text: "ትንሽ ልጅ እያለሁ ታናሽ ወንድሜ ሶስት ጊዜ ክሩፕ ያዘው። እያንዳንዱ ጊዜ ምን ያህል አሳሳቢ እንደሆነ በመጨረሻው ደረጃ ላይ ነው የተረዳነው። አንድ ጊዜ ምሳ እየበላን ሳለ ድንገት መተንፈስ አቸገረው። ሊያጣን ነበር። ያ ተሞክሮ CroupGuardን እንድገነባ አደረገኝ።",
+        why_text: "ትንሽ ልጅ እያለሁ ታናሽ ወንድሜ ሶስት ጊዜ ክሩፕ ያዘው። እያንዳንዱ ጊዜ ምን ያህል አሳሳቢ እንደሆነ በመጨረሻው ደረጃ ላይ ነው የተረዳነው። አንድ ጊዜ ምሳ እየበላን ሳለ ድንገት መተንፈስ አቸገረው። ሊያጣን ነበር። ያ ተሞክሮ CroupGuardን እንድገነባ አደረገኝ — ሌሎች ቤተሰቦች ቀድመው እንዲረዱ።",
         demo_title: "የሙከራ ማሳያ",
         demo_desc: "ይህ የተማሪ ምሳሌ ነው። ቁልፉን በመጫን ሙከራ ያድርጉ።",
         demo_button: "የሳል ትንተና ሙከራ",
@@ -429,10 +440,10 @@
         about_title: "ስለ ፕሮጀክቱ",
         about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው። ከግል ቤተሰብ ተሞክሮ ተነስቶ ለቀደመ ግንዛቤ፣ ግላዊነት እና የቋንቋ ተደራሽነት ያተኮረ መሳሪያ ሆኗል።",
         privacy_title: "የግላዊነት ማስታወሻ",
-        privacy_text: "ይህ ፕሮቶታይፕ የግል ጤና ውሂብ አይሰበስብም። አስተያየቶች ለፈጣሪው ብቻ ይላካሉ።"
+        privacy_text: "ይህ ፕሮቶታይፕ የግል ጤና ውሂብ አይሰበስብም። አስተያየቶች ለፈጣሪው ብቻ ይላካሉ። ቁጥሩ ብቻ ይታያል።"
       },
       om: {
-        tagline: "Pirojektii barataa kan maatiilee dhukkuba qufaa dafanii akka hubatan gargaaru.",
+        tagline: "Pirojektii barataa kan maatiilee dhukkuba qufaa dafanii akka hubatan gargaaru — dhuunfaa fi afaan waliin.",
         why_title: "Maaliif Kan Uume",
         why_text: "Yeroo xixiqqaa ture obboleessi koo xinnaan al tokko sadii croup qabate. Yeroo hunda hanga dhumarratti malee akka cimaa ta'e hin beekne. Tajaajila CroupGuard uumuuf na kakaase.",
         demo_title: "Demo Interactive",
@@ -487,9 +498,7 @@
       const t = translations[lang] || translations.en;
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (t[key]) {
-          el.innerText = t[key];
-        }
+        if (t[key]) el.innerText = t[key];
       });
     }
   </script>
