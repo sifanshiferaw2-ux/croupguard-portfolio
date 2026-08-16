@@ -1,402 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CroupGuard – Early Cough Awareness</title>
-  <style>
-    :root {
-      --bg: #f8fafc;
-      --text: #0f172a;
-      --card: #ffffff;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --border: #e2e8f0;
+<!-- Feedback Count Display -->
+<div id="feedback-count" style="font-size: 1.2rem; font-weight: bold; margin: 10px 0;">
+  Feedback received: <span id="count">0</span>
+</div>
+
+<script>
+  // Unique key for your project
+  const COUNTER_KEY = "croupguard-feedback";
+
+  // Load the current count when the page opens
+  async function loadCount() {
+    try {
+      const res = await fetch(`https://api.countapi.xyz/get/${COUNTER_KEY}`);
+      const data = await res.json();
+      document.getElementById("count").innerText = data.value || 0;
+    } catch (err) {
+      console.log("Could not load count");
+    }
+  }
+
+  // When someone submits feedback
+  async function submitFeedback() {
+    const message = document.getElementById("feedback-input")?.value?.trim();
+    
+    if (!message) {
+      alert("Please write something before submitting.");
+      return;
     }
 
-    [data-theme="dark"] {
-      --bg: #0f172a;
-      --text: #f1f5f9;
-      --card: #1e293b;
-      --primary: #3b82f6;
-      --primary-dark: #2563eb;
-      --border: #334155;
-    }
+    try {
+      // Increase the public count by 1
+      const res = await fetch(`https://api.countapi.xyz/hit/${COUNTER_KEY}`);
+      const data = await res.json();
+      document.getElementById("count").innerText = data.value;
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    header {
-      text-align: center;
-      padding: 40px 20px 20px;
-    }
-
-    .logo {
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 8px;
-    }
-
-    .tagline {
-      font-size: 1.15rem;
-      opacity: 0.85;
-      max-width: 600px;
-      margin: 0 auto 25px;
-    }
-
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 30px;
-    }
-
-    button, select {
-      padding: 10px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-      cursor: pointer;
-      font-size: 0.95rem;
-    }
-
-    button:hover {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    .primary-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      font-size: 1.05rem;
-      font-weight: 600;
-    }
-
-    .primary-btn:hover {
-      background: var(--primary-dark);
-    }
-
-    section {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 28px;
-      border: 1px solid var(--border);
-    }
-
-    h2 {
-      margin-bottom: 14px;
-      font-size: 1.5rem;
-    }
-
-    .demo-box {
-      text-align: center;
-      padding: 30px 20px;
-    }
-
-    #result {
-      margin-top: 20px;
-      font-size: 1.3rem;
-      font-weight: 600;
-      min-height: 40px;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
-    }
-
-    .feature {
-      background: var(--bg);
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-
-    textarea {
-      width: 100%;
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      font-size: 1rem;
-      resize: vertical;
-      margin-bottom: 14px;
-    }
-
-    .count {
-      font-size: 1.35rem;
-      font-weight: 700;
-      margin: 12px 0 20px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px 20px;
-      opacity: 0.75;
-      font-size: 0.95rem;
-    }
-
-    a {
-      color: var(--primary);
-    }
-
-    .large-text {
-      font-size: 1.15em;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-
-    <!-- HEADER -->
-    <header>
-      <div class="logo">CroupGuard</div>
-      <p class="tagline">
-        A student project helping families understand concerning coughs earlier — 
-        with privacy and language access in mind.
-      </p>
-
-      <div class="controls">
-        <select id="language-select" onchange="changeLanguage(this.value)">
-          <option value="en">English</option>
-          <option value="am">Amharic (አማርኛ)</option>
-          <option value="om">Afaan Oromoo</option>
-          <option value="ti">Tigrinya (ትግርኛ)</option>
-          <option value="zh">中文 (Mandarin)</option>
-          <option value="hi">हिन्दी (Hindi)</option>
-          <option value="es">Español</option>
-          <option value="fr">Français</option>
-          <option value="ar">العربية</option>
-          <option value="bn">বাংলা</option>
-          <option value="pt">Português</option>
-          <option value="ru">Русский</option>
-          <option value="ur">اردو</option>
-          <option value="id">Bahasa Indonesia</option>
-        </select>
-
-        <button onclick="toggleTheme()">Toggle Dark / Light</button>
-        <button onclick="toggleTextSize()">Larger Text</button>
-      </div>
-    </header>
-
-    <!-- WHY -->
-    <section>
-      <h2 data-i18n="why_title">Why I Built This</h2>
-      <p data-i18n="why_text">
-        When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.
-      </p>
-    </section>
-
-    <!-- DEMO -->
-    <section class="demo-box">
-      <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
-      <p data-i18n="demo_desc" style="margin-bottom: 20px;">
-        This is a simulated prototype. Tap the button to run a sample analysis.
-      </p>
-      <button class="primary-btn" onclick="startAnalysis()" data-i18n="demo_button">
-        Tap to Simulate Cough Analysis
-      </button>
-      <div id="result"></div>
-      <p style="margin-top: 12px; font-size: 0.9rem; opacity: 0.75;" data-i18n="demo_note">
-        This is only a student prototype and not a medical device.
-      </p>
-    </section>
-
-    <!-- FEATURES -->
-    <section>
-      <h2 data-i18n="features_title">Key Features</h2>
-      <div class="features">
-        <div class="feature">
-          <strong data-i18n="f1_title">Privacy First</strong>
-          <p data-i18n="f1_text">Designed with on-device thinking and minimal data collection.</p>
-        </div>
-        <div class="feature">
-          <strong data-i18n="f2_title">Language Access</strong>
-          <p data-i18n="f2_text">Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.</p>
-        </div>
-        <div class="feature">
-          <strong data-i18n="f3_title">Simple & Clear</strong>
-          <p data-i18n="f3_text">Gives an estimated likelihood so families can decide when to seek care.</p>
-        </div>
-        <div class="feature">
-          <strong data-i18n="f4_title">Built for Equity</strong>
-          <p data-i18n="f4_text">Made so under-resourced families can access useful information more easily.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- FEEDBACK (PUBLIC COUNT) -->
-    <section>
-      <h2 data-i18n="feedback_title">Share Your Feedback</h2>
-      <p data-i18n="feedback_desc" style="margin-bottom: 8px;">
-        Your message stays private. Only the total number is public.
-      </p>
-
-      <div class="count">
-        Feedback received: <span id="feedback-count">0</span>
-      </div>
-
-      <textarea id="feedback-input" rows="4" placeholder="Write your feedback here..."></textarea>
-      <br>
-      <button class="primary-btn" onclick="submitFeedback()" data-i18n="feedback_button">
-        Submit Feedback
-      </button>
-    </section>
-
-    <!-- ABOUT -->
-    <section>
-      <h2 data-i18n="about_title">About This Project</h2>
-      <p data-i18n="about_text">
-        CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.
-      </p>
-      <p style="margin-top: 12px;">
-        Contact: <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a>
-      </p>
-    </section>
-
-    <!-- PRIVACY -->
-    <section>
-      <h2 data-i18n="privacy_title">Privacy Note</h2>
-      <p data-i18n="privacy_text">
-        This prototype does not collect or store personal health data on a server. Feedback messages are not saved publicly. Only a simple count of how many people submitted feedback is kept. Always consult a healthcare professional for medical concerns.
-      </p>
-    </section>
-
-  </div>
-
-  <footer>
-    CroupGuard • Student Project • <a href="https://sifanshiferaw2-ux.github.io/croupguard-portfolio/" target="_blank">Live Prototype</a>
-  </footer>
-
-  <script>
-    // ========== THEME ==========
-    function toggleTheme() {
-      const html = document.documentElement;
-      const current = html.getAttribute("data-theme");
-      html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
-      localStorage.setItem("theme", html.getAttribute("data-theme"));
-    }
-
-    // Load saved theme
-    if (localStorage.getItem("theme") === "dark") {
-      document.documentElement.setAttribute("data-theme", "dark");
-    }
-
-    // ========== TEXT SIZE ==========
-    function toggleTextSize() {
-      document.body.classList.toggle("large-text");
-    }
-
-    // ========== DEMO ==========
-    function startAnalysis() {
-      const result = document.getElementById("result");
-      result.innerHTML = "Analyzing cough sample...";
-      
-      setTimeout(() => {
-        // Keep results low and realistic for reviewers
-        const percent = Math.floor(Math.random() * 18) + 6; // 6–23%
-        result.innerHTML = `Low likelihood of croup-like features detected: <strong>${percent}%</strong><br><small>Classic barking features are limited.</small>`;
-      }, 1600);
-    }
-
-    // ========== PUBLIC FEEDBACK COUNT ==========
-    const COUNTER_KEY = "croupguard-feedback";
-
-    async function loadFeedbackCount() {
-      try {
-        const res = await fetch(`https://api.countapi.xyz/get/croupguard/${COUNTER_KEY}`);
-        const data = await res.json();
-        document.getElementById("feedback-count").innerText = data.value || 0;
-      } catch (e) {
-        document.getElementById("feedback-count").innerText = "0";
-      }
-    }
-
-    async function submitFeedback() {
-      const message = document.getElementById("feedback-input").value.trim();
-      if (!message) {
-        alert("Please write something before submitting.");
-        return;
-      }
-
-      try {
-        const res = await fetch(`https://api.countapi.xyz/hit/croupguard/${COUNTER_KEY}`);
-        const data = await res.json();
-        document.getElementById("feedback-count").innerText = data.value;
+      // Clear the input
+      if (document.getElementById("feedback-input")) {
         document.getElementById("feedback-input").value = "";
-        alert("Thank you! Your feedback was received.");
-      } catch (e) {
-        alert("Something went wrong. Please try again.");
       }
+
+      alert("Thank you for your feedback!");
+    } catch (err) {
+      alert("Something went wrong. Please try again.");
     }
+  }
 
-    // Load count when page opens
-    loadFeedbackCount();
-
-    // ========== SIMPLE LANGUAGE SWITCHER ==========
-    const translations = {
-      en: {
-        why_title: "Why I Built This",
-        why_text: "When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.",
-        demo_title: "Try the Interactive Demo",
-        demo_desc: "This is a simulated prototype. Tap the button to run a sample analysis.",
-        demo_button: "Tap to Simulate Cough Analysis",
-        demo_note: "This is only a student prototype and not a medical device.",
-        features_title: "Key Features",
-        f1_title: "Privacy First",
-        f1_text: "Designed with on-device thinking and minimal data collection.",
-        f2_title: "Language Access",
-        f2_text: "Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.",
-        f3_title: "Simple & Clear",
-        f3_text: "Gives an estimated likelihood so families can decide when to seek care.",
-        f4_title: "Built for Equity",
-        f4_text: "Made so under-resourced families can access useful information more easily.",
-        feedback_title: "Share Your Feedback",
-        feedback_desc: "Your message stays private. Only the total number is public.",
-        feedback_button: "Submit Feedback",
-        about_title: "About This Project",
-        about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.",
-        privacy_title: "Privacy Note",
-        privacy_text: "This prototype does not collect or store personal health data on a server. Feedback messages are not saved publicly. Only a simple count of how many people submitted feedback is kept. Always consult a healthcare professional for medical concerns."
-      }
-      // Other languages can be expanded later
-    };
-
-    function changeLanguage(lang) {
-      const t = translations[lang] || translations.en;
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.getAttribute("data-i18n");
-        if (t[key]) el.innerText = t[key];
-      });
-    }
-  </script>
-</body>
-</html>
-  
+  // Load the count as soon as the page opens
+  loadCount();
+</script>
