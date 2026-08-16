@@ -31,32 +31,39 @@
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
     }
 
-    .logo-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ec4899, #22d3ee);
+    /* Logo - two circles diagonal, just touching */
+    .logo-wrap {
       position: relative;
+      width: 28px;
+      height: 28px;
     }
-    .logo-dot::after {
-      content: "";
+    .logo-circle-1 {
       position: absolute;
-      width: 12px;
-      height: 12px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ec4899;
+      top: 0;
+      left: 0;
+    }
+    .logo-circle-2 {
+      position: absolute;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       background: #22d3ee;
-      top: 6px;
-      left: 6px;
+      bottom: 0;
+      right: 0;
     }
 
     .nav-links {
       display: flex;
-      gap: 24px;
+      gap: 28px;
       align-items: center;
     }
 
@@ -67,22 +74,18 @@
     }
     .nav-links a:hover { color: white; }
 
-    .theme-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #f59e0b, #8b5cf6);
-      border: none;
+    select {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: #1a1a24;
+      color: #ffffff;
+      font-size: 0.9rem;
       cursor: pointer;
     }
-
-    select {
-      padding: 7px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.06);
+    select option {
+      background: #1a1a24;
       color: white;
-      font-size: 0.9rem;
     }
 
     /* Hero */
@@ -179,16 +182,21 @@
       color: #38bdf8;
     }
 
+    /* Feedback box - clean and welcoming */
     textarea {
       width: 100%;
-      padding: 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.3);
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
       color: white;
       font-size: 1rem;
       margin-bottom: 16px;
       resize: vertical;
+      font-family: inherit;
+    }
+    textarea::placeholder {
+      color: #71717a;
     }
 
     .count {
@@ -209,18 +217,22 @@
     @media (max-width: 700px) {
       nav { flex-direction: column; gap: 14px; padding: 16px 20px; }
       .hero h1 { font-size: 2.4rem; }
-      .nav-links { flex-wrap: wrap; justify-content: center; }
+      .nav-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- NAVIGATION -->
   <nav>
     <div class="nav-brand">
-      <div class="logo-dot"></div>
+      <div class="logo-wrap">
+        <div class="logo-circle-1"></div>
+        <div class="logo-circle-2"></div>
+      </div>
       CroupGuard
     </div>
+
     <div class="nav-links">
       <a href="#why">Why</a>
       <a href="#how">How it Works</a>
@@ -244,8 +256,6 @@
         <option value="ur">Urdu</option>
         <option value="id">Indonesian</option>
       </select>
-
-      <button class="theme-btn" onclick="toggleTheme()"></button>
     </div>
   </nav>
 
@@ -259,20 +269,26 @@
       A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.
     </p>
     <div class="hero-buttons">
-      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Try the Demo</button>
-      <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">See the Goal</button>
+      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">
+        Try the Demo
+      </button>
+      <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">
+        See the Goal
+      </button>
     </div>
   </div>
 
   <div class="container">
 
+    <!-- WHY (rewritten) -->
     <section id="why">
       <h2 data-i18n="why_title">Why I Built This</h2>
       <p data-i18n="why_text">
-        When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.
+        My family and I never recognized the early symptoms of croup. As a result, we nearly lost my younger brother three times. That experience is the reason I built CroupGuard — to help other families identify concerning coughs earlier, especially in communities where language barriers and limited access to clear information make timely care harder to reach.
       </p>
     </section>
 
+    <!-- DEMO -->
     <section id="demo">
       <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
       <p data-i18n="demo_desc" style="color:#a1a1aa; margin-bottom:20px;">
@@ -287,6 +303,7 @@
       </p>
     </section>
 
+    <!-- FEATURES -->
     <section id="how">
       <h2 data-i18n="features_title">Key Features</h2>
       <div class="features">
@@ -309,6 +326,7 @@
       </div>
     </section>
 
+    <!-- FEEDBACK -->
     <section id="feedback">
       <h2 data-i18n="feedback_title">Share Your Feedback</h2>
       <p data-i18n="feedback_desc" style="color:#a1a1aa; margin-bottom:8px;">
@@ -323,6 +341,7 @@
       </button>
     </section>
 
+    <!-- ABOUT -->
     <section id="about">
       <h2 data-i18n="about_title">About This Project</h2>
       <p data-i18n="about_text">
@@ -340,17 +359,6 @@
   </footer>
 
   <script>
-    function toggleTheme() {
-      const body = document.body;
-      if (body.style.background === "white" || body.style.background === "rgb(255, 255, 255)") {
-        body.style.background = "#0b0b12";
-        body.style.color = "#ffffff";
-      } else {
-        body.style.background = "white";
-        body.style.color = "#111";
-      }
-    }
-
     function startAnalysis() {
       const result = document.getElementById("result");
       result.innerHTML = "Analyzing cough sample...";
@@ -360,6 +368,7 @@
       }, 1500);
     }
 
+    // Feedback
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -397,10 +406,11 @@
 
     loadFeedbackCount();
 
+    // Languages
     const translations = {
       en: {
         why_title: "Why I Built This",
-        why_text: "When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.",
+        why_text: "My family and I never recognized the early symptoms of croup. As a result, we nearly lost my younger brother three times. That experience is the reason I built CroupGuard — to help other families identify concerning coughs earlier, especially in communities where language barriers and limited access to clear information make timely care harder to reach.",
         demo_title: "Try the Interactive Demo",
         demo_desc: "This is a simulated prototype. Tap the button to run a sample analysis.",
         demo_button: "Tap to Simulate Cough Analysis",
@@ -422,7 +432,7 @@
       },
       am: {
         why_title: "ለምን እንደገነባሁት",
-        why_text: "ትንሽ ልጅ እያለሁ ታናሽ ወንድሜ ሶስት ጊዜ ክሩፕ ያዘው። እያንዳንዱ ጊዜ ምን ያህል አሳሳቢ እንደሆነ በመጨረሻው ደረጃ ላይ ነው የተረዳነው። ያ ተሞክሮ CroupGuardን እንድገነባ አደረገኝ።",
+        why_text: "ቤተሰቤ እና እኔ የክሩፕን ቀደምት ምልክቶች አላወቅንም። በዚህ ምክንያት ታናሽ ወንድሜን ሶስት ጊዜ ሊያጣን ተቃርቧል። ያ ተሞክሮ CroupGuardን እንድገነባ ምክንያት ሆኗል።",
         demo_title: "የሙከራ ማሳያ",
         demo_desc: "ይህ የተማሪ ምሳሌ ነው። ቁልፉን በመጫን ሙከራ ያድርጉ።",
         demo_button: "የሳል ትንተና ሙከራ",
@@ -444,7 +454,7 @@
       },
       om: {
         why_title: "Maaliif Kan Uume",
-        why_text: "Yeroo xixiqqaa ture obboleessi koo xinnaan al tokko sadii croup qabate. Tajaajila CroupGuard uumuuf na kakaase.",
+        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra. Muuxannoon kun CroupGuard uumuuf na kakaase.",
         demo_title: "Demo Interactive",
         demo_desc: "Kun protootaayipii barataa. Qufeetti cuqaasuun yaali.",
         demo_button: "Qufaa Xiinxali",
@@ -466,7 +476,7 @@
       },
       ti: {
         why_title: "ስለምንታይ ዝሰራሕኩዎ",
-        why_text: "ንእሽቶ ምስ ነበርኩ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክሩፕ ሒዝዎ። ነቲ ተመኩሮ CroupGuard ክሰርሕ ድርኺቱ ኮይኑ።",
+        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና። እቲ ተመኩሮ CroupGuard ክሰርሕ ድርኺቱ ኮይኑ።",
         demo_title: "ናይ ፈተነ ማርእያ",
         demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ።",
         demo_button: "ሳል ትንተና ፈትን",
