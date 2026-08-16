@@ -6,12 +6,13 @@
   <title>CroupGuard – Early Cough Awareness</title>
   <style>
     :root {
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --text: #0f172a;
       --card: #ffffff;
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --border: #e2e8f0;
+      --accent: #3b82f6;
     }
 
     [data-theme="dark"] {
@@ -21,45 +22,43 @@
       --primary: #3b82f6;
       --primary-dark: #2563eb;
       --border: #334155;
+      --accent: #60a5fa;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.65;
       transition: background 0.3s, color 0.3s;
     }
 
     .container {
-      max-width: 920px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 24px 20px 60px;
     }
 
     header {
       text-align: center;
-      padding: 40px 20px 25px;
+      padding: 50px 20px 30px;
     }
 
     .logo {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       font-weight: 800;
       color: var(--primary);
-      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
     }
 
     .tagline {
-      font-size: 1.15rem;
-      opacity: 0.85;
-      max-width: 620px;
-      margin: 0 auto 25px;
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 640px;
+      margin: 0 auto 30px;
     }
 
     .controls {
@@ -67,22 +66,21 @@
       justify-content: center;
       gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     button, select {
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: 11px 18px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--card);
       color: var(--text);
       cursor: pointer;
       font-size: 0.95rem;
+      transition: all 0.2s;
     }
 
-    button:hover {
-      background: var(--primary);
-      color: white;
+    button:hover, select:hover {
       border-color: var(--primary);
     }
 
@@ -90,11 +88,12 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 14px 28px;
+      padding: 15px 32px;
       font-size: 1.05rem;
       font-weight: 600;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      transition: background 0.2s;
     }
 
     .primary-btn:hover {
@@ -103,74 +102,83 @@
 
     section {
       background: var(--card);
-      border-radius: 16px;
-      padding: 28px;
+      border-radius: 18px;
+      padding: 32px;
       margin-bottom: 28px;
       border: 1px solid var(--border);
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
     }
 
     h2 {
-      margin-bottom: 14px;
-      font-size: 1.5rem;
+      margin-bottom: 16px;
+      font-size: 1.55rem;
+      color: var(--primary);
     }
 
     .demo-box {
       text-align: center;
-      padding: 30px 20px;
+      padding: 40px 25px;
     }
 
     #result {
-      margin-top: 20px;
-      font-size: 1.3rem;
+      margin-top: 22px;
+      font-size: 1.35rem;
       font-weight: 600;
-      min-height: 50px;
+      min-height: 55px;
     }
 
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
     }
 
     .feature {
       background: var(--bg);
-      padding: 18px;
-      border-radius: 12px;
+      padding: 22px;
+      border-radius: 14px;
       border: 1px solid var(--border);
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
     }
 
     textarea {
       width: 100%;
-      padding: 14px;
-      border-radius: 10px;
+      padding: 16px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: var(--bg);
       color: var(--text);
       font-size: 1rem;
       resize: vertical;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .count {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 700;
-      margin: 12px 0 18px;
+      margin: 14px 0 20px;
       color: var(--primary);
     }
 
     footer {
       text-align: center;
-      padding: 30px 20px;
-      opacity: 0.75;
+      padding: 40px 20px;
+      opacity: 0.8;
       font-size: 0.95rem;
     }
 
-    a {
-      color: var(--primary);
-    }
+    a { color: var(--primary); }
 
-    .large-text {
-      font-size: 1.15em;
+    .large-text { font-size: 1.18em; }
+
+    @media (max-width: 600px) {
+      .logo { font-size: 2.2rem; }
+      section { padding: 24px 18px; }
     }
   </style>
 </head>
@@ -181,7 +189,7 @@
     <!-- HEADER -->
     <header>
       <div class="logo">CroupGuard</div>
-      <p class="tagline">
+      <p class="tagline" data-i18n="tagline">
         A student project helping families understand concerning coughs earlier — with privacy and language access in mind.
       </p>
 
@@ -191,8 +199,8 @@
           <option value="am">Amharic (አማርኛ)</option>
           <option value="om">Afaan Oromoo</option>
           <option value="ti">Tigrinya (ትግርኛ)</option>
-          <option value="zh">中文 (Mandarin)</option>
-          <option value="hi">हिन्दी (Hindi)</option>
+          <option value="zh">中文</option>
+          <option value="hi">हिन्दी</option>
           <option value="es">Español</option>
           <option value="fr">Français</option>
           <option value="ar">العربية</option>
@@ -203,61 +211,61 @@
           <option value="id">Bahasa Indonesia</option>
         </select>
 
-        <button onclick="toggleTheme()">Toggle Dark / Light</button>
+        <button onclick="toggleTheme()">Dark / Light</button>
         <button onclick="toggleTextSize()">Larger Text</button>
       </div>
     </header>
 
     <!-- WHY -->
     <section>
-      <h2>Why I Built This</h2>
-      <p>
+      <h2 data-i18n="why_title">Why I Built This</h2>
+      <p data-i18n="why_text">
         When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.
       </p>
     </section>
 
     <!-- DEMO -->
     <section class="demo-box">
-      <h2>Try the Interactive Demo</h2>
-      <p style="margin-bottom: 20px;">
+      <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
+      <p data-i18n="demo_desc" style="margin-bottom: 22px; opacity: 0.9;">
         This is a simulated prototype. Tap the button to run a sample analysis.
       </p>
-      <button class="primary-btn" onclick="startAnalysis()">
+      <button class="primary-btn" onclick="startAnalysis()" data-i18n="demo_button">
         Tap to Simulate Cough Analysis
       </button>
       <div id="result"></div>
-      <p style="margin-top: 12px; font-size: 0.9rem; opacity: 0.75;">
+      <p style="margin-top: 14px; font-size: 0.9rem; opacity: 0.75;" data-i18n="demo_note">
         This is only a student prototype and not a medical device.
       </p>
     </section>
 
     <!-- FEATURES -->
     <section>
-      <h2>Key Features</h2>
+      <h2 data-i18n="features_title">Key Features</h2>
       <div class="features">
         <div class="feature">
-          <strong>Privacy First</strong>
-          <p>Designed with on-device thinking and minimal data collection.</p>
+          <strong data-i18n="f1_title">Privacy First</strong>
+          <p data-i18n="f1_text">Designed with on-device thinking and minimal data collection.</p>
         </div>
         <div class="feature">
-          <strong>Language Access</strong>
-          <p>Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.</p>
+          <strong data-i18n="f2_title">Language Access</strong>
+          <p data-i18n="f2_text">Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.</p>
         </div>
         <div class="feature">
-          <strong>Simple & Clear</strong>
-          <p>Gives an estimated likelihood so families can decide when to seek care.</p>
+          <strong data-i18n="f3_title">Simple & Clear</strong>
+          <p data-i18n="f3_text">Gives an estimated likelihood so families can decide when to seek care.</p>
         </div>
         <div class="feature">
-          <strong>Built for Equity</strong>
-          <p>Made so under-resourced families can access useful information more easily.</p>
+          <strong data-i18n="f4_title">Built for Equity</strong>
+          <p data-i18n="f4_text">Made so under-resourced families can access useful information more easily.</p>
         </div>
       </div>
     </section>
 
     <!-- FEEDBACK -->
     <section>
-      <h2>Share Your Feedback</h2>
-      <p style="margin-bottom: 8px;">
+      <h2 data-i18n="feedback_title">Share Your Feedback</h2>
+      <p data-i18n="feedback_desc" style="margin-bottom: 8px;">
         Your message stays private. Only the total number is public.
       </p>
 
@@ -267,26 +275,26 @@
 
       <textarea id="feedback-input" rows="4" placeholder="Write your feedback here..."></textarea>
       <br>
-      <button class="primary-btn" onclick="submitFeedback()">
+      <button class="primary-btn" onclick="submitFeedback()" data-i18n="feedback_button">
         Submit Feedback
       </button>
     </section>
 
     <!-- ABOUT -->
     <section>
-      <h2>About This Project</h2>
-      <p>
+      <h2 data-i18n="about_title">About This Project</h2>
+      <p data-i18n="about_text">
         CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.
       </p>
-      <p style="margin-top: 12px;">
+      <p style="margin-top: 14px;">
         Contact: <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a>
       </p>
     </section>
 
     <!-- PRIVACY -->
     <section>
-      <h2>Privacy Note</h2>
-      <p>
+      <h2 data-i18n="privacy_title">Privacy Note</h2>
+      <p data-i18n="privacy_text">
         This prototype does not collect or store personal health data on a server. Feedback messages are sent privately to the creator. Only a simple count of how many people submitted feedback is kept public. Always consult a healthcare professional for medical concerns.
       </p>
     </section>
@@ -325,7 +333,7 @@
       }, 1600);
     }
 
-    // ========== PUBLIC COUNT + SEND TO EMAIL ==========
+    // Public count + Formspree
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -347,7 +355,7 @@
       }
 
       try {
-        // 1. Send the real message to your email
+        // Send message to your email
         await fetch(FORMSPREE_URL, {
           method: "POST",
           headers: {
@@ -357,12 +365,11 @@
           body: JSON.stringify({ message: message })
         });
 
-        // 2. Increase the public count
+        // Increase public count
         const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`);
         const data = await res.json();
         document.getElementById("feedback-count").innerText = data.value;
 
-        // 3. Clear the box
         document.getElementById("feedback-input").value = "";
         alert("Thank you! Your feedback was received.");
       } catch (e) {
@@ -370,11 +377,120 @@
       }
     }
 
-    // Load count when page opens
     loadFeedbackCount();
 
+    // ========== LANGUAGE TRANSLATIONS ==========
+    const translations = {
+      en: {
+        tagline: "A student project helping families understand concerning coughs earlier — with privacy and language access in mind.",
+        why_title: "Why I Built This",
+        why_text: "When I was younger, my little brother had croup three times. Each time we only realized how serious it was in the final stages. Once we were eating lunch and he suddenly struggled to breathe. We almost lost him. That experience is why I created CroupGuard — to help other families recognize concerning coughs earlier, especially in communities with limited access to information.",
+        demo_title: "Try the Interactive Demo",
+        demo_desc: "This is a simulated prototype. Tap the button to run a sample analysis.",
+        demo_button: "Tap to Simulate Cough Analysis",
+        demo_note: "This is only a student prototype and not a medical device.",
+        features_title: "Key Features",
+        f1_title: "Privacy First",
+        f1_text: "Designed with on-device thinking and minimal data collection.",
+        f2_title: "Language Access",
+        f2_text: "Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.",
+        f3_title: "Simple & Clear",
+        f3_text: "Gives an estimated likelihood so families can decide when to seek care.",
+        f4_title: "Built for Equity",
+        f4_text: "Made so under-resourced families can access useful information more easily.",
+        feedback_title: "Share Your Feedback",
+        feedback_desc: "Your message stays private. Only the total number is public.",
+        feedback_button: "Submit Feedback",
+        about_title: "About This Project",
+        about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.",
+        privacy_title: "Privacy Note",
+        privacy_text: "This prototype does not collect or store personal health data on a server. Feedback messages are sent privately to the creator. Only a simple count of how many people submitted feedback is kept public. Always consult a healthcare professional for medical concerns."
+      },
+      am: {
+        tagline: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል።",
+        why_title: "ለምን እንደገነባሁት",
+        why_text: "ትንሽ ልጅ እያለሁ ታናሽ ወንድሜ ሶስት ጊዜ ክሩፕ ያዘው። እያንዳንዱ ጊዜ ምን ያህል አሳሳቢ እንደሆነ በመጨረሻው ደረጃ ላይ ነው የተረዳነው። አንድ ጊዜ ምሳ እየበላን ሳለ ድንገት መተንፈስ አቸገረው። ሊያጣን ነበር። ያ ተሞክሮ CroupGuardን እንድገነባ አደረገኝ።",
+        demo_title: "የሙከራ ማሳያ",
+        demo_desc: "ይህ የተማሪ ምሳሌ ነው። ቁልፉን በመጫን ሙከራ ያድርጉ።",
+        demo_button: "የሳል ትንተና ሙከራ",
+        demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው፣ የሕክምና መሣሪያ አይደለም።",
+        features_title: "ዋና ባህሪያት",
+        f1_title: "ግላዊነት በመጀመሪያ",
+        f1_text: "በመሣሪያ ላይ የሚሰራ እና ውሂብ አነስተኛ የሚሰበስብ።",
+        f2_title: "የቋንቋ መዳረሻ",
+        f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ እና ሌሎች ቋንቋዎችን ይደግፋል።",
+        f3_title: "ቀላል እና ግልጽ",
+        f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ የሚያግዝ ግምት ይሰጣል።",
+        f4_title: "ለእኩልነት የተሰራ",
+        f4_text: "ሀብት የሌላቸው ቤተሰቦች በቀላሉ መረጃ እንዲያገኙ የተሰራ።",
+        feedback_title: "አስተያየትዎን ያጋሩ",
+        feedback_desc: "መልእክትዎ ግላዊ ነው። ቁጥሩ ብቻ ይታያል።",
+        feedback_button: "አስተያየት ላክ",
+        about_title: "ስለ ፕሮጀክቱ",
+        about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው። ከግል ቤተሰብ ተሞክሮ ተነስቶ ለቀደመ ግንዛቤ፣ ግላዊነት እና የቋንቋ ተደራሽነት ያተኮረ መሳሪያ ሆኗል።",
+        privacy_title: "የግላዊነት ማስታወሻ",
+        privacy_text: "ይህ ፕሮቶታይፕ የግል ጤና ውሂብ አይሰበስብም። አስተያየቶች ለፈጣሪው ብቻ ይላካሉ።"
+      },
+      om: {
+        tagline: "Pirojektii barataa kan maatiilee dhukkuba qufaa dafanii akka hubatan gargaaru.",
+        why_title: "Maaliif Kan Uume",
+        why_text: "Yeroo xixiqqaa ture obboleessi koo xinnaan al tokko sadii croup qabate. Yeroo hunda hanga dhumarratti malee akka cimaa ta'e hin beekne. Tajaajila CroupGuard uumuuf na kakaase.",
+        demo_title: "Demo Interactive",
+        demo_desc: "Kun protootaayipii barataa. Qufeetti cuqaasuun yaali.",
+        demo_button: "Qufaa Xiinxali",
+        demo_note: "Kun protootaayipii barataa qofa, meeshaa fayyaa miti.",
+        features_title: "Amaloota Ijoo",
+        f1_title: "Dhuunfaa Dura",
+        f1_text: "Meeshaa irratti kan hojjetu fi daataa xiqqaa qabu.",
+        f2_title: "Afaan Argachuu",
+        f2_text: "Afaan Oromoo, Amaariffaa, Tigiree fi afaanota biroo deeggara.",
+        f3_title: "Salphaa fi Ifaa",
+        f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
+        f4_title: "Qixaaf Kan Uumame",
+        f4_text: "Maatiilee qabeenya hin qabneef odeeffannoo salphaatti akka argatan.",
+        feedback_title: "Yaada Kee Qoodi",
+        feedback_desc: "Ergaan kee dhuunfaa. Lakkoofsi qofa uumame.",
+        feedback_button: "Yaada Ergi",
+        about_title: "Waa'ee Pirojektii",
+        about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame. Muuxannoo maatii irraa ka'ee.",
+        privacy_title: "Yaadannoo Dhuunfaa",
+        privacy_text: "Protootaayipiin kun daataa fayyaa hin kuufatu. Yaadni uumaa qofaaf ergame."
+      },
+      ti: {
+        tagline: "ናይ ተማሃራይ ፕሮጀክት ስድራቤታት ኣሳሳቢ ሳል ቅድሚ ምርዳእ ዝሕግዝ።",
+        why_title: "ስለምንታይ ዝሰራሕኩዎ",
+        why_text: "ንእሽቶ ምስ ነበርኩ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክሩፕ ሒዝዎ። ነቲ ተመኩሮ CroupGuard ክሰርሕ ድርኺቱ ኮይኑ።",
+        demo_title: "ናይ ፈተነ ማርእያ",
+        demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ።",
+        demo_button: "ሳል ትንተና ፈትን",
+        demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ።",
+        features_title: "ቁልፊ ባህርያት",
+        f1_title: "ብሕታውነት ቀዳምነት",
+        f1_text: "ኣብ መሳርሒ ዝሰርሕን ውሱን ዳታ ዘለዎን።",
+        f2_title: "ናይ ቋንቋ መእተዊ",
+        f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ይድግፍ።",
+        f3_title: "ቀሊልን ንጹርን",
+        f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
+        f4_title: "ንማዕረ ክብሪ ዝተሰርሐ",
+        f4_text: "ንድኻታት ስድራቤታት ሓበሬታ ቀሊል ክረኽቡ።",
+        feedback_title: "ርእይቶኻ ኣካፍል",
+        feedback_desc: "መልእኽትኻ ብሕታዊ እዩ። ቁጽሪ ጥራይ ይረአ።",
+        feedback_button: "ርእይቶ ስደድ",
+        about_title: "ብዛዕባ እቲ ፕሮጀክት",
+        about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ።",
+        privacy_title: "ናይ ብሕታውነት መዘኻኸሪ",
+        privacy_text: "እዚ ፕሮቶታይፕ ናይ ጥዕና ዳታ ኣይእክብን።"
+      }
+    };
+
     function changeLanguage(lang) {
-      console.log("Language selected:", lang);
+      const t = translations[lang] || translations.en;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (t[key]) {
+          el.innerText = t[key];
+        }
+      });
     }
   </script>
 </body>
