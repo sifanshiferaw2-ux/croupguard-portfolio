@@ -59,8 +59,9 @@
 
     .nav-links {
       display: flex;
-      gap: 28px;
+      gap: 22px;
       align-items: center;
+      flex-wrap: wrap;
     }
     .nav-links a {
       color: #a1a1aa;
@@ -70,7 +71,7 @@
     .nav-links a:hover { color: white; }
 
     select {
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 10px;
       border: 1px solid rgba(255,255,255,0.18);
       background: #1a1a24;
@@ -85,7 +86,7 @@
     }
 
     .hero h1 {
-      font-size: 3.5rem;
+      font-size: 3.4rem;
       font-weight: 800;
       line-height: 1.15;
       margin-bottom: 22px;
@@ -99,7 +100,7 @@
     .hero p {
       font-size: 1.15rem;
       color: #a1a1aa;
-      max-width: 600px;
+      max-width: 620px;
       margin: 0 auto 38px;
     }
 
@@ -264,8 +265,8 @@
 
     @media (max-width: 700px) {
       nav { flex-direction: column; gap: 14px; padding: 16px 20px; }
-      .hero h1 { font-size: 2.4rem; }
-      .nav-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+      .hero h1 { font-size: 2.3rem; }
+      .nav-links { justify-content: center; gap: 14px; }
     }
   </style>
 </head>
@@ -289,9 +290,9 @@
 
       <select id="language-select" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
-        <option value="am">Amharic</option>
+        <option value="am">Amharic (አማርኛ)</option>
         <option value="om">Afaan Oromoo</option>
-        <option value="ti">Tigrinya</option>
+        <option value="ti">Tigrinya (ትግርኛ)</option>
         <option value="zh">中文</option>
         <option value="hi">हिन्दी</option>
         <option value="es">Español</option>
@@ -491,6 +492,7 @@
       }
     }
 
+    // Feedback
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -528,6 +530,7 @@
 
     loadFeedbackCount();
 
+    // ===================== FULL TRANSLATIONS =====================
     const translations = {
       en: {
         nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
@@ -552,74 +555,318 @@
         about_title: "About This Project",
         about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit."
       },
+
       am: {
-        nav_why: "ለምን", nav_how: "እንዴት", nav_demo: "ሙከራ", nav_about: "ስለ", nav_feedback: "አስተያየት",
+        nav_why: "ለምን", nav_how: "እንዴት እንደሚሰራ", nav_demo: "ሙከራ", nav_about: "ስለ ፕሮጀክቱ", nav_feedback: "አስተያየት",
         hero_line1: "የቀደመ የሳል መመሪያን", hero_line2: "ተደራሽ ማድረግ",
-        hero_sub: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል።",
+        hero_sub: "የተማሪ ፕሮጀክት ሲሆን ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲረዱ ያግዛል — በተለይ የቋንቋ እና የመረጃ እጥረት ባለባቸው አካባቢዎች።",
         btn_demo: "ሙከራ አድርግ", btn_goal: "ግቡን ተመልከት",
         why_title: "ለምን እንደገነባሁት",
-        why_text: "ቤተሰቤ እና እኔ የክሩፕን ቀደምት ምልክቶች አላወቅንም። በዚህ ምክንያት ታናሽ ወንድሜን ሶስት ጊዜ ሊያጣን ተቃርቧል። ያ ተሞክሮ CroupGuardን እንድገነባ ምክንያት ሆኗል።",
+        why_text: "ቤተሰቤ እና እኔ የክሩፕን ቀደምት ምልክቶች አላወቅንም። በዚህ ምክንያት ታናሽ ወንድሜን ሶስት ጊዜ ሊያጣን ተቃርቧል። ያ ተሞክሮ CroupGuardን እንድገነባ ምክንያት ሆኗል — ሌሎች ቤተሰቦች አሳሳቢ ሳል ቀድመው እንዲለዩ ለመርዳት።",
         demo_title: "የሙከራ ማሳያ",
         demo_desc: "ይህ የተማሪ ምሳሌ ነው። ቁልፉን በመጫን ሙከራ ያድርጉ።",
         demo_button: "የሳል ትንተና ሙከራ",
-        demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው።",
+        demo_note: "ይህ የተማሪ ፕሮቶታይፕ ብቻ ነው፣ የሕክምና መሣሪያ አይደለም።",
         features_title: "ዋና ባህሪያት",
-        f1_title: "ግላዊነት በመጀመሪያ", f1_text: "በመሣሪያ ላይ የሚሰራ።",
-        f2_title: "የቋንቋ መዳረሻ", f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ ይደግፋል።",
-        f3_title: "ቀላል እና ግልጽ", f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ ያግዛል።",
-        f4_title: "ለእኩልነት", f4_text: "ለሁሉም ቤተሰቦች።",
+        f1_title: "ግላዊነት በመጀመሪያ", f1_text: "በመሣሪያ ላይ የሚሰራ እና ውሂብ አነስተኛ የሚሰበስብ።",
+        f2_title: "የቋንቋ መዳረሻ", f2_text: "አማርኛ፣ አፋን ኦሮሞ፣ ትግርኛ እና ሌሎች ቋንቋዎችን ይደግፋል።",
+        f3_title: "ቀላል እና ግልጽ", f3_text: "ቤተሰቦች መቼ እንደሚፈልጉ እንዲወስኑ የሚያግዝ ግምት ይሰጣል።",
+        f4_title: "ለእኩልነት የተሰራ", f4_text: "ሀብት የሌላቸው ቤተሰቦች በቀላሉ መረጃ እንዲያገኙ የተሰራ።",
         feedback_title: "አስተያየትዎን ያጋሩ",
-        feedback_desc: "መልእክትዎ ግላዊ ነው።",
+        feedback_desc: "መልእክትዎ ግላዊ ነው። ቁጥሩ ብቻ ይታያል።",
         feedback_count_label: "የተቀበሉ አስተያየቶች:",
         feedback_button: "አስተያየት ላክ",
         about_title: "ስለ ፕሮጀክቱ",
         about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው። ከግል ቤተሰብ ተሞክሮ ተነስቶ ለቀደመ ግንዛቤ፣ ግላዊነት እና የቋንቋ ተደራሽነት ያተኮረ መሳሪያ ሆኗል። አሁንም ፕሮቶታይፕ ነው እና የሕክምና መሣሪያ አይደለም። ግቡ ተጨማሪ ቤተሰቦች እንዲጠቀሙበት ማሻሻል ነው።"
       },
+
       om: {
-        nav_why: "Maaliif", nav_how: "Akkaataa", nav_demo: "Demo", nav_about: "Waa'ee", nav_feedback: "Yaada",
+        nav_why: "Maaliif", nav_how: "Akkaataa Hojii", nav_demo: "Demo", nav_about: "Waa'ee", nav_feedback: "Yaada",
         hero_line1: "Gorsa qufaa dafanii", hero_line2: "salphaatti argachuu",
-        hero_sub: "Pirojektii barataa kan maatiilee gargaaru.",
+        hero_sub: "Pirojektii barataa kan maatiilee dhukkuba qufaa dafanii akka hubatan gargaaru — keessattuu bakka afaan fi odeeffannoo hanqate.",
         btn_demo: "Demo Yaali", btn_goal: "Kaayyoo Ilaali",
         why_title: "Maaliif Kan Uume",
-        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra.",
+        why_text: "Maatiinkoo fi ani mallattoolee croup jalqabaa hin beekne. Kanaaf obboleessa koo xinnaa al tokko sadii dhabuu dhaanerra. Muuxannoon kun CroupGuard uumuuf na kakaase — maatiilee biroo qufaa yaaddessaa dafanii akka adda baasan gargaaruuf.",
         demo_title: "Demo Interactive",
-        demo_desc: "Kun protootaayipii barataa.",
+        demo_desc: "Kun protootaayipii barataa. Qufeetti cuqaasuun yaali.",
         demo_button: "Qufaa Xiinxali",
-        demo_note: "Kun protootaayipii barataa qofa.",
+        demo_note: "Kun protootaayipii barataa qofa, meeshaa fayyaa miti.",
         features_title: "Amaloota Ijoo",
-        f1_title: "Dhuunfaa", f1_text: "Meeshaa irratti kan hojjetu.",
-        f2_title: "Afaan", f2_text: "Afaan Oromoo, Amaariffaa, Tigiree deeggara.",
-        f3_title: "Salphaa", f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
-        f4_title: "Qixxummaa", f4_text: "Maatiilee hundaaf.",
+        f1_title: "Dhuunfaa Dura", f1_text: "Meeshaa irratti kan hojjetu fi daataa xiqqaa qabu.",
+        f2_title: "Afaan Argachuu", f2_text: "Afaan Oromoo, Amaariffaa, Tigiree fi afaanota biroo deeggara.",
+        f3_title: "Salphaa fi Ifaa", f3_text: "Maatiileen yeroo barbaachisu akka murteessan gargaara.",
+        f4_title: "Qixaaf Kan Uumame", f4_text: "Maatiilee qabeenya hin qabneef odeeffannoo salphaatti akka argatan.",
         feedback_title: "Yaada Kee Qoodi",
-        feedback_desc: "Ergaan kee dhuunfaa.",
+        feedback_desc: "Ergaan kee dhuunfaa. Lakkoofsi qofa uumame.",
         feedback_count_label: "Yaadni argame:",
         feedback_button: "Yaada Ergi",
         about_title: "Waa'ee Pirojektii",
         about_text: "CroupGuard pirojektii barataa Sifan Shiferaw tiin uumame. Muuxannoo maatii irraa ka'ee gara meeshaa dafanii beekumsa, dhuunfaa fi afaan argachuu irratti xiyyeeffate. Ammaas protootaayipii dha, meeshaa fayyaa miti. Kaayyoon isaa maatiilee dabalataa akka fayyadaman fooyyessuu dha."
       },
+
       ti: {
-        nav_why: "ስለምንታይ", nav_how: "ከመይ", nav_demo: "ፈተነ", nav_about: "ብዛዕባ", nav_feedback: "ርእይቶ",
+        nav_why: "ስለምንታይ", nav_how: "ከመይ ዝሰርሕ", nav_demo: "ፈተነ", nav_about: "ብዛዕባ", nav_feedback: "ርእይቶ",
         hero_line1: "ቀዳማይ መምርሒ ሳል", hero_line2: "ተበጻሕነት",
-        hero_sub: "ናይ ተማሃራይ ፕሮጀክት ስድራቤታት ዝሕግዝ።",
+        hero_sub: "ናይ ተማሃራይ ፕሮጀክት ስድራቤታት ኣሳሳቢ ሳል ቅድሚ ምርዳእ ዝሕግዝ — ብፍላይ ኣብቲ ቋንቋን ሓበሬታን ዝጎድለሉ ቦታታት።",
         btn_demo: "ፈተነ ግበር", btn_goal: "ዕላማ ርአ",
         why_title: "ስለምንታይ ዝሰራሕኩዎ",
-        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና።",
+        why_text: "ስድራቤተይን ኣነን ቀዳሞት ምልክታት ክሩፕ ኣይፈለጥናን። ብሰንኪ እዚ ንእሽቶ ሓውተይ ሰለስተ ጊዜ ክንስእ ቀሪብና። እቲ ተመኩሮ CroupGuard ክሰርሕ ድርኺቱ ኮይኑ — ንኻልኦት ስድራቤታት ኣሳሳቢ ሳል ቅድሚ ምልላይ ንምሕጋዝ።",
         demo_title: "ናይ ፈተነ ማርእያ",
-        demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ።",
+        demo_desc: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ እዩ። ቁልፊ ጠዊቕካ ፈተነ ግበር።",
         demo_button: "ሳል ትንተና ፈትን",
-        demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ።",
+        demo_note: "እዚ ናይ ተማሃራይ ፕሮቶታይፕ ጥራይ እዩ፣ ናይ ሕክምና መሳርሒ ኣይኮነን።",
         features_title: "ቁልፊ ባህርያት",
-        f1_title: "ብሕታውነት", f1_text: "ኣብ መሳርሒ ዝሰርሕ።",
-        f2_title: "ቋንቋ", f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ይድግፍ።",
-        f3_title: "ቀሊል", f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
-        f4_title: "ማዕረ", f4_text: "ንኹሉ ስድራቤታት።",
+        f1_title: "ብሕታውነት ቀዳምነት", f1_text: "ኣብ መሳርሒ ዝሰርሕን ውሱን ዳታ ዘለዎን።",
+        f2_title: "ናይ ቋንቋ መእተዊ", f2_text: "ትግርኛ፣ ኣማርኛ፣ ኦሮሞን ካልኦት ቋንቋታትን ይድግፍ።",
+        f3_title: "ቀሊልን ንጹርን", f3_text: "ስድራቤታት መኣዝ ከም ዝደልዩ ክውስኑ ይሕግዝ።",
+        f4_title: "ንማዕረ ክብሪ ዝተሰርሐ", f4_text: "ንድኻታት ስድራቤታት ሓበሬታ ቀሊል ክረኽቡ።",
         feedback_title: "ርእይቶኻ ኣካፍል",
-        feedback_desc: "መልእኽትኻ ብሕታዊ እዩ።",
+        feedback_desc: "መልእኽትኻ ብሕታዊ እዩ። ቁጽሪ ጥራይ ይረአ።",
         feedback_count_label: "ርእይቶታት:",
         feedback_button: "ርእይቶ ስደድ",
         about_title: "ብዛዕባ እቲ ፕሮጀክት",
         about_text: "CroupGuard ብሲፋን ሽፈራው ዝተሰርሐ ናይ ተማሃራይ ፕሮጀክት እዩ። ካብ ናይ ስድራቤት ተመኩሮ ተበጊሱ ናብ መሳርሒ ቀዳማይ ምርዳእ፣ ብሕታውነትን ናይ ቋንቋ ተበጻሕነትን ዝተሓጽረ ኮይኑ። ገና ፕሮቶታይፕ እዩ እሞ ናይ ሕክምና መሳርሒ ኣይኮነን። ዕላማኡ ዝያዳ ስድራቤታት ክጥቀሙሉ ምምሕያሽ እዩ።"
+      },
+
+      // Other languages (solid coverage)
+      zh: {
+        nav_why: "原因", nav_how: "工作原理", nav_demo: "演示", nav_about: "关于", nav_feedback: "反馈",
+        hero_line1: "让早期咳嗽指导", hero_line2: "更加普及",
+        hero_sub: "这是一个学生项目，探索如何通过注重隐私的AI和多语言设计，帮助家庭更好地理解令人担忧的咳嗽——尤其是在语言或资源障碍使清晰信息更难获取的地区。",
+        btn_demo: "试用演示", btn_goal: "查看目标",
+        why_title: "我为什么做这个",
+        why_text: "我和我的家人从未认识到哮吼的早期症状。结果我们差点三次失去我的弟弟。这段经历是我创建 CroupGuard 的原因——帮助其他家庭更早识别令人担忧的咳嗽。",
+        demo_title: "互动演示",
+        demo_desc: "这是一个模拟原型。点击按钮运行示例分析。",
+        demo_button: "点击模拟咳嗽分析",
+        demo_note: "这只是学生原型，不是医疗设备。",
+        features_title: "主要功能",
+        f1_title: "隐私优先", f1_text: "采用设备端处理，尽量减少数据收集。",
+        f2_title: "语言支持", f2_text: "支持阿姆哈拉语、奥罗莫语、提格里尼亚语等主要语言。",
+        f3_title: "简单清晰", f3_text: "提供估计可能性，帮助家庭决定何时寻求护理。",
+        f4_title: "为公平而建", f4_text: "让资源有限的家庭也能更容易获得有用信息。",
+        feedback_title: "分享您的反馈",
+        feedback_desc: "您的消息保持私密。只有总数是公开的。",
+        feedback_count_label: "收到的反馈：",
+        feedback_button: "提交反馈",
+        about_title: "关于本项目",
+        about_text: "CroupGuard 是由 Sifan Shiferaw 创建的学生项目。它源于个人家庭经历，发展成为一个专注于早期意识、隐私和语言可及性的工具。它仍然是一个原型，不是医疗设备。目标是不断改进，让更多家庭受益。"
+      },
+
+      hi: {
+        nav_why: "क्यों", nav_how: "यह कैसे काम करता है", nav_demo: "डेमो", nav_about: "परिचय", nav_feedback: "प्रतिक्रिया",
+        hero_line1: "जल्दी खांसी मार्गदर्शन को", hero_line2: "अधिक सुलभ बनाना",
+        hero_sub: "यह एक छात्र परियोजना है जो देखती है कि गोपनीयता-प्रथम AI और बहुभाषी डिज़ाइन परिवारों को चिंताजनक खांसी को बेहतर समझने में कैसे मदद कर सकते हैं।",
+        btn_demo: "डेमो आज़माएँ", btn_goal: "लक्ष्य देखें",
+        why_title: "मैंने यह क्यों बनाया",
+        why_text: "मेरे परिवार और मैंने क्रूप के शुरुआती लक्षणों को नहीं पहचाना। नतीजतन हमने तीन बार लगभग अपने छोटे भाई को खो दिया। उसी अनुभव ने मुझे CroupGuard बनाने के लिए प्रेरित किया।",
+        demo_title: "इंटरैक्टिव डेमो",
+        demo_desc: "यह एक सिम्युलेटेड प्रोटोटाइप है। नमूना विश्लेषण चलाने के लिए बटन दबाएँ।",
+        demo_button: "खांसी विश्लेषण सिमुलेट करें",
+        demo_note: "यह केवल छात्र प्रोटोटाइप है, चिकित्सा उपकरण नहीं।",
+        features_title: "मुख्य विशेषताएँ",
+        f1_title: "गोपनीयता पहले", f1_text: "डिवाइस पर प्रोसेसिंग और न्यूनतम डेटा संग्रह।",
+        f2_title: "भाषा पहुँच", f2_text: "अम्हारिक, अफ़ान ओरोमो, तिग्रिन्या और अन्य भाषाओं का समर्थन।",
+        f3_title: "सरल और स्पष्ट", f3_text: "अनुमानित संभावना देता है ताकि परिवार तय कर सकें।",
+        f4_title: "समानता के लिए", f4_text: "संसाधन-कम परिवारों के लिए उपयोगी जानकारी आसान बनाना।",
+        feedback_title: "अपनी प्रतिक्रिया साझा करें",
+        feedback_desc: "आपका संदेश निजी रहता है। केवल कुल संख्या सार्वजनिक है।",
+        feedback_count_label: "प्राप्त प्रतिक्रियाएँ:",
+        feedback_button: "प्रतिक्रिया भेजें",
+        about_title: "इस परियोजना के बारे में",
+        about_text: "CroupGuard सिफ़ान शिफेराव द्वारा बनाई गई एक छात्र परियोजना है। यह एक व्यक्तिगत पारिवारिक अनुभव से शुरू हुई और शुरुआती जागरूकता, गोपनीयता और भाषा पहुँच पर केंद्रित उपकरण बनी। यह अभी भी प्रोटोटाइप है और चिकित्सा उपकरण नहीं है।"
+      },
+
+      es: {
+        nav_why: "Por qué", nav_how: "Cómo funciona", nav_demo: "Demo", nav_about: "Acerca de", nav_feedback: "Comentarios",
+        hero_line1: "Haciendo la guía temprana de la tos", hero_line2: "más accesible",
+        hero_sub: "Un proyecto estudiantil que explora cómo la IA centrada en la privacidad y el diseño multilingüe pueden ayudar a las familias a entender mejor las toses preocupantes.",
+        btn_demo: "Probar la Demo", btn_goal: "Ver el Objetivo",
+        why_title: "Por qué lo construí",
+        why_text: "Mi familia y yo nunca reconocimos los síntomas tempranos del crup. Como resultado, casi perdimos a mi hermano menor tres veces. Esa experiencia es la razón por la que creé CroupGuard.",
+        demo_title: "Demo Interactiva",
+        demo_desc: "Este es un prototipo simulado. Toca el botón para ejecutar un análisis de muestra.",
+        demo_button: "Simular análisis de tos",
+        demo_note: "Esto es solo un prototipo estudiantil y no un dispositivo médico.",
+        features_title: "Características clave",
+        f1_title: "Privacidad primero", f1_text: "Diseñado con procesamiento en el dispositivo y mínima recolección de datos.",
+        f2_title: "Acceso lingüístico", f2_text: "Compatible con amhárico, afaan oromoo, tigrinya y otros idiomas principales.",
+        f3_title: "Simple y claro", f3_text: "Ofrece una probabilidad estimada para que las familias decidan cuándo buscar atención.",
+        f4_title: "Hecho para la equidad", f4_text: "Para que las familias con menos recursos puedan acceder más fácilmente a información útil.",
+        feedback_title: "Comparte tus comentarios",
+        feedback_desc: "Tu mensaje permanece privado. Solo el número total es público.",
+        feedback_count_label: "Comentarios recibidos:",
+        feedback_button: "Enviar comentarios",
+        about_title: "Acerca de este proyecto",
+        about_text: "CroupGuard es un proyecto estudiantil creado por Sifan Shiferaw. Nació de una experiencia familiar personal y se convirtió en una herramienta centrada en la conciencia temprana, la privacidad y la accesibilidad lingüística. Todavía es un prototipo y no un dispositivo médico."
+      },
+
+      ar: {
+        nav_why: "لماذا", nav_how: "كيف يعمل", nav_demo: "تجربة", nav_about: "حول", nav_feedback: "ملاحظات",
+        hero_line1: "جعل إرشادات السعال المبكرة", hero_line2: "أكثر سهولة",
+        hero_sub: "مشروع طلابي يستكشف كيف يمكن للذكاء الاصطناعي الذي يحافظ على الخصوصية والتصميم متعدد اللغات مساعدة العائلات على فهم السعال المقلق بشكل أفضل.",
+        btn_demo: "جرب العرض", btn_goal: "شاهد الهدف",
+        why_title: "لماذا بنيت هذا",
+        why_text: "لم نتعرف أنا وعائلتي على الأعراض المبكرة للخناق. ونتيجة لذلك كدنا نفقد أخي الصغير ثلاث مرات. تلك التجربة هي السبب في إنشاء CroupGuard.",
+        demo_title: "العرض التفاعلي",
+        demo_desc: "هذا نموذج أولي محاكى. اضغط الزر لتشغيل تحليل عينة.",
+        demo_button: "محاكاة تحليل السعال",
+        demo_note: "هذا مجرد نموذج أولي طلابي وليس جهازًا طبيًا.",
+        features_title: "الميزات الرئيسية",
+        f1_title: "الخصوصية أولاً", f1_text: "مصمم بمعالجة على الجهاز وجمع بيانات محدود.",
+        f2_title: "الوصول اللغوي", f2_text: "يدعم الأمهرية والأورومو والتيغرينية ولغات رئيسية أخرى.",
+        f3_title: "بسيط وواضح", f3_text: "يعطي احتمالية تقديرية لمساعدة العائلات على اتخاذ القرار.",
+        f4_title: "مبني من أجل المساواة", f4_text: "ليتمكن العائلات ذات الموارد المحدودة من الوصول إلى معلومات مفيدة بسهولة أكبر.",
+        feedback_title: "شارك ملاحظاتك",
+        feedback_desc: "رسالتك تبقى خاصة. فقط العدد الإجمالي عام.",
+        feedback_count_label: "الملاحظات المستلمة:",
+        feedback_button: "إرسال الملاحظات",
+        about_title: "حول هذا المشروع",
+        about_text: "CroupGuard هو مشروع طلابي أنشأته سيفان شيفراو. بدأ من تجربة عائلية شخصية ونما ليصبح أداة تركز على الوعي المبكر والخصوصية وإمكانية الوصول اللغوي. لا يزال نموذجًا أوليًا وليس جهازًا طبيًا."
+      },
+
+      fr: {
+        nav_why: "Pourquoi", nav_how: "Comment ça marche", nav_demo: "Démo", nav_about: "À propos", nav_feedback: "Commentaires",
+        hero_line1: "Rendre les conseils précoces sur la toux", hero_line2: "plus accessibles",
+        hero_sub: "Un projet étudiant qui explore comment une IA respectueuse de la vie privée et un design multilingue peuvent aider les familles à mieux comprendre les toux inquiétantes.",
+        btn_demo: "Essayer la démo", btn_goal: "Voir l'objectif",
+        why_title: "Pourquoi j'ai créé ceci",
+        why_text: "Ma famille et moi n'avons jamais reconnu les symptômes précoces du croup. En conséquence, nous avons failli perdre mon petit frère trois fois. Cette expérience est la raison pour laquelle j'ai créé CroupGuard.",
+        demo_title: "Démo interactive",
+        demo_desc: "Ceci est un prototype simulé. Appuyez sur le bouton pour lancer une analyse d'exemple.",
+        demo_button: "Simuler l'analyse de toux",
+        demo_note: "Ceci n'est qu'un prototype étudiant et non un dispositif médical.",
+        features_title: "Fonctionnalités clés",
+        f1_title: "Confidentialité d'abord", f1_text: "Conçu avec un traitement sur l'appareil et une collecte de données minimale.",
+        f2_title: "Accès linguistique", f2_text: "Prend en charge l'amharique, l'afaan oromoo, le tigrinya et d'autres langues majeures.",
+        f3_title: "Simple et clair", f3_text: "Donne une probabilité estimée pour aider les familles à décider quand consulter.",
+        f4_title: "Conçu pour l'équité", f4_text: "Pour que les familles disposant de moins de ressources puissent accéder plus facilement à des informations utiles.",
+        feedback_title: "Partagez vos commentaires",
+        feedback_desc: "Votre message reste privé. Seul le nombre total est public.",
+        feedback_count_label: "Commentaires reçus :",
+        feedback_button: "Envoyer les commentaires",
+        about_title: "À propos de ce projet",
+        about_text: "CroupGuard est un projet étudiant créé par Sifan Shiferaw. Il est né d'une expérience familiale personnelle et est devenu un outil axé sur la sensibilisation précoce, la confidentialité et l'accessibilité linguistique. Il s'agit encore d'un prototype et non d'un dispositif médical."
+      },
+
+      bn: {
+        nav_why: "কেন", nav_how: "কিভাবে কাজ করে", nav_demo: "ডেমো", nav_about: "সম্পর্কে", nav_feedback: "মতামত",
+        hero_line1: "প্রাথমিক কাশির নির্দেশনা", hero_line2: "আরও সহজলভ্য করা",
+        hero_sub: "একটি শিক্ষার্থী প্রকল্প যা গোপনীয়তা-প্রথম AI এবং বহুভাষিক ডিজাইন কীভাবে পরিবারগুলিকে উদ্বেগজনক কাশি আরও ভালোভাবে বুঝতে সাহায্য করতে পারে তা অন্বেষণ করে।",
+        btn_demo: "ডেমো চেষ্টা করুন", btn_goal: "লক্ষ্য দেখুন",
+        why_title: "আমি কেন এটি তৈরি করেছি",
+        why_text: "আমার পরিবার এবং আমি ক্রুপের প্রাথমিক লক্ষণগুলি চিনতে পারিনি। ফলে আমরা তিনবার প্রায় আমার ছোট ভাইকে হারিয়ে ফেলতাম। সেই অভিজ্ঞতাই CroupGuard তৈরি করার কারণ।",
+        demo_title: "ইন্টারঅ্যাকটিভ ডেমো",
+        demo_desc: "এটি একটি সিমুলেটেড প্রোটোটাইপ। নমুনা বিশ্লেষণ চালাতে বাটনে ট্যাপ করুন।",
+        demo_button: "কাশির বিশ্লেষণ সিমুলেট করুন",
+        demo_note: "এটি শুধুমাত্র শিক্ষার্থী প্রোটোটাইপ, চিকিৎসা ডিভাইস নয়।",
+        features_title: "মূল বৈশিষ্ট্য",
+        f1_title: "গোপনীয়তা প্রথম", f1_text: "ডিভাইসে প্রক্রিয়াকরণ এবং ন্যূনতম ডেটা সংগ্রহ।",
+        f2_title: "ভাষা অ্যাক্সেস", f2_text: "আমহারিক, আফান ওরোমো, তিগ্রিনিয়া এবং অন্যান্য প্রধান ভাষা সমর্থন করে।",
+        f3_title: "সহজ ও স্পষ্ট", f3_text: "আনুমানিক সম্ভাবনা দেয় যাতে পরিবার সিদ্ধান্ত নিতে পারে।",
+        f4_title: "সমতার জন্য তৈরি", f4_text: "কম সম্পদসম্পন্ন পরিবার যাতে সহজেই উপযোগী তথ্য পায়।",
+        feedback_title: "আপনার মতামত শেয়ার করুন",
+        feedback_desc: "আপনার বার্তা ব্যক্তিগত থাকে। শুধুমাত্র মোট সংখ্যা প্রকাশ্য।",
+        feedback_count_label: "প্রাপ্ত মতামত:",
+        feedback_button: "মতামত পাঠান",
+        about_title: "এই প্রকল্প সম্পর্কে",
+        about_text: "CroupGuard সিফান শিফেরাউ তৈরি একটি শিক্ষার্থী প্রকল্প। এটি ব্যক্তিগত পারিবারিক অভিজ্ঞতা থেকে শুরু হয়ে প্রাথমিক সচেতনতা, গোপনীয়তা এবং ভাষা অ্যাক্সেসibilitতে মনোযোগী একটি টুলে পরিণত হয়েছে। এটি এখনও প্রোটোটাইপ এবং চিকিৎসা ডিভাইস নয়।"
+      },
+
+      pt: {
+        nav_why: "Porquê", nav_how: "Como funciona", nav_demo: "Demo", nav_about: "Sobre", nav_feedback: "Feedback",
+        hero_line1: "Tornando a orientação precoce da tosse", hero_line2: "mais acessível",
+        hero_sub: "Um projeto estudantil que explora como a IA centrada na privacidade e o design multilíngue podem ajudar as famílias a compreender melhor as tosses preocupantes.",
+        btn_demo: "Experimentar a Demo", btn_goal: "Ver o Objetivo",
+        why_title: "Por que eu construí isto",
+        why_text: "A minha família e eu nunca reconhecemos os sintomas precoces do crupe. Como resultado, quase perdemos o meu irmão mais novo três vezes. Essa experiência é a razão pela qual criei o CroupGuard.",
+        demo_title: "Demo Interativa",
+        demo_desc: "Este é um protótipo simulado. Toque no botão para executar uma análise de amostra.",
+        demo_button: "Simular análise de tosse",
+        demo_note: "Isto é apenas um protótipo estudantil e não um dispositivo médico.",
+        features_title: "Funcionalidades principais",
+        f1_title: "Privacidade em primeiro lugar", f1_text: "Desenhado com processamento no dispositivo e recolha mínima de dados.",
+        f2_title: "Acesso linguístico", f2_text: "Suporta amárico, afaan oromoo, tigrínia e outras línguas principais.",
+        f3_title: "Simples e claro", f3_text: "Dá uma probabilidade estimada para as famílias decidirem quando procurar cuidados.",
+        f4_title: "Feito para a equidade", f4_text: "Para que famílias com menos recursos possam aceder mais facilmente a informação útil.",
+        feedback_title: "Partilhe o seu feedback",
+        feedback_desc: "A sua mensagem permanece privada. Apenas o número total é público.",
+        feedback_count_label: "Feedback recebido:",
+        feedback_button: "Enviar feedback",
+        about_title: "Sobre este projeto",
+        about_text: "CroupGuard é um projeto estudantil criado por Sifan Shiferaw. Começou a partir de uma experiência familiar pessoal e tornou-se uma ferramenta focada na consciencialização precoce, privacidade e acessibilidade linguística. Ainda é um protótipo e não um dispositivo médico."
+      },
+
+      ru: {
+        nav_why: "Почему", nav_how: "Как это работает", nav_demo: "Демо", nav_about: "О проекте", nav_feedback: "Отзывы",
+        hero_line1: "Делая ранние рекомендации по кашлю", hero_line2: "более доступными",
+        hero_sub: "Студенческий проект, исследующий, как ИИ с приоритетом конфиденциальности и многоязычный дизайн могут помочь семьям лучше понимать тревожный кашель.",
+        btn_demo: "Попробовать демо", btn_goal: "Посмотреть цель",
+        why_title: "Почему я это создал",
+        why_text: "Моя семья и я никогда не распознавали ранние симптомы крупа. В результате мы почти трижды потеряли моего младшего брата. Этот опыт стал причиной создания CroupGuard.",
+        demo_title: "Интерактивное демо",
+        demo_desc: "Это симулированный прототип. Нажмите кнопку, чтобы запустить пример анализа.",
+        demo_button: "Симулировать анализ кашля",
+        demo_note: "Это только студенческий прототип, а не медицинское устройство.",
+        features_title: "Ключевые особенности",
+        f1_title: "Конфиденциальность прежде всего", f1_text: "Обработка на устройстве и минимальный сбор данных.",
+        f2_title: "Языковой доступ", f2_text: "Поддерживает амхарский, афаан оромо, тигринья и другие основные языки.",
+        f3_title: "Просто и понятно", f3_text: "Даёт ориентировочную вероятность, чтобы семьи могли решить, когда обращаться за помощью.",
+        f4_title: "Создано для равенства", f4_text: "Чтобы семьи с ограниченными ресурсами легче получали полезную информацию.",
+        feedback_title: "Поделитесь отзывом",
+        feedback_desc: "Ваше сообщение остаётся приватным. Публичным является только общее количество.",
+        feedback_count_label: "Получено отзывов:",
+        feedback_button: "Отправить отзыв",
+        about_title: "О этом проекте",
+        about_text: "CroupGuard — студенческий проект, созданный Сифан Шиферау. Он начался с личного семейного опыта и вырос в инструмент, ориентированный на раннее осознание, конфиденциальность и языковую доступность. Это всё ещё прототип, а не медицинское устройство."
+      },
+
+      ur: {
+        nav_why: "کیوں", nav_how: "یہ کیسے کام کرتا ہے", nav_demo: "ڈیمو", nav_about: "کے بارے میں", nav_feedback: "رائے",
+        hero_line1: "ابتدائی کھانسی کی رہنمائی کو", hero_line2: "زیادہ قابل رسائی بنانا",
+        hero_sub: "ایک طلبہ کا منصوبہ جو دیکھتا ہے کہ پرائیویسی فرسٹ اے آئی اور کثیر لسانی ڈیزائن خاندانوں کو تشویشناک کھانسی کو بہتر سمجھنے میں کیسے مدد دے سکتے ہیں۔",
+        btn_demo: "ڈیمو آزمائیں", btn_goal: "ہدف دیکھیں",
+        why_title: "میں نے یہ کیوں بنایا",
+        why_text: "میرے خاندان اور میں نے کروپ کی ابتدائی علامات کو نہیں پہچانا۔ نتیجتاً ہم نے تین بار تقریباً اپنے چھوٹے بھائی کو کھو دیا۔ اسی تجربے نے مجھے CroupGuard بنانے پر مجبور کیا۔",
+        demo_title: "انٹرایکٹو ڈیمو",
+        demo_desc: "یہ ایک سمیولٹڈ پروٹوٹائپ ہے۔ نمونہ تجزیہ چلانے کے لیے بٹن دبائیں۔",
+        demo_button: "کھانسی کا تجزیہ سمیولیٹ کریں",
+        demo_note: "یہ صرف طلبہ کا پروٹوٹائپ ہے، طبی آلہ نہیں۔",
+        features_title: "اہم خصوصیات",
+        f1_title: "پرائیویسی پہلے", f1_text: "ڈیوائس پر پروسیسنگ اور کم سے کم ڈیٹا جمع کرنا۔",
+        f2_title: "زبان کی رسائی", f2_text: "امہارک، افان اورومو، ٹگرینیا اور دیگر بڑی زبانوں کی حمایت۔",
+        f3_title: "سادہ اور واضح", f3_text: "اندازاً امکان دیتا ہے تاکہ خاندان فیصلہ کر سکیں۔",
+        f4_title: "مساوات کے لیے بنایا گیا", f4_text: "کم وسائل والے خاندانوں کے لیے مفید معلومات آسان بنانا۔",
+        feedback_title: "اپنی رائے شیئر کریں",
+        feedback_desc: "آپ کا پیغام نجی رہتا ہے۔ صرف کل تعداد عوامی ہے۔",
+        feedback_count_label: "موصولہ رائے:",
+        feedback_button: "رائے بھیجیں",
+        about_title: "اس منصوبے کے بارے میں",
+        about_text: "CroupGuard سیفان شیفراؤ کا بنایا ہوا طلبہ کا منصوبہ ہے۔ یہ ذاتی خاندانی تجربے سے شروع ہوا اور ابتدائی آگاہی، پرائیویسی اور زبان کی رسائی پر مرکوز ایک ٹول بن گیا۔ یہ ابھی بھی پروٹوٹائپ ہے اور طبی آلہ نہیں ہے۔"
+      },
+
+      id: {
+        nav_why: "Mengapa", nav_how: "Cara Kerja", nav_demo: "Demo", nav_about: "Tentang", nav_feedback: "Umpan Balik",
+        hero_line1: "Membuat panduan batuk dini", hero_line2: "lebih mudah diakses",
+        hero_sub: "Proyek mahasiswa yang mengeksplorasi bagaimana AI yang mengutamakan privasi dan desain multibahasa dapat membantu keluarga lebih memahami batuk yang mengkhawatirkan.",
+        btn_demo: "Coba Demo", btn_goal: "Lihat Tujuan",
+        why_title: "Mengapa Saya Membangun Ini",
+        why_text: "Keluarga saya dan saya tidak pernah mengenali gejala awal croup. Akibatnya kami hampir kehilangan adik laki-laki saya tiga kali. Pengalaman itu menjadi alasan saya membuat CroupGuard.",
+        demo_title: "Demo Interaktif",
+        demo_desc: "Ini adalah prototipe simulasi. Ketuk tombol untuk menjalankan analisis sampel.",
+        demo_button: "Simulasikan Analisis Batuk",
+        demo_note: "Ini hanya prototipe mahasiswa dan bukan perangkat medis.",
+        features_title: "Fitur Utama",
+        f1_title: "Privasi Utama", f1_text: "Dirancang dengan pemrosesan di perangkat dan pengumpulan data minimal.",
+        f2_title: "Akses Bahasa", f2_text: "Mendukung Amharik, Afaan Oromoo, Tigrinya, dan bahasa utama lainnya.",
+        f3_title: "Sederhana & Jelas", f3_text: "Memberikan perkiraan kemungkinan agar keluarga dapat memutuskan kapan mencari perawatan.",
+        f4_title: "Dibuat untuk Kesetaraan", f4_text: "Agar keluarga dengan sumber daya terbatas dapat mengakses informasi berguna dengan lebih mudah.",
+        feedback_title: "Bagikan Umpan Balik Anda",
+        feedback_desc: "Pesan Anda tetap pribadi. Hanya jumlah total yang bersifat publik.",
+        feedback_count_label: "Umpan balik diterima:",
+        feedback_button: "Kirim Umpan Balik",
+        about_title: "Tentang Proyek Ini",
+        about_text: "CroupGuard adalah proyek mahasiswa yang dibuat oleh Sifan Shiferaw. Dimulai dari pengalaman keluarga pribadi dan berkembang menjadi alat yang berfokus pada kesadaran dini, privasi, dan aksesibilitas bahasa. Masih merupakan prototipe dan bukan perangkat medis."
       }
     };
 
@@ -627,7 +874,9 @@
       const t = translations[lang] || translations.en;
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (t[key]) el.innerText = t[key];
+        if (t[key]) {
+          el.innerText = t[key];
+        }
       });
     }
   </script>
