@@ -414,60 +414,40 @@
     let analyser = null;
     let currentLang = "en";
 
-    // ========== FORCE VOICES TO LOAD ==========
+    // Load voices
     if ("speechSynthesis" in window) {
       window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = function() {
+      window.speechSynthesis.onvoiceschanged = () => {
         window.speechSynthesis.getVoices();
       };
     }
 
-    // ========== IMPROVED SPEAK FUNCTION ==========
     function speak(text, langCode) {
       if (!("speechSynthesis" in window)) return;
-
       window.speechSynthesis.cancel();
 
       setTimeout(() => {
         const utterance = new SpeechSynthesisUtterance(text);
-
         const langMap = {
-          en: "en-US",
-          am: "am-ET",
-          om: "om",
-          ti: "ti",
-          zh: "zh-CN",
-          hi: "hi-IN",
-          es: "es-ES",
-          ar: "ar-SA",
-          fr: "fr-FR",
-          bn: "bn-BD",
-          pt: "pt-BR",
-          ru: "ru-RU",
-          ur: "ur-PK",
-          id: "id-ID"
+          en: "en-US", am: "am-ET", om: "om", ti: "ti",
+          zh: "zh-CN", hi: "hi-IN", es: "es-ES", ar: "ar-SA",
+          fr: "fr-FR", bn: "bn-BD", pt: "pt-BR", ru: "ru-RU",
+          ur: "ur-PK", id: "id-ID"
         };
-
         utterance.lang = langMap[langCode] || "en-US";
         utterance.rate = 0.9;
-        utterance.pitch = 1;
         utterance.volume = 1;
 
-        // Try to find a good voice
         const voices = window.speechSynthesis.getVoices();
-        let selectedVoice = voices.find(v => v.lang === utterance.lang) ||
-                            voices.find(v => v.lang.startsWith(utterance.lang.slice(0,2))) ||
-                            voices.find(v => v.lang.startsWith("en"));
-
-        if (selectedVoice) {
-          utterance.voice = selectedVoice;
-        }
+        const voice = voices.find(v => v.lang === utterance.lang) ||
+                      voices.find(v => v.lang.startsWith(utterance.lang.slice(0,2))) ||
+                      voices.find(v => v.lang.startsWith("en"));
+        if (voice) utterance.voice = voice;
 
         window.speechSynthesis.speak(utterance);
-      }, 300);
+      }, 250);
     }
 
-    // ========== ANALYSIS + VOICE ==========
     async function startAnalysis() {
       const result = document.getElementById("result");
       const circle = document.getElementById("breathingCircle");
@@ -488,45 +468,32 @@
 
         circle.classList.add("active");
 
-        const messages = [
-          t.msg_recording || "Recording... speak or cough now",
-          t.msg_analyzing || "Analyzing cough sample...",
-          t.msg_listening || "Listening for barking features...",
-          t.msg_evaluating || "Evaluating pitch and loudness...",
-          t.msg_almost || "Almost there...",
-          t.msg_finalizing || "Finalizing analysis..."
-        ];
-
-        let i = 0;
+        // Clear instruction - user should cough now
         result.innerHTML = `
           <div class="result-box">
-            <div id="statusText" style="font-size:1.1rem;">${messages[0]}</div>
+            <div id="statusText" style="font-size:1.15rem; font-weight:600;">
+              Please cough now...
+            </div>
+            <div style="margin-top:8px; color:#a1a1aa; font-size:0.95rem;">
+              Listening for 6 seconds
+            </div>
           </div>
         `;
 
-        // Speak first message
-        speak(messages[0], currentLang);
-
-        const statusInterval = setInterval(() => {
-          i++;
-          if (i < messages.length) {
-            document.getElementById("statusText").innerText = messages[i];
-            speak(messages[i], currentLang);
-          }
-        }, 1200);
-
-        // Collect audio features
+        // Collect real audio data for longer
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         const timeArray = new Uint8Array(analyser.fftSize);
 
         let volumeSum = 0;
         let pitchSum = 0;
         let samples = 0;
+        let maxVolume = 0;
 
         const collectInterval = setInterval(() => {
           analyser.getByteFrequencyData(dataArray);
           analyser.getByteTimeDomainData(timeArray);
 
+          // Volume
           let sum = 0;
           for (let j = 0; j < timeArray.length; j++) {
             const val = (timeArray[j] - 128) / 128;
@@ -534,10 +501,12 @@
           }
           const rms = Math.sqrt(sum / timeArray.length);
           volumeSum += rms;
+          if (rms > maxVolume) maxVolume = rms;
 
+          // Pitch
           let maxVal = 0;
           let maxIndex = 0;
-          for (let j = 20; j < 200; j++) {
+          for (let j = 15; j < 180; j++) {
             if (dataArray[j] > maxVal) {
               maxVal = dataArray[j];
               maxIndex = j;
@@ -545,13 +514,14 @@
           }
           pitchSum += maxIndex;
           samples++;
-        }, 100);
+        }, 80);
 
+        // Listen for 6 full seconds
         setTimeout(() => {
-          clearInterval(statusInterval);
           clearInterval(collectInterval);
           circle.classList.remove("active");
 
+          // Stop mic
           if (mediaStream) {
             mediaStream.getTracks().forEach(track => track.stop());
             mediaStream = null;
@@ -564,11 +534,14 @@
           const avgVolume = samples > 0 ? volumeSum / samples : 0;
           const avgPitch = samples > 0 ? pitchSum / samples : 0;
 
-          let percent = Math.round((avgVolume * 180) + (avgPitch * 0.25));
-          percent = Math.max(5, Math.min(percent, 68));
+          // Better mapping using both average and peak volume
+          let percent = Math.round(
+            (avgVolume * 140) + (maxVolume * 90) + (avgPitch * 0.18)
+          );
+          percent = Math.max(4, Math.min(percent, 72));
 
           let label, detail;
-          if (percent >= 35) {
+          if (percent >= 38) {
             label = t.result_mild || "Mild indicators detected";
             detail = t.result_mild_detail || "Higher pitch and energy detected. Consider monitoring closely.";
           } else {
@@ -584,13 +557,13 @@
             </div>
           `;
 
-          // Speak final result
+          // ONLY speak the final result
           const finalSpeech = `${percent} percent. ${label}. ${detail}`;
           speak(finalSpeech, currentLang);
 
           btn.disabled = false;
           btn.style.opacity = "1";
-        }, 5800);
+        }, 6000);
 
       } catch (err) {
         circle.classList.remove("active");
@@ -607,7 +580,7 @@
       }
     }
 
-    // Feedback system
+    // Feedback
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -645,7 +618,6 @@
 
     loadFeedbackCount();
 
-    // Translations
     const translations = {
       en: {
         nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
@@ -669,12 +641,6 @@
         feedback_button: "Submit Feedback",
         about_title: "About This Project",
         about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.",
-        msg_recording: "Recording... speak or cough now",
-        msg_analyzing: "Analyzing cough sample...",
-        msg_listening: "Listening for barking features...",
-        msg_evaluating: "Evaluating pitch and loudness...",
-        msg_almost: "Almost there...",
-        msg_finalizing: "Finalizing analysis...",
         result_low: "Low likelihood",
         result_low_detail: "Classic barking features are limited. This appears closer to a regular cough.",
         result_mild: "Mild indicators detected",
