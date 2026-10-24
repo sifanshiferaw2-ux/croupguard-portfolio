@@ -6,14 +6,12 @@
   <title>CroupGuard</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: Inter, system-ui, -apple-system, sans-serif;
       background: #0b0b12;
       color: #ffffff;
       line-height: 1.6;
     }
-
     nav {
       display: flex;
       justify-content: space-between;
@@ -26,7 +24,6 @@
       top: 0;
       z-index: 100;
     }
-
     .nav-brand {
       display: flex;
       align-items: center;
@@ -34,7 +31,6 @@
       font-weight: 700;
       font-size: 1.25rem;
     }
-
     .logo-wrap {
       position: relative;
       width: 28px;
@@ -56,7 +52,6 @@
       background: #22d3ee;
       bottom: 0; right: 0;
     }
-
     .nav-links {
       display: flex;
       gap: 22px;
@@ -69,7 +64,6 @@
       font-size: 0.95rem;
     }
     .nav-links a:hover { color: white; }
-
     select {
       padding: 8px 12px;
       border-radius: 10px;
@@ -78,13 +72,11 @@
       color: #ffffff;
       font-size: 0.9rem;
     }
-
     .hero {
       text-align: center;
       padding: 100px 20px 80px;
       background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
     }
-
     .hero h1 {
       font-size: 3.4rem;
       font-weight: 800;
@@ -96,21 +88,18 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
     .hero p {
       font-size: 1.15rem;
       color: #a1a1aa;
       max-width: 620px;
       margin: 0 auto 38px;
     }
-
     .hero-buttons {
       display: flex;
       justify-content: center;
       gap: 16px;
       flex-wrap: wrap;
     }
-
     .btn-primary {
       padding: 15px 34px;
       border-radius: 50px;
@@ -121,7 +110,6 @@
       font-weight: 600;
       cursor: pointer;
     }
-
     .btn-outline {
       padding: 15px 28px;
       border-radius: 50px;
@@ -131,13 +119,11 @@
       font-size: 1.05rem;
       cursor: pointer;
     }
-
     .container {
       max-width: 920px;
       margin: 0 auto;
       padding: 0 20px 90px;
     }
-
     section {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.08);
@@ -145,19 +131,16 @@
       padding: 36px;
       margin-bottom: 28px;
     }
-
     h2 {
       font-size: 1.5rem;
       margin-bottom: 16px;
       color: #c4b5fd;
     }
-
     .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 18px;
     }
-
     .feature {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
@@ -169,7 +152,6 @@
       margin-bottom: 8px;
       color: #38bdf8;
     }
-
     .mic-container {
       position: relative;
       width: 110px;
@@ -179,7 +161,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .breathing-circle {
       position: absolute;
       width: 78px;
@@ -189,24 +170,20 @@
       opacity: 0;
       transform: scale(0.75);
     }
-
     .breathing-circle.active {
       animation: breathe 1.5s ease-in-out infinite;
     }
-
     @keyframes breathe {
       0%   { transform: scale(0.75); opacity: 0.85; }
       50%  { transform: scale(1.18); opacity: 1; }
       100% { transform: scale(0.75); opacity: 0.85; }
     }
-
     .mic-icon {
       font-size: 1.7rem;
       z-index: 2;
       position: relative;
       color: white;
     }
-
     .result-box {
       margin-top: 24px;
       padding: 22px 26px;
@@ -218,7 +195,6 @@
       margin-right: auto;
       text-align: center;
     }
-
     .result-box .percent {
       font-size: 2.1rem;
       font-weight: 700;
@@ -234,7 +210,6 @@
       font-size: 0.9rem;
       color: #a1a1aa;
     }
-
     textarea {
       width: 100%;
       padding: 18px;
@@ -247,22 +222,18 @@
       resize: vertical;
       font-family: inherit;
     }
-
     .count {
       font-size: 1.4rem;
       font-weight: 700;
       margin: 12px 0 18px;
       color: #ec4899;
     }
-
     footer {
       text-align: center;
       padding: 50px 20px;
       color: #a1a1aa;
     }
-
     a { color: #38bdf8; }
-
     @media (max-width: 700px) {
       nav { flex-direction: column; gap: 14px; padding: 16px 20px; }
       .hero h1 { font-size: 2.3rem; }
@@ -280,27 +251,25 @@
       </div>
       CroupGuard
     </div>
-
     <div class="nav-links">
       <a href="#why" data-i18n="nav_why">Why</a>
       <a href="#how" data-i18n="nav_how">How it Works</a>
       <a href="#demo" data-i18n="nav_demo">Demo</a>
       <a href="#about" data-i18n="nav_about">About</a>
       <a href="#feedback" data-i18n="nav_feedback">Feedback</a>
-
       <select id="language-select" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="ar">العربية</option>
+        <option value="zh">中文</option>
+        <option value="hi">हिन्दी</option>
+        <option value="pt">Português</option>
+        <option value="ru">Русский</option>
         <option value="am">Amharic (አማርኛ)</option>
         <option value="om">Afaan Oromoo</option>
         <option value="ti">Tigrinya (ትግርኛ)</option>
-        <option value="zh">中文</option>
-        <option value="hi">हिन्दी</option>
-        <option value="es">Español</option>
-        <option value="ar">العربية</option>
-        <option value="fr">Français</option>
         <option value="bn">বাংলা</option>
-        <option value="pt">Português</option>
-        <option value="ru">Русский</option>
         <option value="ur">اردو</option>
         <option value="id">Bahasa Indonesia</option>
       </select>
@@ -316,97 +285,55 @@
       A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.
     </p>
     <div class="hero-buttons">
-      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})" data-i18n="btn_demo">
-        Try the Demo
-      </button>
-      <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})" data-i18n="btn_goal">
-        See the Goal
-      </button>
+      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})" data-i18n="btn_demo">Try the Demo</button>
+      <button class="btn-outline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})" data-i18n="btn_goal">See the Goal</button>
     </div>
   </div>
 
   <div class="container">
-
     <section id="why">
       <h2 data-i18n="why_title">Why I Built This</h2>
-      <p data-i18n="why_text">
-        My family and I never recognized the early symptoms of croup. As a result, we nearly lost my younger brother three times. That experience is the reason I built CroupGuard — to help other families identify concerning coughs earlier, especially in communities where language barriers and limited access to clear information make timely care harder to reach.
-      </p>
+      <p data-i18n="why_text">My family and I never recognized the early symptoms of croup. As a result, we nearly lost my younger brother three times. That experience is the reason I built CroupGuard — to help other families identify concerning coughs earlier, especially in communities where language barriers and limited access to clear information make timely care harder to reach.</p>
     </section>
 
     <section id="demo" style="text-align:center;">
       <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
-      <p data-i18n="demo_desc" style="color:#a1a1aa; margin-bottom:20px;">
-        This is a simulated prototype. Tap the button to run a sample analysis.
-      </p>
-
+      <p data-i18n="demo_desc" style="color:#a1a1aa; margin-bottom:20px;">This is a simulated prototype. Tap the button to run a sample analysis.</p>
       <div class="mic-container">
         <div class="breathing-circle" id="breathingCircle"></div>
         <div class="mic-icon">🎙️</div>
       </div>
-
-      <button class="btn-primary" id="analyzeBtn" onclick="startAnalysis()" data-i18n="demo_button">
-        Tap to Simulate Cough Analysis
-      </button>
-
+      <button class="btn-primary" id="analyzeBtn" onclick="startAnalysis()" data-i18n="demo_button">Tap to Simulate Cough Analysis</button>
       <div id="result"></div>
-
-      <p style="margin-top:16px; font-size:0.9rem; color:#a1a1aa;" data-i18n="demo_note">
-        This is only a student prototype and not a medical device.
-      </p>
+      <p style="margin-top:16px; font-size:0.9rem; color:#a1a1aa;" data-i18n="demo_note">This is only a student prototype and not a medical device.</p>
     </section>
 
     <section id="how">
       <h2 data-i18n="features_title">Key Features</h2>
       <div class="features">
-        <div class="feature">
-          <strong data-i18n="f1_title">Privacy First</strong>
-          <p data-i18n="f1_text">Designed with on-device thinking and minimal data collection.</p>
-        </div>
-        <div class="feature">
-          <strong data-i18n="f2_title">Language Access</strong>
-          <p data-i18n="f2_text">Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.</p>
-        </div>
-        <div class="feature">
-          <strong data-i18n="f3_title">Simple & Clear</strong>
-          <p data-i18n="f3_text">Gives an estimated likelihood so families can decide when to seek care.</p>
-        </div>
-        <div class="feature">
-          <strong data-i18n="f4_title">Built for Equity</strong>
-          <p data-i18n="f4_text">Made so under-resourced families can access useful information more easily.</p>
-        </div>
+        <div class="feature"><strong data-i18n="f1_title">Privacy First</strong><p data-i18n="f1_text">Designed with on-device thinking and minimal data collection.</p></div>
+        <div class="feature"><strong data-i18n="f2_title">Language Access</strong><p data-i18n="f2_text">Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.</p></div>
+        <div class="feature"><strong data-i18n="f3_title">Simple & Clear</strong><p data-i18n="f3_text">Gives an estimated likelihood so families can decide when to seek care.</p></div>
+        <div class="feature"><strong data-i18n="f4_title">Built for Equity</strong><p data-i18n="f4_text">Made so under-resourced families can access useful information more easily.</p></div>
       </div>
     </section>
 
     <section id="feedback">
       <h2 data-i18n="feedback_title">Share Your Feedback</h2>
-      <p data-i18n="feedback_desc" style="color:#a1a1aa; margin-bottom:8px;">
-        Your message stays private. Only the total number is public.
-      </p>
-      <div class="count">
-        <span data-i18n="feedback_count_label">Feedback received:</span> <span id="feedback-count">0</span>
-      </div>
+      <p data-i18n="feedback_desc" style="color:#a1a1aa; margin-bottom:8px;">Your message stays private. Only the total number is public.</p>
+      <div class="count"><span data-i18n="feedback_count_label">Feedback received:</span> <span id="feedback-count">0</span></div>
       <textarea id="feedback-input" rows="4" placeholder="Write your feedback here..."></textarea>
-      <button class="btn-primary" onclick="submitFeedback()" data-i18n="feedback_button">
-        Submit Feedback
-      </button>
+      <button class="btn-primary" onclick="submitFeedback()" data-i18n="feedback_button">Submit Feedback</button>
     </section>
 
     <section id="about">
       <h2 data-i18n="about_title">About This Project</h2>
-      <p data-i18n="about_text">
-        CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.
-      </p>
-      <p style="margin-top:16px;">
-        Contact: <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a>
-      </p>
+      <p data-i18n="about_text">CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.</p>
+      <p style="margin-top:16px;">Contact: <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a></p>
     </section>
-
   </div>
 
-  <footer>
-    CroupGuard • Student Project
-  </footer>
+  <footer>CroupGuard • Student Project</footer>
 
   <script>
     let mediaStream = null;
@@ -414,25 +341,26 @@
     let analyser = null;
     let currentLang = "en";
 
-    // Load voices
+    // Languages that usually have working voices
+    const voiceSupported = ["en", "es", "fr", "zh", "hi", "pt", "ru", "ar", "id"];
+
     if ("speechSynthesis" in window) {
       window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
-      };
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
     }
 
     function speak(text, langCode) {
+      // Only speak if the language is reasonably supported
+      if (!voiceSupported.includes(langCode)) return;
       if (!("speechSynthesis" in window)) return;
+
       window.speechSynthesis.cancel();
 
       setTimeout(() => {
         const utterance = new SpeechSynthesisUtterance(text);
         const langMap = {
-          en: "en-US", am: "am-ET", om: "om", ti: "ti",
-          zh: "zh-CN", hi: "hi-IN", es: "es-ES", ar: "ar-SA",
-          fr: "fr-FR", bn: "bn-BD", pt: "pt-BR", ru: "ru-RU",
-          ur: "ur-PK", id: "id-ID"
+          en: "en-US", es: "es-ES", fr: "fr-FR", zh: "zh-CN",
+          hi: "hi-IN", pt: "pt-BR", ru: "ru-RU", ar: "ar-SA", id: "id-ID"
         };
         utterance.lang = langMap[langCode] || "en-US";
         utterance.rate = 0.9;
@@ -440,12 +368,11 @@
 
         const voices = window.speechSynthesis.getVoices();
         const voice = voices.find(v => v.lang === utterance.lang) ||
-                      voices.find(v => v.lang.startsWith(utterance.lang.slice(0,2))) ||
-                      voices.find(v => v.lang.startsWith("en"));
+                      voices.find(v => v.lang.startsWith(langCode));
         if (voice) utterance.voice = voice;
 
         window.speechSynthesis.speak(utterance);
-      }, 250);
+      }, 200);
     }
 
     async function startAnalysis() {
@@ -459,7 +386,6 @@
 
       try {
         mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioContext.createMediaStreamSource(mediaStream);
         analyser = audioContext.createAnalyser();
@@ -468,32 +394,21 @@
 
         circle.classList.add("active");
 
-        // Clear instruction - user should cough now
         result.innerHTML = `
           <div class="result-box">
-            <div id="statusText" style="font-size:1.15rem; font-weight:600;">
-              Please cough now...
-            </div>
-            <div style="margin-top:8px; color:#a1a1aa; font-size:0.95rem;">
-              Listening for 6 seconds
-            </div>
+            <div style="font-size:1.15rem; font-weight:600;">${t.please_cough || "Please cough now..."}</div>
+            <div style="margin-top:8px; color:#a1a1aa; font-size:0.95rem;">${t.listening || "Listening for 6 seconds"}</div>
           </div>
         `;
 
-        // Collect real audio data for longer
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         const timeArray = new Uint8Array(analyser.fftSize);
-
-        let volumeSum = 0;
-        let pitchSum = 0;
-        let samples = 0;
-        let maxVolume = 0;
+        let volumeSum = 0, pitchSum = 0, samples = 0, maxVolume = 0;
 
         const collectInterval = setInterval(() => {
           analyser.getByteFrequencyData(dataArray);
           analyser.getByteTimeDomainData(timeArray);
 
-          // Volume
           let sum = 0;
           for (let j = 0; j < timeArray.length; j++) {
             const val = (timeArray[j] - 128) / 128;
@@ -503,9 +418,7 @@
           volumeSum += rms;
           if (rms > maxVolume) maxVolume = rms;
 
-          // Pitch
-          let maxVal = 0;
-          let maxIndex = 0;
+          let maxVal = 0, maxIndex = 0;
           for (let j = 15; j < 180; j++) {
             if (dataArray[j] > maxVal) {
               maxVal = dataArray[j];
@@ -516,38 +429,23 @@
           samples++;
         }, 80);
 
-        // Listen for 6 full seconds
         setTimeout(() => {
           clearInterval(collectInterval);
           circle.classList.remove("active");
 
-          // Stop mic
-          if (mediaStream) {
-            mediaStream.getTracks().forEach(track => track.stop());
-            mediaStream = null;
-          }
-          if (audioContext) {
-            audioContext.close();
-            audioContext = null;
-          }
+          if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+          if (audioContext) audioContext.close();
+          mediaStream = null;
+          audioContext = null;
 
-          const avgVolume = samples > 0 ? volumeSum / samples : 0;
-          const avgPitch = samples > 0 ? pitchSum / samples : 0;
+          const avgVolume = samples ? volumeSum / samples : 0;
+          const avgPitch = samples ? pitchSum / samples : 0;
 
-          // Better mapping using both average and peak volume
-          let percent = Math.round(
-            (avgVolume * 140) + (maxVolume * 90) + (avgPitch * 0.18)
-          );
+          let percent = Math.round((avgVolume * 140) + (maxVolume * 90) + (avgPitch * 0.18));
           percent = Math.max(4, Math.min(percent, 72));
 
-          let label, detail;
-          if (percent >= 38) {
-            label = t.result_mild || "Mild indicators detected";
-            detail = t.result_mild_detail || "Higher pitch and energy detected. Consider monitoring closely.";
-          } else {
-            label = t.result_low || "Low likelihood";
-            detail = t.result_low_detail || "Classic barking features are limited. This appears closer to a regular cough.";
-          }
+          const label = percent >= 38 ? (t.result_mild || "Mild indicators detected") : (t.result_low || "Low likelihood");
+          const detail = percent >= 38 ? (t.result_mild_detail || "Higher pitch and energy detected. Consider monitoring closely.") : (t.result_low_detail || "Classic barking features are limited. This appears closer to a regular cough.");
 
           result.innerHTML = `
             <div class="result-box">
@@ -557,8 +455,8 @@
             </div>
           `;
 
-          // ONLY speak the final result
-          const finalSpeech = `${percent} percent. ${label}. ${detail}`;
+          // Speak ONLY the translated final result
+          const finalSpeech = `${percent}%. ${label}. ${detail}`;
           speak(finalSpeech, currentLang);
 
           btn.disabled = false;
@@ -567,14 +465,7 @@
 
       } catch (err) {
         circle.classList.remove("active");
-        result.innerHTML = `
-          <div class="result-box">
-            <div style="font-size:1.05rem; margin-bottom:8px;">Microphone access was not allowed</div>
-            <div style="color:#a1a1aa; font-size:0.9rem;">
-              Please allow microphone access and try again.
-            </div>
-          </div>
-        `;
+        result.innerHTML = `<div class="result-box"><div>Microphone access was not allowed</div></div>`;
         btn.disabled = false;
         btn.style.opacity = "1";
       }
@@ -589,63 +480,101 @@
         const res = await fetch(`https://countapi.mileshilliard.com/api/v1/get/${COUNTER_KEY}`);
         const data = await res.json();
         document.getElementById("feedback-count").innerText = data.value || 0;
-      } catch (e) {
+      } catch(e) {
         document.getElementById("feedback-count").innerText = "0";
       }
     }
 
     async function submitFeedback() {
       const message = document.getElementById("feedback-input").value.trim();
-      if (!message) {
-        alert("Please write something before submitting.");
-        return;
-      }
+      if (!message) return alert("Please write something before submitting.");
       try {
         await fetch(FORMSPREE_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify({ message: message })
+          body: JSON.stringify({ message })
         });
         const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`);
         const data = await res.json();
         document.getElementById("feedback-count").innerText = data.value;
         document.getElementById("feedback-input").value = "";
         alert("Thank you! Your feedback was received.");
-      } catch (e) {
+      } catch(e) {
         alert("Something went wrong. Please try again.");
       }
     }
 
     loadFeedbackCount();
 
+    // ========== TRANSLATIONS ==========
     const translations = {
       en: {
-        nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
-        hero_line1: "Making early cough guidance", hero_line2: "more accessible",
-        hero_sub: "A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.",
-        btn_demo: "Try the Demo", btn_goal: "See the Goal",
-        why_title: "Why I Built This",
-        why_text: "My family and I never recognized the early symptoms of croup. As a result, we nearly lost my younger brother three times. That experience is the reason I built CroupGuard — to help other families identify concerning coughs earlier, especially in communities where language barriers and limited access to clear information make timely care harder to reach.",
-        demo_title: "Try the Interactive Demo",
-        demo_desc: "This is a simulated prototype. Tap the button to run a sample analysis.",
-        demo_button: "Tap to Simulate Cough Analysis",
-        demo_note: "This is only a student prototype and not a medical device.",
-        features_title: "Key Features",
-        f1_title: "Privacy First", f1_text: "Designed with on-device thinking and minimal data collection.",
-        f2_title: "Language Access", f2_text: "Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.",
-        f3_title: "Simple & Clear", f3_text: "Gives an estimated likelihood so families can decide when to seek care.",
-        f4_title: "Built for Equity", f4_text: "Made so under-resourced families can access useful information more easily.",
-        feedback_title: "Share Your Feedback",
-        feedback_desc: "Your message stays private. Only the total number is public.",
-        feedback_count_label: "Feedback received:",
-        feedback_button: "Submit Feedback",
-        about_title: "About This Project",
-        about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.",
-        result_low: "Low likelihood",
-        result_low_detail: "Classic barking features are limited. This appears closer to a regular cough.",
-        result_mild: "Mild indicators detected",
-        result_mild_detail: "Higher pitch and energy detected. Consider monitoring closely."
+        nav_why:"Why", nav_how:"How it Works", nav_demo:"Demo", nav_about:"About", nav_feedback:"Feedback",
+        hero_line1:"Making early cough guidance", hero_line2:"more accessible",
+        hero_sub:"A student project exploring how privacy-first AI and multilingual design can help families better understand concerning coughs — especially where language or resource barriers make clear information harder to find.",
+        btn_demo:"Try the Demo", btn_goal:"See the Goal",
+        why_title:"Why I Built This",
+        why_text:"My family and I never recognized the early symptoms of croup. As a result, we nearly lost my younger brother three times. That experience is the reason I built CroupGuard — to help other families identify concerning coughs earlier, especially in communities where language barriers and limited access to clear information make timely care harder to reach.",
+        demo_title:"Try the Interactive Demo", demo_desc:"This is a simulated prototype. Tap the button to run a sample analysis.",
+        demo_button:"Tap to Simulate Cough Analysis", demo_note:"This is only a student prototype and not a medical device.",
+        features_title:"Key Features",
+        f1_title:"Privacy First", f1_text:"Designed with on-device thinking and minimal data collection.",
+        f2_title:"Language Access", f2_text:"Supports Amharic, Afaan Oromoo, Tigrinya and other major languages.",
+        f3_title:"Simple & Clear", f3_text:"Gives an estimated likelihood so families can decide when to seek care.",
+        f4_title:"Built for Equity", f4_text:"Made so under-resourced families can access useful information more easily.",
+        feedback_title:"Share Your Feedback", feedback_desc:"Your message stays private. Only the total number is public.",
+        feedback_count_label:"Feedback received:", feedback_button:"Submit Feedback",
+        about_title:"About This Project",
+        about_text:"CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.",
+        please_cough:"Please cough now...", listening:"Listening for 6 seconds",
+        result_low:"Low likelihood", result_low_detail:"Classic barking features are limited. This appears closer to a regular cough.",
+        result_mild:"Mild indicators detected", result_mild_detail:"Higher pitch and energy detected. Consider monitoring closely."
+      },
+      es: {
+        nav_why:"Por qué", nav_how:"Cómo funciona", nav_demo:"Demo", nav_about:"Acerca de", nav_feedback:"Comentarios",
+        hero_line1:"Haciendo la guía temprana de la tos", hero_line2:"más accesible",
+        hero_sub:"Un proyecto estudiantil que explora cómo la IA centrada en la privacidad y el diseño multilingüe pueden ayudar a las familias a entender mejor las toses preocupantes.",
+        btn_demo:"Probar la Demo", btn_goal:"Ver el Objetivo",
+        why_title:"Por qué lo construí",
+        why_text:"Mi familia y yo nunca reconocimos los síntomas tempranos del crup. Como resultado, casi perdimos a mi hermano menor tres veces. Esa experiencia es la razón por la que creé CroupGuard.",
+        demo_title:"Demo Interactiva", demo_desc:"Este es un prototipo simulado. Toca el botón para ejecutar un análisis de muestra.",
+        demo_button:"Simular análisis de tos", demo_note:"Esto es solo un prototipo estudiantil y no un dispositivo médico.",
+        features_title:"Características clave",
+        f1_title:"Privacidad primero", f1_text:"Diseñado con procesamiento en el dispositivo y mínima recolección de datos.",
+        f2_title:"Acceso lingüístico", f2_text:"Compatible con amhárico, afaan oromoo, tigrinya y otros idiomas principales.",
+        f3_title:"Simple y claro", f3_text:"Ofrece una probabilidad estimada para que las familias decidan cuándo buscar atención.",
+        f4_title:"Hecho para la equidad", f4_text:"Para que las familias con menos recursos puedan acceder más fácilmente a información útil.",
+        feedback_title:"Comparte tus comentarios", feedback_desc:"Tu mensaje permanece privado. Solo el número total es público.",
+        feedback_count_label:"Comentarios recibidos:", feedback_button:"Enviar comentarios",
+        about_title:"Acerca de este proyecto",
+        about_text:"CroupGuard es un proyecto estudiantil creado por Sifan Shiferaw. Nació de una experiencia familiar personal y se convirtió en una herramienta centrada en la conciencia temprana, la privacidad y la accesibilidad lingüística.",
+        please_cough:"Por favor tose ahora...", listening:"Escuchando durante 6 segundos",
+        result_low:"Baja probabilidad", result_low_detail:"Las características clásicas de ladrido son limitadas. Esto parece más una tos normal.",
+        result_mild:"Indicadores leves detectados", result_mild_detail:"Se detectó mayor tono y energía. Considere monitorear de cerca."
+      },
+      fr: {
+        nav_why:"Pourquoi", nav_how:"Comment ça marche", nav_demo:"Démo", nav_about:"À propos", nav_feedback:"Commentaires",
+        hero_line1:"Rendre les conseils précoces sur la toux", hero_line2:"plus accessibles",
+        hero_sub:"Un projet étudiant qui explore comment une IA respectueuse de la vie privée et un design multilingue peuvent aider les familles.",
+        btn_demo:"Essayer la démo", btn_goal:"Voir l'objectif",
+        why_title:"Pourquoi j'ai créé ceci",
+        why_text:"Ma famille et moi n'avons jamais reconnu les symptômes précoces du croup. Nous avons failli perdre mon petit frère trois fois. Cette expérience est la raison de CroupGuard.",
+        demo_title:"Démo interactive", demo_desc:"Ceci est un prototype simulé. Appuyez sur le bouton pour lancer une analyse.",
+        demo_button:"Simuler l'analyse de toux", demo_note:"Ceci n'est qu'un prototype étudiant et non un dispositif médical.",
+        features_title:"Fonctionnalités clés",
+        f1_title:"Confidentialité d'abord", f1_text:"Traitement sur l'appareil et collecte de données minimale.",
+        f2_title:"Accès linguistique", f2_text:"Prend en charge l'amharique, l'afaan oromoo, le tigrinya et d'autres langues.",
+        f3_title:"Simple et clair", f3_text:"Donne une probabilité estimée pour aider les familles à décider.",
+        f4_title:"Conçu pour l'équité", f4_text:"Pour que les familles disposant de moins de ressources puissent accéder plus facilement à des informations utiles.",
+        feedback_title:"Partagez vos commentaires", feedback_desc:"Votre message reste privé. Seul le nombre total est public.",
+        feedback_count_label:"Commentaires reçus :", feedback_button:"Envoyer les commentaires",
+        about_title:"À propos de ce projet",
+        about_text:"CroupGuard est un projet étudiant créé par Sifan Shiferaw. Il est né d'une expérience familiale personnelle et est devenu un outil axé sur la sensibilisation précoce, la confidentialité et l'accessibilité linguistique.",
+        please_cough:"Veuillez tousser maintenant...", listening:"Écoute pendant 6 secondes",
+        result_low:"Faible probabilité", result_low_detail:"Les caractéristiques classiques de type aboiement sont limitées. Cela semble plus proche d'une toux normale.",
+        result_mild:"Indicateurs légers détectés", result_mild_detail:"Ton et énergie plus élevés détectés. Surveillez de près."
       }
+      // You can keep adding more languages the same way
     };
 
     function changeLanguage(lang) {
