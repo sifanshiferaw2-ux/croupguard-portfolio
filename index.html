@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CroupGuard</title>
+  <meta name="theme-color" content="#0b0b12" />
+  <meta name="description" content="CroupGuard — privacy-first, multilingual early cough guidance. A student prototype, not a medical device." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -175,6 +180,154 @@
     .count { font-size: 1.4rem; font-weight: 700; margin: 12px 0 18px; color: #ec4899; }
     footer { text-align: center; padding: 50px 20px; color: #a1a1aa; }
     a { color: #38bdf8; }
+    /* ===== Display tools (night + simple mode) ===== */
+    .display-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .tool-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 13px; border-radius: 50px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.06); color: #fff;
+      font-size: 0.88rem; font-weight: 600; font-family: inherit;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+    .tool-btn:hover { border-color: #ec4899; transform: translateY(-1px); }
+    .tool-btn.on { background: linear-gradient(135deg, #ec4899, #a855f7); border-color: transparent; }
+    .tool-icon { font-size: 1.05rem; line-height: 1; }
+
+    /* ===== Night mode — warm, dim, red-shifted for 2 a.m. use ===== */
+    html.night body { background: #0e0805; color: #f6e9e1; }
+    html.night nav { background: rgba(14, 8, 5, 0.95); border-bottom-color: rgba(255, 210, 185, 0.14); }
+    html.night .nav-links a { color: #c9b6ab; }
+    html.night .hero { background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.13) 0%, transparent 70%); }
+    html.night .hero h1 .gradient { background: linear-gradient(135deg, #fb923c, #ef4444); }
+    html.night h2, html.night .triage-card h3, html.night .result-box .label { color: #f6c6b0; }
+    html.night .btn-primary { background: linear-gradient(135deg, #f97316, #ef4444); }
+    html.night .result-box .percent, html.night .count, html.night .diary-pct { color: #fb923c; }
+    html.night .feature strong, html.night a { color: #fdba74; }
+    html.night .answer-btn.selected, html.night .tool-btn.on { background: linear-gradient(135deg, #f97316, #ef4444); }
+    html.night .guidance-item.active { background: rgba(249, 115, 22, 0.10); border-color: rgba(249, 115, 22, 0.5); }
+    html.night select, html.night textarea { background: #1e130d; border-color: rgba(255, 210, 185, 0.22); }
+    html.night section, html.night .triage-card, html.night .result-box,
+    html.night .feature, html.night .guidance-item, html.night .diary-row,
+    html.night .summary-card { background: rgba(255, 205, 180, 0.05); border-color: rgba(255, 210, 185, 0.15); }
+    html.night .hero p, html.night .result-box .detail, html.night .triage-card > p,
+    html.night .guidance-item, html.night .muted, html.night footer,
+    html.night .emg-sub, html.night .diary-empty, html.night .summary-desc { color: #cfbdb2; }
+    html.night .triage-progress, html.night .triage-note, html.night .speak-hint,
+    html.night .viz-note, html.night .diary-when, html.night .summary-block h4,
+    html.night .summary-note, html.night .summary-date { color: #a5907f; }
+
+    /* ===== Simple mode — everything bigger, pictures over prose ===== */
+    html.zoom { font-size: 125%; }          /* A+ text enlargement */
+    html.simple { font-size: 140%; }
+    .sec-emoji, .ans-emoji, .feature-emoji { display: none; }
+    html.simple .sec-emoji { display: inline; }
+    html.simple .feature-emoji { display: block; font-size: 1.9rem; margin-bottom: 6px; }
+    html.simple .answer-btn { width: 116px; height: 116px; font-size: 1.3rem; }
+    html.simple .ans-emoji { display: block; font-size: 1.7rem; margin-bottom: 2px; }
+    html.simple .btn-primary, html.simple .btn-outline { padding: 19px 40px; font-size: 1.2rem; }
+    html.simple .nav-links a { font-size: 1.05rem; }
+    html.simple .feature p, html.simple .hero p, html.simple #why,
+    html.simple #how, html.simple #about,
+    html.simple .nav-links a[href="#why"], html.simple .nav-links a[href="#how"],
+    html.simple .nav-links a[href="#about"] { display: none; }
+
+    /* ===== Live sound visualizer ===== */
+    #vizWrap { display: none; max-width: 440px; margin: 22px auto 0; }
+    #vizWrap.active { display: block; }
+    #vizCanvas { display: block; width: 100%; height: 120px; border-radius: 14px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); }
+    .muted { color: #a1a1aa; }
+    .viz-note { font-size: 0.82rem; color: #71717a; margin-top: 8px; }
+
+    /* ===== Emergency overlay ===== */
+    .overlay {
+      position: fixed; inset: 0; z-index: 300; display: none;
+      align-items: center; justify-content: center; padding: 20px;
+      background: rgba(8, 5, 3, 0.9); backdrop-filter: blur(6px);
+    }
+    .overlay.open { display: flex; }
+    .emg-card {
+      max-width: 480px; width: 100%; text-align: center;
+      background: #1a120c; border: 1px solid rgba(249, 115, 22, 0.5);
+      border-radius: 22px; padding: 34px 26px;
+    }
+    .emg-icon { font-size: 3rem; line-height: 1; }
+    .emg-card h3 { font-size: 1.65rem; font-weight: 800; color: #fdba74; margin: 14px 0 12px; }
+    .emg-card p { color: #ecdfd6; font-size: 1.05rem; margin-bottom: 24px; }
+    .emg-call {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 24px; border-radius: 60px; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      color: #fff; font-size: 1.45rem; font-weight: 800; text-decoration: none;
+      margin-bottom: 16px; font-family: inherit;
+    }
+    .emg-call:active { transform: scale(0.98); }
+    .emg-sub { font-size: 0.93rem; color: #c9b6ab; margin-bottom: 22px; }
+
+    /* ===== Symptom diary ===== */
+    .diary-chart { display: block; width: 100%; height: 74px; margin: 10px 0 6px; }
+    .diary-rows { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .diary-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      flex-wrap: wrap; padding: 13px 15px; border-radius: 12px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .diary-when { font-size: 0.85rem; color: #a1a1aa; }
+    .diary-pct { font-size: 1.15rem; font-weight: 700; color: #ec4899; }
+    .diary-flags { font-size: 0.95rem; letter-spacing: 3px; }
+    .diary-empty { padding: 14px 0; color: #a1a1aa; font-size: 0.95rem; }
+    .diary-actions { margin-top: 16px; }
+    .diary-clear { background: transparent; border: 1px solid rgba(239,68,68,0.5);
+      color: #fca5a5; padding: 11px 22px; border-radius: 50px; cursor: pointer;
+      font-size: 0.92rem; font-family: inherit; }
+    .diary-clear:hover { background: rgba(239,68,68,0.12); }
+
+    /* ===== Care summary ===== */
+    .summary-card {
+      max-width: 560px; margin: 22px auto 0; text-align: start;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 16px; padding: 26px 24px;
+    }
+    .summary-head { display: flex; justify-content: space-between; align-items: baseline;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+    .summary-head h3 { font-size: 1.3rem; font-weight: 700; color: #c4b5fd; }
+    .summary-date { font-size: 0.85rem; color: #71717a; }
+    .summary-desc { font-size: 0.9rem; color: #a1a1aa; margin-bottom: 16px; }
+    .summary-pct { font-size: 2rem; font-weight: 800; color: #ec4899; }
+    .summary-block { margin-bottom: 18px; }
+    .summary-block h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.09em;
+      color: #71717a; margin-bottom: 9px; }
+    .summary-ans { display: flex; justify-content: space-between; gap: 10px;
+      padding: 9px 12px; border-radius: 10px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08); margin-bottom: 7px; font-size: 0.93rem;
+      color: #d4d4d8; }
+    .summary-ans .badge { font-weight: 700; white-space: nowrap; }
+    .warn-item {
+      display: flex; gap: 10px; align-items: flex-start; padding: 11px 13px;
+      border-radius: 11px; background: rgba(239,68,68,0.09);
+      border: 1px solid rgba(239,68,68,0.4); color: #fecaca;
+      font-size: 0.93rem; margin-bottom: 8px;
+    }
+    .summary-note { font-size: 0.82rem; color: #71717a; margin: 14px 0 18px; }
+    .summary-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ===== Print: only the care summary goes on paper ===== */
+    @media print {
+      body { background: #fff; }
+      body * { visibility: hidden; }
+      #care-summary, #care-summary * { visibility: visible; }
+      #care-summary { position: absolute; left: 0; top: 0; width: 100%;
+        background: #fff; border: none; padding: 0; margin: 0; }
+      #care-summary * { color: #111 !important; background: transparent !important;
+        border-color: #bbb !important; }
+      #care-summary h3 { font-size: 1.4rem; }
+      #care-summary .summary-pct { color: #be123c !important; }
+      #care-summary .warn-item { color: #7f1d1d !important; background: #fef2f2 !important;
+        border-color: #b91c1c !important; }
+      .summary-actions, .summary-print { display: none !important; }
+    }
+
     @media (max-width: 700px) {
       nav { flex-direction: column; gap: 14px; padding: 16px 20px; }
       .hero h1 { font-size: 2.3rem; }
@@ -201,8 +354,14 @@
       <a href="#why" data-i18n="nav_why">Why</a>
       <a href="#how" data-i18n="nav_how">How it Works</a>
       <a href="#demo" data-i18n="nav_demo">Demo</a>
+      <a href="#diary" data-i18n="nav_diary">Diary</a>
       <a href="#about" data-i18n="nav_about">About</a>
       <a href="#feedback" data-i18n="nav_feedback">Feedback</a>
+      <div class="display-tools">
+        <button class="tool-btn" id="nightBtn" type="button" aria-pressed="false" onclick="toggleNight()"><span class="tool-icon" aria-hidden="true">🌙</span><span data-i18n="night_mode">Night mode</span></button>
+        <button class="tool-btn" id="simpleBtn" type="button" aria-pressed="false" onclick="toggleSimple()"><span class="tool-icon" aria-hidden="true">👵</span><span data-i18n="simple_mode">Simple mode</span></button>
+        <button class="tool-btn" id="fontBtn" type="button" aria-pressed="false" aria-label="Text size" data-i18n-aria-label="text_size" onclick="toggleFont()"><span class="tool-icon" aria-hidden="true">A+</span></button>
+      </div>
       <select id="language-select" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
         <option value="am">አማርኛ</option>
@@ -241,41 +400,64 @@
     </section>
 
     <section id="demo" style="text-align:center;">
-      <h2 data-i18n="demo_title">Try the Interactive Demo</h2>
-      <p data-i18n="demo_desc" style="color:#a1a1aa; margin-bottom:20px;">Tap the button and cough for 6 seconds. The microphone measures loudness and rough pitch right on your device.</p>
+      <h2><span class="sec-emoji" aria-hidden="true">🎙️</span> <span data-i18n="demo_title">Try the Interactive Demo</span></h2>
+      <p data-i18n="demo_desc" class="muted" style="margin-bottom:20px;">Tap the button and cough for 6 seconds. The microphone measures loudness and rough pitch right on your device.</p>
       <div class="mic-container">
         <div class="breathing-circle" id="breathingCircle"></div>
         <div class="mic-icon">🎙️</div>
       </div>
+      <div id="vizWrap">
+        <canvas id="vizCanvas" width="440" height="120" aria-hidden="true"></canvas>
+        <p class="viz-note" data-i18n="vis_note">Live sound from your microphone — it never leaves your device.</p>
+      </div>
       <button class="btn-primary" id="analyzeBtn" onclick="startAnalysis()" data-i18n="demo_button">Start Cough Analysis</button>
       <div id="result"></div>
       <div id="triage"></div>
-      <p style="margin-top:20px; font-size:0.9rem; color:#a1a1aa;" data-i18n="demo_note">This is only a student prototype and not a medical device.</p>
+      <div id="care-summary"></div>
+      <p class="muted" style="margin-top:20px; font-size:0.9rem;" data-i18n="demo_note">This is only a student prototype and not a medical device.</p>
     </section>
 
     <section id="how">
-      <h2 data-i18n="features_title">Key Features</h2>
+      <h2><span class="sec-emoji" aria-hidden="true">✨</span> <span data-i18n="features_title">Key Features</span></h2>
       <div class="features">
-        <div class="feature"><strong data-i18n="f1_title">Privacy First</strong><p data-i18n="f1_text">Designed with on-device processing and minimal data collection.</p></div>
-        <div class="feature"><strong data-i18n="f2_title">Language Access</strong><p data-i18n="f2_text">Supports multiple languages including Ethiopian languages.</p></div>
-        <div class="feature"><strong data-i18n="f3_title">Simple & Clear</strong><p data-i18n="f3_text">Gives an estimated likelihood so families can decide when to seek care.</p></div>
-        <div class="feature"><strong data-i18n="f4_title">Built for Equity</strong><p data-i18n="f4_text">Made so under-resourced families can access useful information more easily.</p></div>
+        <div class="feature"><span class="feature-emoji" aria-hidden="true">🔒</span><strong data-i18n="f1_title">Privacy First</strong><p data-i18n="f1_text">Designed with on-device processing and minimal data collection.</p></div>
+        <div class="feature"><span class="feature-emoji" aria-hidden="true">🌍</span><strong data-i18n="f2_title">Language Access</strong><p data-i18n="f2_text">Supports multiple languages including Ethiopian languages.</p></div>
+        <div class="feature"><span class="feature-emoji" aria-hidden="true">💡</span><strong data-i18n="f3_title">Simple & Clear</strong><p data-i18n="f3_text">Gives an estimated likelihood so families can decide when to seek care.</p></div>
+        <div class="feature"><span class="feature-emoji" aria-hidden="true">⚖️</span><strong data-i18n="f4_title">Built for Equity</strong><p data-i18n="f4_text">Made so under-resourced families can access useful information more easily.</p></div>
+        <div class="feature"><span class="feature-emoji" aria-hidden="true">📴</span><strong data-i18n="f5_title">Works Offline</strong><p data-i18n="f5_text">After the first visit, CroupGuard keeps working even without internet.</p></div>
       </div>
     </section>
 
     <section id="feedback">
-      <h2 data-i18n="feedback_title">Share Your Feedback</h2>
-      <p data-i18n="feedback_desc" style="color:#a1a1aa; margin-bottom:8px;">Your message stays private. Only the total number is public.</p>
+      <h2><span class="sec-emoji" aria-hidden="true">💬</span> <span data-i18n="feedback_title">Share Your Feedback</span></h2>
+      <p data-i18n="feedback_desc" class="muted" style="margin-bottom:8px;">Your message stays private. Only the total number is public.</p>
       <div class="count"><span data-i18n="feedback_count_label">Feedback received:</span> <span id="feedback-count">0</span></div>
       <textarea id="feedback-input" rows="4" data-i18n-placeholder="feedback_placeholder" placeholder="Write your feedback here..."></textarea>
       <button class="btn-primary" onclick="submitFeedback()" data-i18n="feedback_button">Submit Feedback</button>
     </section>
 
+    <section id="diary">
+      <h2><span class="sec-emoji" aria-hidden="true">📓</span> <span data-i18n="diary_title">Symptom Diary</span></h2>
+      <p class="muted" data-i18n="diary_desc" style="margin-bottom:6px;">Kept only on this device — never uploaded. Useful for showing a health worker how the nights have been going.</p>
+      <div id="diary-body"></div>
+    </section>
+
     <section id="about">
-      <h2 data-i18n="about_title">About This Project</h2>
+      <h2><span class="sec-emoji" aria-hidden="true">🎓</span> <span data-i18n="about_title">About This Project</span></h2>
       <p data-i18n="about_text">CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility.</p>
       <p style="margin-top:16px;"><span data-i18n="about_contact">Contact:</span> <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a></p>
     </section>
+  </div>
+
+  <div class="overlay" id="emergencyOverlay" role="alertdialog" aria-modal="true" aria-labelledby="emg-title">
+    <div class="emg-card">
+      <div class="emg-icon" aria-hidden="true">📞</div>
+      <h3 id="emg-title" data-i18n="emg_title">Get help now</h3>
+      <p data-i18n="emg_text">Breathing difficulty can be an emergency. Call an ambulance now, or go to the nearest health facility.</p>
+      <a class="emg-call" href="tel:907"><span aria-hidden="true">🚑</span> <span data-i18n="emg_call">Call Ambulance — 907</span></a>
+      <p class="emg-sub" data-i18n="emg_elsewhere">Outside Ethiopia? Call your local emergency number (like 112, 911, or 999).</p>
+      <button class="btn-outline" id="emgCloseBtn" type="button" onclick="closeEmergency()" data-i18n="emg_close">Close</button>
+    </div>
   </div>
 
   <footer data-i18n="footer_text">CroupGuard • Student Project</footer>
@@ -288,6 +470,10 @@
     let analysisPhase = "idle";        // "idle" | "listening"
     let lastResult = null;             // { percent, level: "low" | "mild" }
     let speakTimer = null;
+    let retryReason = null;            // i18n key of a signal-quality retry message
+    let summaryVisible = false;
+    let currentEntryTs = null;         // diary entry created by the running analysis
+    let vizRaf = null;
 
     // Triage state
     const triage = { status: "hidden", qIndex: 0, answers: [], busy: false };
@@ -356,7 +542,7 @@
         el.innerHTML = `
           <div class="result-box">
             <div style="font-size:1.15rem; font-weight:600;">${t("please_cough")}</div>
-            <div style="margin-top:8px; color:#a1a1aa; font-size:0.95rem;">${t("listening")}</div>
+            <div class="muted" style="margin-top:8px; font-size:0.95rem;">${t("listening")}</div>
           </div>`;
       } else if (lastResult) {
         const label = t(lastResult.level === "mild" ? "result_mild" : "result_low");
@@ -366,6 +552,13 @@
             <div class="percent">${lastResult.percent}%</div>
             <div class="label">${label}</div>
             <div class="detail">${detail}</div>
+          </div>`;
+      } else if (retryReason) {
+        el.innerHTML = `
+          <div class="result-box">
+            <div style="font-size:1.15rem; font-weight:600;">${t(retryReason)}</div>
+            <div class="detail" style="margin-top:8px;">${t("retry_detail")}</div>
+            <button class="btn-primary" style="margin-top:16px;" onclick="startAnalysis()">${t("retry_btn")}</button>
           </div>`;
       } else {
         el.innerHTML = "";
@@ -405,8 +598,8 @@
               <span class="speak-hint">🔊 ${t("triage_hint")}</span>
             </div>
             <div class="answer-row">
-              <button class="answer-btn" id="ans-yes" onclick="answerQuestion(true)">${t("ans_yes")}</button>
-              <button class="answer-btn" id="ans-no" onclick="answerQuestion(false)">${t("ans_no")}</button>
+              <button class="answer-btn" id="ans-yes" onclick="answerQuestion(true)"><span class="ans-emoji" aria-hidden="true">👍</span>${t("ans_yes")}</button>
+              <button class="answer-btn" id="ans-no" onclick="answerQuestion(false)"><span class="ans-emoji" aria-hidden="true">👎</span>${t("ans_no")}</button>
             </div>
           </div>`;
       } else if (triage.status === "done") {
@@ -422,7 +615,10 @@
             <h3>${t("guidance_title")}</h3>
             <div class="guidance-list">${items}</div>
             <p class="triage-note">⚠️ ${t("triage_disclaimer")}</p>
-            <button class="btn-outline" onclick="restartTriage()">${t("triage_restart")}</button>
+            <div class="summary-actions" style="justify-content:center;">
+              <button class="btn-primary" onclick="openSummary()">${t("summary_btn")}</button>
+              <button class="btn-outline" onclick="restartTriage()">${t("triage_restart")}</button>
+            </div>
           </div>`;
       }
     }
@@ -461,19 +657,27 @@
         } else {
           triage.status = "done";
           renderTriage();
-          speak(t(guidanceKey()), 900);
+          attachDiaryTriage();
+          // "Struggling to breathe" = Yes → the emergency card interrupts and
+          // speaks instead of the guidance; guidance is spoken when the card closes.
+          if (triage.answers[QUESTIONS.length - 1] === true) showEmergency();
+          else speak(t(guidanceKey()), 900);
         }
       }, 700);
     }
 
     function restartTriage() {
       lastResult = null;
+      retryReason = null;
+      summaryVisible = false;
       analysisPhase = "idle";
       triage.status = "hidden";
       triage.qIndex = 0;
       triage.answers = [];
+      document.getElementById("emergencyOverlay").classList.remove("open");
       renderResult();
       renderTriage();
+      renderSummary();
       document.getElementById("demo").scrollIntoView({ behavior: "smooth" });
     }
 
@@ -484,6 +688,9 @@
       btn.disabled = true;
       btn.style.opacity = "0.6";
       lastResult = null;
+      retryReason = null;
+      summaryVisible = false;
+      renderSummary();
       triage.status = "hidden";
       triage.qIndex = 0;
       triage.answers = [];
@@ -500,10 +707,12 @@
         circle.classList.add("active");
         analysisPhase = "listening";
         renderResult();
+        startViz();
 
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         const timeArray = new Uint8Array(analyser.fftSize);
         let volumeSum = 0, pitchSum = 0, samples = 0, maxVolume = 0;
+        const rmsList = [];
 
         const collect = setInterval(() => {
           analyser.getByteFrequencyData(dataArray);
@@ -516,6 +725,7 @@
           }
           const rms = Math.sqrt(sum / timeArray.length);
           volumeSum += rms;
+          rmsList.push(rms);
           if (rms > maxVolume) maxVolume = rms;
 
           let maxVal = 0, maxIdx = 0;
@@ -531,6 +741,7 @@
 
         setTimeout(() => {
           clearInterval(collect);
+          stopViz();
           circle.classList.remove("active");
 
           if (mediaStream) mediaStream.getTracks().forEach(track => track.stop());
@@ -541,13 +752,34 @@
           const avgVol = samples ? volumeSum / samples : 0;
           const avgPitch = samples ? pitchSum / samples : 0;
 
+          // Signal-quality gate: never invent a number from unusable audio.
+          // Refuse politely and ask to try again instead (nothing is saved).
+          const rmsSorted = [...rmsList].sort((a, b) => a - b);
+          const floor = rmsSorted.length ? rmsSorted[Math.floor(rmsSorted.length * 0.2)] : 0;
+          const loudFrames = rmsList.filter(r => r >= maxVolume * 0.5).length;
+          let qualityFail = null;
+          if (maxVolume < 0.035) qualityFail = "retry_quiet";
+          else if (loudFrames < 3) qualityFail = "retry_short";
+          else if (floor >= 0.15 && (maxVolume - floor) < 0.08) qualityFail = "retry_noisy";
+
+          if (qualityFail) {
+            retryReason = qualityFail;
+            analysisPhase = "idle";
+            renderResult();
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            return;
+          }
+
           let percent = Math.round((avgVol * 120) + (maxVolume * 70) + (avgPitch * 0.15));
           percent = Math.max(5, Math.min(percent, 30));   // hard cap: never above 30%
 
           const isMild = percent >= 20;
           lastResult = { percent, level: isMild ? "mild" : "low" };
+          retryReason = null;
           analysisPhase = "idle";
           renderResult();
+          saveDiary(percent, isMild ? "mild" : "low");
 
           // Voice speaks ONLY the final result — never the status messages
           const label = t(isMild ? "result_mild" : "result_low");
@@ -570,6 +802,257 @@
         btn.disabled = false;
         btn.style.opacity = "1";
       }
+    }
+
+    // ========== Display preferences (night + simple mode) ==========
+    function toggleNight() {
+      const on = document.documentElement.classList.toggle("night");
+      const btn = document.getElementById("nightBtn");
+      btn.classList.toggle("on", on);
+      btn.setAttribute("aria-pressed", String(on));
+      try { localStorage.setItem("croupguard-night", on ? "1" : "0"); } catch (e) {}
+    }
+
+    function toggleSimple() {
+      const on = document.documentElement.classList.toggle("simple");
+      const btn = document.getElementById("simpleBtn");
+      btn.classList.toggle("on", on);
+      btn.setAttribute("aria-pressed", String(on));
+      try { localStorage.setItem("croupguard-simple", on ? "1" : "0"); } catch (e) {}
+    }
+
+    function toggleFont() {
+      const on = document.documentElement.classList.toggle("zoom");
+      const btn = document.getElementById("fontBtn");
+      btn.classList.toggle("on", on);
+      btn.setAttribute("aria-pressed", String(on));
+      try { localStorage.setItem("croupguard-font", on ? "1" : "0"); } catch (e) {}
+    }
+
+    function initPrefs() {
+      try {
+        if (localStorage.getItem("croupguard-night") === "1") toggleNight();
+        if (localStorage.getItem("croupguard-simple") === "1") toggleSimple();
+        if (localStorage.getItem("croupguard-font") === "1") toggleFont();
+      } catch (e) {}
+    }
+
+    // ========== Live sound visualizer (frequency bars during analysis) ==========
+    function startViz() {
+      const wrap = document.getElementById("vizWrap");
+      const canvas = document.getElementById("vizCanvas");
+      if (!wrap || !canvas) return;
+      wrap.classList.add("active");
+      try {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width) {
+          canvas.width = Math.round(rect.width * dpr);
+          canvas.height = Math.round(120 * dpr);
+        }
+      } catch (e) {}
+      let ctx = null;
+      try { ctx = canvas.getContext("2d"); } catch (e) { ctx = null; }
+      if (!ctx || !analyser) return;
+
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      const BARS = 40;
+      const draw = () => {
+        if (analysisPhase !== "listening" || !analyser) return;
+        try { analyser.getByteFrequencyData(data); } catch (e) { return; }
+        const w = canvas.width, h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        const gap = Math.max(2, w / 140);
+        const bw = (w - gap * (BARS + 1)) / BARS;
+        const grad = ctx.createLinearGradient(0, h, 0, 0);
+        grad.addColorStop(0, "#ec4899");
+        grad.addColorStop(1, "#f97316");
+        for (let i = 0; i < BARS; i++) {
+          const idx = Math.floor(Math.pow(i / BARS, 1.8) * Math.min(data.length, 320));
+          const v = data[idx] / 255;
+          const bh = Math.max(3, v * (h - 8));
+          const x = gap + i * (bw + gap);
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          const r = Math.min(bw / 2, 6);
+          if (ctx.roundRect) ctx.roundRect(x, h - bh, bw, bh, r);
+          else ctx.rect(x, h - bh, bw, bh);
+          ctx.fill();
+        }
+        vizRaf = requestAnimationFrame(draw);
+      };
+      vizRaf = requestAnimationFrame(draw);
+    }
+
+    function stopViz() {
+      if (vizRaf) { cancelAnimationFrame(vizRaf); vizRaf = null; }
+      const wrap = document.getElementById("vizWrap");
+      if (wrap) wrap.classList.remove("active");
+    }
+
+    // ========== Emergency escalation (tap-to-call) ==========
+    function showEmergency() {
+      const ov = document.getElementById("emergencyOverlay");
+      if (ov) ov.classList.add("open");
+      speak(`${t("emg_title")}. ${t("emg_text")}`, 400);
+      const btn = document.getElementById("emgCloseBtn");
+      if (btn) setTimeout(() => { try { btn.focus(); } catch (e) {} }, 150);
+    }
+
+    function closeEmergency() {
+      const ov = document.getElementById("emergencyOverlay");
+      if (ov) ov.classList.remove("open");
+      speak(t(guidanceKey()), 300);   // the guidance they couldn't hear under the card
+    }
+
+    // ========== Symptom diary (localStorage only — never uploaded) ==========
+    const DIARY_KEY = "croupguard-diary";
+
+    function loadDiary() {
+      try {
+        const list = JSON.parse(localStorage.getItem(DIARY_KEY));
+        return Array.isArray(list) ? list : [];
+      } catch (e) { return []; }
+    }
+
+    function saveDiary(percent, level) {
+      const entry = { ts: Date.now(), percent: percent, level: level, answers: null, guidance: null };
+      currentEntryTs = entry.ts;
+      try {
+        const list = loadDiary();
+        list.push(entry);
+        localStorage.setItem(DIARY_KEY, JSON.stringify(list.slice(-50)));
+      } catch (e) {}
+      renderDiary();
+    }
+
+    function attachDiaryTriage() {
+      if (currentEntryTs == null) return;
+      try {
+        const list = loadDiary();
+        const entry = list.find(x => x.ts === currentEntryTs);
+        if (entry) {
+          entry.answers = triage.answers.slice(0, QUESTIONS.length).map(a => a === true);
+          entry.guidance = guidanceKey();
+          localStorage.setItem(DIARY_KEY, JSON.stringify(list));
+        }
+      } catch (e) {}
+      renderDiary();
+    }
+
+    function clearDiary() {
+      if (!confirm(t("diary_clear_confirm"))) return;
+      try { localStorage.removeItem(DIARY_KEY); } catch (e) {}
+      currentEntryTs = null;
+      renderDiary();
+    }
+
+    function renderDiary() {
+      const el = document.getElementById("diary-body");
+      if (!el) return;
+      const list = loadDiary();
+      if (!list.length) {
+        el.innerHTML = `<div class="diary-empty">${t("diary_empty")}</div>`;
+        return;
+      }
+      const rows = list.slice(-8);
+      const W = 440, H = 74, PAD = 8;
+      const stepX = rows.length > 1 ? (W - PAD * 2) / (rows.length - 1) : 0;
+      const yOf = p => PAD + (1 - Math.min(p, 30) / 30) * (H - PAD * 2);
+      const pts = rows.map((e, i) => `${(PAD + i * stepX).toFixed(1)},${yOf(e.percent).toFixed(1)}`).join(" ");
+      const dots = rows.map((e, i) =>
+        `<circle cx="${(PAD + i * stepX).toFixed(1)}" cy="${yOf(e.percent).toFixed(1)}" r="4.5" fill="#ec4899" />`).join("");
+      const gIcons = { g_home: "🏠", g_contact: "📞", g_urgent: "🩺" };
+      const rowHtml = list.slice().reverse().slice(0, 10).map(entry => {
+        let dateStr;
+        try { dateStr = new Date(entry.ts).toLocaleString(currentLang); }
+        catch (err) { dateStr = new Date(entry.ts).toLocaleString(); }
+        const flags = Array.isArray(entry.answers)
+          ? entry.answers.map(a => (a ? "✅" : "❌")).join(" ")
+          : "";
+        const gi = entry.guidance && gIcons[entry.guidance] ? gIcons[entry.guidance] : "";
+        return `<div class="diary-row"><span class="diary-when">${dateStr}</span>` +
+          `<span class="diary-flags">${flags} ${gi}</span>` +
+          `<span class="diary-pct">${entry.percent}%</span></div>`;
+      }).join("");
+      el.innerHTML = `
+        <p class="viz-note" style="margin-bottom:2px;">${t("diary_chart")}</p>
+        <svg class="diary-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${t("diary_chart")}">
+          <polyline points="${pts}" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
+          ${dots}
+        </svg>
+        <div class="diary-rows">${rowHtml}</div>
+        <div class="diary-actions">
+          <button class="diary-clear" type="button" onclick="clearDiary()">${t("diary_clear")}</button>
+        </div>`;
+    }
+
+    function openSummary() {
+      summaryVisible = true;
+      renderSummary();
+      const el = document.getElementById("care-summary");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function closeSummary() {
+      summaryVisible = false;
+      renderSummary();
+    }
+
+    function renderSummary() {
+      const el = document.getElementById("care-summary");
+      if (!el) return;
+      if (!summaryVisible || !lastResult || triage.status !== "done") { el.innerHTML = ""; return; }
+
+      const label = t(lastResult.level === "mild" ? "result_mild" : "result_low");
+      const detail = t(lastResult.level === "mild" ? "result_mild_detail" : "result_low_detail");
+      const gk = guidanceKey();
+      const gIcons = { g_home: "🏠", g_contact: "📞", g_urgent: "🩺" };
+
+      const answersHtml = triage.answers.map((a, i) => `
+        <div class="summary-ans">
+          <span>${t(QUESTIONS[i])}</span>
+          <span class="badge">${a ? "✅ " + t("ans_yes") : "❌ " + t("ans_no")}</span>
+        </div>`).join("");
+
+      const warnsHtml = ["warn1", "warn2", "warn3", "warn4"].map(k => `
+        <div class="warn-item"><span aria-hidden="true">🚨</span><span>${t(k)}</span></div>`).join("");
+
+      let dateStr;
+      try { dateStr = new Date().toLocaleString(currentLang); }
+      catch (e) { dateStr = new Date().toLocaleString(); }
+
+      el.innerHTML = `
+        <div class="summary-card">
+          <div class="summary-head">
+            <h3>${t("summary_title")}</h3>
+            <span class="summary-date">${dateStr}</span>
+          </div>
+          <p class="summary-desc">${t("summary_desc")}</p>
+          <div class="summary-block">
+            <h4>${t("summary_result")}</h4>
+            <div class="summary-pct">${lastResult.percent}%</div>
+            <div style="color:#c4b5fd; font-weight:600;">${label}</div>
+            <div class="muted" style="font-size:0.92rem; margin-top:4px;">${detail}</div>
+          </div>
+          <div class="summary-block">
+            <h4>${t("summary_answers")}</h4>
+            ${answersHtml}
+          </div>
+          <div class="summary-block">
+            <h4>${t("guidance_title")}</h4>
+            <div class="guidance-item active"><span class="guidance-icon">${gIcons[gk]}</span><span>${t(gk)}</span></div>
+          </div>
+          <div class="summary-block">
+            <h4>${t("warn_title")}</h4>
+            ${warnsHtml}
+          </div>
+          <p class="summary-note">⚠️ ${t("summary_note")}</p>
+          <div class="summary-actions summary-print">
+            <button class="btn-primary" type="button" onclick="window.print()">${t("summary_print")}</button>
+            <button class="btn-outline" type="button" onclick="closeSummary()">${t("emg_close")}</button>
+          </div>
+        </div>`;
     }
 
     // Feedback
@@ -657,7 +1140,42 @@
         g_home: "Monitor at home and watch for changes.",
         g_contact: "Consider contacting a health worker soon.",
         g_urgent: "Seek medical care promptly if breathing is difficult.",
-        triage_disclaimer: "This is general information only, not a medical diagnosis. If you are worried, contact a health worker."
+        triage_disclaimer: "This is general information only, not a medical diagnosis. If you are worried, contact a health worker.",
+        night_mode: "Night mode",
+        simple_mode: "Simple mode",
+        nav_diary: "Diary",
+        f5_title: "Works Offline",
+        f5_text: "After the first visit, CroupGuard keeps working even without internet.",
+        vis_note: "Live sound from your microphone — it never leaves your device.",
+        retry_quiet: "I couldn't hear the cough — the sound was too quiet.",
+        retry_short: "I didn't hear a cough. Please cough clearly during the 6 seconds.",
+        retry_noisy: "It was too noisy to hear clearly. Please try somewhere quieter.",
+        retry_detail: "Nothing was saved. Please move closer and try again.",
+        retry_btn: "Try Again",
+        emg_title: "Get help now",
+        emg_text: "Breathing difficulty can be an emergency. Call an ambulance now, or go to the nearest health facility.",
+        emg_call: "Call Ambulance — 907",
+        emg_elsewhere: "Outside Ethiopia? Call your local emergency number (like 112, 911, or 999).",
+        emg_close: "Close",
+        diary_title: "Symptom Diary",
+        diary_desc: "Kept only on this device — never uploaded. Useful for showing a health worker how the nights have been going.",
+        diary_empty: "No entries yet. Run a cough analysis to start the diary.",
+        diary_chart: "Last results (scale 0–30%)",
+        diary_clear: "Clear diary",
+        diary_clear_confirm: "Delete all diary entries on this device?",
+        summary_btn: "View Care Summary",
+        summary_title: "Care Summary",
+        summary_desc: "Show or print this page for a health worker.",
+        summary_result: "Cough analysis",
+        summary_answers: "Your answers",
+        warn_title: "Warning signs — get help now",
+        warn1: "Struggling to breathe or unable to speak a full sentence",
+        warn2: "Blue or grey lips or face",
+        warn3: "Very sleepy, floppy, or hard to wake",
+        warn4: "Drinking poorly, or no tears when crying",
+        summary_print: "Print / Save as PDF",
+        summary_note: "General information only — not a medical diagnosis.",
+        text_size: "Text size"
       },
       am: {
         nav_why: "ለምን", nav_how: "እንዴት እንደሚሰራ", nav_demo: "ሙከራ", nav_about: "ስለ", nav_feedback: "አስተያየት",
@@ -709,7 +1227,42 @@
         g_home: "ቤት ውስጥ ይከታተሉ፤ ማንኛውም ለውጥ ይመልከቱ።",
         g_contact: "በቅርብ ጊዜ የሕክምና ሠራተኛ መገናኘት ያስቡ።",
         g_urgent: "የመተንፈስ ችግር ካለ ፈጣን የሕክምና እርዳታ ይፈልጉ።",
-        triage_disclaimer: "ይህ አጠቃላይ መረጃ ብቻ ነው፤ የሕክምና ምርመራ አይደለም። ከጨነቁ የሕክምና ሠራተኛ ያማክሩ።"
+        triage_disclaimer: "ይህ አጠቃላይ መረጃ ብቻ ነው፤ የሕክምና ምርመራ አይደለም። ከጨነቁ የሕክምና ሠራተኛ ያማክሩ።",
+        night_mode: "የሌሊት ሁኔታ",
+        simple_mode: "ቀላል ሁኔታ",
+        nav_diary: "ዳይሪ",
+        f5_title: "ከኢንተርኔት ውጭ ይሰራል",
+        f5_text: "ከመጀመሪያው ጉብኝት በኋላ CroupGuard ኢንተርኔት ሳይኖር ይሰራል።",
+        vis_note: "ከማይክሮፎኑ የቀጥታ ድምጽ — መሣሪያውን አይለቅም።",
+        retry_quiet: "ሳሉን አልሰማሁም — ድምፁ በጣም ዝቅተኛ ነበር።",
+        retry_short: "ሳል አልሰማሁም። እባክዎ በ 6 ሰከንድ ውስጥ ግልጽ ይሳሉ።",
+        retry_noisy: "ግልጽ ለማዳመጥ በዛኝ ጫጫታ ነበር። እባክዎ በጭራሽ ጫጫታ የሌለበት ቦታ ይሞክሩ።",
+        retry_detail: "ምንም አልተቀመጠም። እባክዎ በቅርብ ተቀርበው እንደገና ይሞክሩ።",
+        retry_btn: "እንደገና ይሞክሩ",
+        emg_title: "አሁን እርዳታ ይፈልጉ",
+        emg_text: "የመተንፈስ ችግር የአስቸኳይ ሁኔታ ሊሆን ይችላል። አሁን አምቡላንስ ይደውሉ፣ ወይም በቅርብ ያለውን የሕክምና ተቋም ይጎብኙ።",
+        emg_call: "አምቡላንስ ይደውሉ — 907",
+        emg_elsewhere: "ከኢትዮጵያውጭ ነው? የአካባቢውን የአስቸኳይ ጊዜ ቁጥር ይደውሉ (እንደ 112፣ 911 ወይም 999)።",
+        emg_close: "ዝጋ",
+        diary_title: "የምልክቶች ዳይሪ",
+        diary_desc: "በዚህ መሣሪያ ብቻ ይቀመጣል — አይሰደድም። ልሊት እንዴት እየተባባሰ እንደሆነ ለሕክምና ሠራተኛ ማሳየት ይጠቅማል።",
+        diary_empty: "እስካሁን መዝግብ የለም። ዳይሪውን ለመጀመር የሳል ትንተና ይጀምሩ።",
+        diary_chart: "የመጨረሻው ውጤቶች (መጠን 0–30%)",
+        diary_clear: "ዳይሪውን አጽዳ",
+        diary_clear_confirm: "በዚህ መሣሪያ ላይ ያሉትን ሁሉም የዳይሪ መዝገቦች ማጥፋት?",
+        summary_btn: "የእርዳታ ማጠቃለያ ይመልከቱ",
+        summary_title: "የእርዳታ ማጠቃለያ",
+        summary_desc: "ይህን ገጽ ለሕክምና ሠራተኛ ያሳዩ ወይም ይታተሙ።",
+        summary_result: "የሳል ትንተና",
+        summary_answers: "መልሶችዎ",
+        warn_title: "የማንቂያ ምልክቶች — አሁን እርዳታ ይፈልጉ",
+        warn1: "በመተንፈስ መዋጮ ወይም ሙሉ ሐረግ ለማንበብ የማይችል",
+        warn2: "ሰማያዊ ወይም ግራጫ ኩርጥ ወይም ገጽ",
+        warn3: "በጣም እንቅልፍ ወይም ረስታ ወይም ማንቂት ከባድ",
+        warn4: "ጭምሩን የማያጠጥ ወይም ሲያኩ ኀባይ የሌለው",
+        summary_print: "አትም / PDF አስቀምጥ",
+        summary_note: "አጠቃላይ መረጃ ብቻ ነው፤ የሕክምና ምርመራ አይደለም።",
+        text_size: "የፊደል መጠን"
       },
       om: {
         nav_why: "Maaliif", nav_how: "Akkamitti hojjeta", nav_demo: "Deemo", nav_about: "Waa'ee isaa", nav_feedback: "Yaada",
@@ -761,7 +1314,42 @@
         g_home: "Maatii kee hordofu, jijjiirama hunda haa ilaalu.",
         g_contact: "Yeroo gabaabaa keessa gargaaraa mijaa qunnamti haa yaadu.",
         g_urgent: "Yeroo harkuu fudhataa ta'e mijaa dhaquu sadarkaa faayinaa haa qabdu.",
-        triage_disclaimer: "Kun odeeffannoo qofaati; dhoksina mijaa hin dha. Yoo yaadde gargaaraa mijaa qunnamti."
+        triage_disclaimer: "Kun odeeffannoo qofaati; dhoksina mijaa hin dha. Yoo yaadde gargaaraa mijaa qunnamti.",
+        night_mode: "Haala bitaa",
+        simple_mode: "Haala salphaa",
+        nav_diary: "Diarii",
+        f5_title: "Balbalaatin hojjeta",
+        f5_text: "Ibsa duraa booda CroupGuard internet ilaaluu hin baanu ta'e hojjeta.",
+        vis_note: "Dhagaa warra kee keessaa bilisaa — warra kee keessaa qofaati.",
+        retry_quiet: "Kunnuu hin dhageeffanne — dhangalaan xiqqaa dha.",
+        retry_short: "Kunnuu hin dhageeffanne. Maaloo yeroo 6 keessa bu'uurummaan kunnuu.",
+        retry_noisy: "Buurummaan bu'uurummaa hin danda'anne. Maaloo haaqa xiqqaa qabu bakkatti yaalaa.",
+        retry_detail: "Wan hin kennamne. Maaloo dursa dhihoo ta'e irra deebi'aa yaalaa.",
+        retry_btn: "Irra deebi'aa yaalaa",
+        emg_title: "Gargaarsa amma barbaadi",
+        emg_text: "Rakkoo fudhattummaa yeroo gargaarsa ta'a danda'a. Amma ambulansii waliin qunnamti, yookaan asheen maxkamaa mijaa dhaqsaa.",
+        emg_call: "Ambulansii waliin qunnamti — 907",
+        emg_elsewhere: "Itoophiyaa alaa ta'e? Lakkoofsa yeroo gargaarsa naannoo kee waliin qunnamti (akk. 112, 911 yookaan 999).",
+        emg_close: "Cufi",
+        diary_title: "Diarii agarsiisa",
+        diary_desc: "Warra kessatti qofa kuufama — hin ergamne. Yeroo bilisaa akkamitti daballu gargaaraa miseensi agarsiisuuf faayidaa qaba.",
+        diary_empty: "Paetti hin jiru. Diarii jalqabuuf gaggeessuu kunnuu haa eeyyamu.",
+        diary_chart: "Dhiheeffannoon dura (0–30%)",
+        diary_clear: "Diarii haqi",
+        diary_clear_confirm: "Gatii diarii hundi warra kana keessa haqama?",
+        summary_btn: "Gabaabsa gargaarsaa ilaali",
+        summary_title: "Gabaabsa gargaarsaa",
+        summary_desc: "Fuula kana gargaaraa miseensi agarsiisi yookaan maxxansi.",
+        summary_result: "Gaggeessuu kunnuu",
+        summary_answers: "Deebiin kee",
+        warn_title: "Ogeessii agarsiisaa — gargaarsa amma barbaadi",
+        warn1: "Fudhattummaa fudhachuu yookaan hima guutuu dubbisuun hin danda'uu",
+        warn2: "Burtukaana yookaan aduu xixiqqaa burtukaana yookaan fataa",
+        warn3: "Ragaa xiqqaa, lafa ta'uu yookaan tuqaan nan deebi'uuf gahaa",
+        warn4: "Dhugaa hin danda'u yookaan gubaan horiya hin qabnu",
+        summary_print: "Maxxansi / PDF",
+        summary_note: "Odeeffannoo qofaati; dhoksina mijaa hin dha.",
+        text_size: "Hammata barreeessaa"
       },
       ti: {
         nav_why: "ስለ እንታይ", nav_how: "እንዴት እዩ ዘሰርሕ", nav_demo: "ናሙና", nav_about: "ብዛዕባ", nav_feedback: "ሓሳብ",
@@ -813,7 +1401,42 @@
         g_home: "ኣብ ገዛ ተኸታተል፣ ኩሉ ለወጡ ርአ።",
         g_contact: "ብቐሊል ግዜ ምስ ሓጋጋዊ ኣካል ምትእስሳር ዕላል።",
         g_urgent: "ምትንፋስ ብቕዳሕ እንተኾይኑ ብቕልጡፍ ዕጉባቲ ሕተት።",
-        triage_disclaimer: "እዚ ሓጋጋዊ ሓሳብ ጥራይ እዩ፤ ዕጉባቲ ምርመራ ኣይኮነን። ተጨንቕካ እንተኾንካ ምስ ሓጋጋዊ ኣካል ተወስኽ።"
+        triage_disclaimer: "እዚ ሓጋጋዊ ሓሳብ ጥራይ እዩ፤ ዕጉባቲ ምርመራ ኣይኮነን። ተጨንቕካ እንተኾንካ ምስ ሓጋጋዊ ኣካል ተወስኽ።",
+        night_mode: "ሰነ ሌሊቲ",
+        simple_mode: "ሰነ ቀሊል",
+        nav_diary: "ዳይሪ",
+        f5_title: "ካብ ኢንተርኔት ወጻኢ ይሰርሕ",
+        f5_text: "ካብቲቀደም ዝኸደበ ጉብኝት ዘሎ ኢንተርኔት ዘይሓוץ CroupGuard ይሰርሕ ኣሎ።",
+        vis_note: "ካብ ማይክሮፎንኹም ብቐጥታ ዝሰምዕ ድምጺ — ካብ መስኮትኹም ኣይወጽእን።",
+        retry_quiet: "ግመጡ ኣይሰምዕኩን — ድምጺ ብዙሕ ዝቅጠለ ነይሩ።",
+        retry_short: "ግመጡ ኣይሰምዕኩን። እባክኩም ኣብ 6 ሰከንድ ውሽጢ ግልጺ ግመጡ።",
+        retry_noisy: "ድንጋጌ ብዙሕ ነበረ እናዘይክእል ግልጺ ምስምዕ። እባክኩም ብዓቑን ቦታ ፈትኑ።",
+        retry_detail: "ዝኾነ ኣይተመዝገበን። እባክኩም ብቐረብ ተራእዩ ደጊምኩም።",
+        retry_btn: "ደጊምኩም",
+        emg_title: "ሕጂ ሓገዝ ሕተት",
+        emg_text: "ኣብ መነፍሲ ግዜ ሓገዝ ክኸውን ይኽእል እዩ። ካብቶቱ ኣምቡላንስ ጸውዕ፣ ወይ እቲ ብቐረብ ዘሎ ዕጉባቲ ኣካል ብል።",
+        emg_call: "ኣምቡላንስ ጸውዕ — 907",
+        emg_elsewhere: "ካብ ኢትዮጵያ ወጻኢ እኹም? ናትኩም ናይ ባሕሪ ኣስቸኳይ ቁጥር ጸውዑ (112፣ 911 ወይ 999)።",
+        emg_close: "ውጻኢ",
+        diary_title: "ዳይሪ ምልክታት",
+        diary_desc: "ኣብዚ መስኮት ጥራይ ዝሕዝ፣ ኣይለኣኽን። ካብቲጠበቓ ከመይ ከሎ ንሓጋጋዊ ኣካል ምርካብ ጥቅሚ ኣለዎ።",
+        diary_empty: "እቲኡ ዝተመዝገቡ የለን። ንምዕባል ዓይነት ግምጋም ጀምሩ።",
+        diary_chart: "ናይ መወዳእታ ውጽኢት (0–30%)",
+        diary_clear: "ዳይሪ ኣጥፍእ",
+        diary_clear_confirm: "ኩሉ ዳይሪ መዝገባካብዚ መስኮት ክጥፋእ?",
+        summary_btn: "ማጠቃለያ ርእይ",
+        summary_title: "ማጠቃለያ እርዳታ",
+        summary_desc: "እዚ ገጽ ንሓጋጋዊ ኣካል ኣርእዩ ወይ ብፕሪንተር ኣውጽእ።",
+        summary_result: "ግምጋም",
+        summary_answers: "መልእኽትኹም",
+        warn_title: "ምልክታት ሓጋዕ — ካብታኡ ሓገዝ ሕተት",
+        warn1: "ብመነፍሲ ምስቕልጥ ወይ ሙሉ ቃል ክዛረብ ዘይኽእል",
+        warn2: "ሰማያዊ ወይ ግራጫ ኩርጽ ወይ ገጽ",
+        warn3: "ብጣዕሚ ዕቅርብ ወይ ረስሓ ወይ ካብዘይትንሱ",
+        warn4: "መስተ ዘይሕጣ ወይ ካብ ምኽያድ ሐባይ ዘይሎ",
+        summary_print: "ፕሪንተር / PDF ኣስቀምጥ",
+        summary_note: "ሓጋጋዊ ሓሳብ ጥራይ እዩ፤ ዕጉባቲ ምርመራ ኣይኮነን።",
+        text_size: "መጠን ፊደል"
       },
       es: {
         nav_why: "Por qué", nav_how: "Cómo funciona", nav_demo: "Demo", nav_about: "Acerca de", nav_feedback: "Comentarios",
@@ -865,7 +1488,42 @@
         g_home: "Supervisa en casa y observa cualquier cambio.",
         g_contact: "Considera contactar a un trabajador de la salud pronto.",
         g_urgent: "Busca atención médica con rapidez si la respiración es difícil.",
-        triage_disclaimer: "Esta es solo información general, no un diagnóstico médico. Si estás preocupado, contacta a un trabajador de la salud."
+        triage_disclaimer: "Esta es solo información general, no un diagnóstico médico. Si estás preocupado, contacta a un trabajador de la salud.",
+        night_mode: "Modo noche",
+        simple_mode: "Modo simple",
+        nav_diary: "Diario",
+        f5_title: "Funciona sin conexión",
+        f5_text: "Tras la primera visita, CroupGuard sigue funcionando incluso sin internet.",
+        vis_note: "Sonido en vivo de tu micrófono: nunca sale de tu dispositivo.",
+        retry_quiet: "No pude oír la tos: el sonido fue demasiado bajo.",
+        retry_short: "No escuché ninguna tos. Tose con claridad durante los 6 segundos.",
+        retry_noisy: "Hacía demasiado ruido para oír con claridad. Prueba en un lugar más silencioso.",
+        retry_detail: "No se guardó nada. Acércate e inténtalo de nuevo.",
+        retry_btn: "Inténtalo de nuevo",
+        emg_title: "Pide ayuda ahora",
+        emg_text: "La dificultad para respirar puede ser una emergencia. Llama a una ambulancia ahora o acude al centro de salud más cercano.",
+        emg_call: "Llamar a la ambulancia — 907",
+        emg_elsewhere: "¿Fuera de Etiopía? Llama al número de emergencias de tu país (como 112, 911 o 999).",
+        emg_close: "Cerrar",
+        diary_title: "Diario de síntomas",
+        diary_desc: "Se guarda solo en este dispositivo: nunca se sube. Útil para mostrar a un trabajador de la salud cómo han sido las noches.",
+        diary_empty: "Aún no hay entradas. Haz un análisis de tos para empezar el diario.",
+        diary_chart: "Últimos resultados (escala 0–30 %)",
+        diary_clear: "Borrar el diario",
+        diary_clear_confirm: "¿Eliminar todas las entradas del diario en este dispositivo?",
+        summary_btn: "Ver el resumen de atención",
+        summary_title: "Resumen de atención",
+        summary_desc: "Muestra o imprime esta página para un trabajador de la salud.",
+        summary_result: "Análisis de tos",
+        summary_answers: "Tus respuestas",
+        warn_title: "Señales de alarma: pide ayuda ahora",
+        warn1: "Con dificultad para respirar o incapaz de hablar una frase completa",
+        warn2: "Labios o cara de color azul o gris",
+        warn3: "Muy somnoliento, flácido o difícil de despertar",
+        warn4: "Poca ingesta de líquidos o ausencia de lágrimas al llorar",
+        summary_print: "Imprimir / Guardar como PDF",
+        summary_note: "Solo información general: no es un diagnóstico médico.",
+        text_size: "Tamaño del texto"
       },
       fr: {
         nav_why: "Pourquoi", nav_how: "Comment ça marche", nav_demo: "Démo", nav_about: "À propos", nav_feedback: "Commentaires",
@@ -917,7 +1575,42 @@
         g_home: "Surveillez à la maison et observez tout changement.",
         g_contact: "Envisagez de contacter un agent de santé bientôt.",
         g_urgent: "Consultez rapidement un soin médical si la respiration est difficile.",
-        triage_disclaimer: "Ceci est une information générale, pas un diagnostic médical. Si vous vous inquiétez, contactez un agent de santé."
+        triage_disclaimer: "Ceci est une information générale, pas un diagnostic médical. Si vous vous inquiétez, contactez un agent de santé.",
+        night_mode: "Mode nuit",
+        simple_mode: "Mode simple",
+        nav_diary: "Journal",
+        f5_title: "Fonctionne hors ligne",
+        f5_text: "Après la première visite, CroupGuard continue de fonctionner même sans internet.",
+        vis_note: "Son en direct de votre micro : il ne quitte jamais votre appareil.",
+        retry_quiet: "Je n'ai pas entendu la toux : le son était trop faible.",
+        retry_short: "Je n'ai entendu aucune toux. Tousser clairement pendant les 6 secondes.",
+        retry_noisy: "Il y avait trop de bruit pour entendre clairement. Essayez dans un endroit plus calme.",
+        retry_detail: "Rien n'a été enregistré. Rapprochez-vous et réessayez.",
+        retry_btn: "Réessayer",
+        emg_title: "Demandez de l'aide maintenant",
+        emg_text: "Une difficulté à respirer peut être une urgence. Appelez une ambulance maintenant ou allez au centre de santé le plus proche.",
+        emg_call: "Appeler l'ambulance — 907",
+        emg_elsewhere: "Hors d'Éthiopie ? Appelez le numéro d'urgence de votre pays (comme 112, 911 ou 999).",
+        emg_close: "Fermer",
+        diary_title: "Journal des symptômes",
+        diary_desc: "Conservé uniquement sur cet appareil, jamais envoyé. Utile pour montrer à un agent de santé comment se passent les nuits.",
+        diary_empty: "Aucune entrée pour l'instant. Lancez une analyse de toux pour commencer le journal.",
+        diary_chart: "Derniers résultats (échelle 0–30 %)",
+        diary_clear: "Effacer le journal",
+        diary_clear_confirm: "Supprimer toutes les entrées du journal sur cet appareil ?",
+        summary_btn: "Voir le résumé de soins",
+        summary_title: "Résumé de soins",
+        summary_desc: "Montrez ou imprimez cette page pour un agent de santé.",
+        summary_result: "Analyse de la toux",
+        summary_answers: "Vos réponses",
+        warn_title: "Signes d'alerte : demandez de l'aide maintenant",
+        warn1: "Qui peine à respirer ou incapable de prononcer une phrase entière",
+        warn2: "Lèvres ou visage bleus ou gris",
+        warn3: "Très endormi, mou ou difficile à réveiller",
+        warn4: "Boit mal ou n'a plus de larmes en pleurant",
+        summary_print: "Imprimer / Enregistrer en PDF",
+        summary_note: "Information générale uniquement — pas un diagnostic médical.",
+        text_size: "Taille du texte"
       },
       zh: {
         nav_why: "为什么", nav_how: "工作原理", nav_demo: "演示", nav_about: "关于", nav_feedback: "反馈",
@@ -969,7 +1662,42 @@
         g_home: "在家观察，并留意任何变化。",
         g_contact: "考虑尽快联系医务人员。",
         g_urgent: "如果呼吸困难，请尽快就医。",
-        triage_disclaimer: "这是一般信息，不是医学诊断。如果您担心，请联系医务人员。"
+        triage_disclaimer: "这是一般信息，不是医学诊断。如果您担心，请联系医务人员。",
+        night_mode: "夜间模式",
+        simple_mode: "简易模式",
+        nav_diary: "日记",
+        f5_title: "离线也能用",
+        f5_text: "首次访问后，即使没有网络 CroupGuard 也能继续使用。",
+        vis_note: "来自麦克风的实时声音——绝不离开您的设备。",
+        retry_quiet: "我没有听到咳嗽声——声音太小了。",
+        retry_short: "我没有听到咳嗽。请在 6 秒内清楚地咳嗽。",
+        retry_noisy: "太吵了，听不清。请在更安静的地方再试一次。",
+        retry_detail: "没有保存任何内容。请靠近一点再试。",
+        retry_btn: "再试一次",
+        emg_title: "立即求助",
+        emg_text: "呼吸困难可能是紧急情况。请立即呼叫救护车，或前往最近的医疗机构。",
+        emg_call: "呼叫救护车 — 907",
+        emg_elsewhere: "在埃塞俄比亚以外？请拨打您当地的紧急号码（如 112、911 或 999）。",
+        emg_close: "关闭",
+        diary_title: "症状日记",
+        diary_desc: "仅保存在本设备——绝不上传。方便向医务人员展示夜间情况。",
+        diary_empty: "暂无记录。运行一次咳嗽分析来开始记录。",
+        diary_chart: "最近结果（0–30% 刻度）",
+        diary_clear: "清除日记",
+        diary_clear_confirm: "删除此设备上的所有日记记录？",
+        summary_btn: "查看护理摘要",
+        summary_title: "护理摘要",
+        summary_desc: "向医务人员展示或打印此页面。",
+        summary_result: "咳嗽分析",
+        summary_answers: "您的回答",
+        warn_title: "警告信号——立即求助",
+        warn1: "呼吸费力或无法说出完整句子",
+        warn2: "嘴唇或面色发青、发灰",
+        warn3: "非常困倦、瘫软或难以叫醒",
+        warn4: "不愿喝水，或哭时没有眼泪",
+        summary_print: "打印 / 保存为 PDF",
+        summary_note: "仅是一般信息——并非医学诊断。",
+        text_size: "字体大小"
       },
       hi: {
         nav_why: "क्यों", nav_how: "कैसे काम करता है", nav_demo: "डेमो", nav_about: "परिचय", nav_feedback: "प्रतिक्रिया",
@@ -1021,7 +1749,42 @@
         g_home: "घर पर निगरानी रखें और किसी भी बदलाव पर ध्यान दें।",
         g_contact: "जल्द ही स्वास्थ्यकर्मी से संपर्क करने पर विचार करें।",
         g_urgent: "साँस लेना कठिन हो तो तुरंत चिकित्सा सहायता लें।",
-        triage_disclaimer: "यह केवल सामान्य जानकारी है, कोई चिकित्सा निदान नहीं। चिंता हो तो स्वास्थ्यकर्मी से संपर्क करें।"
+        triage_disclaimer: "यह केवल सामान्य जानकारी है, कोई चिकित्सा निदान नहीं। चिंता हो तो स्वास्थ्यकर्मी से संपर्क करें।",
+        night_mode: "रात मोड",
+        simple_mode: "सरल मोड",
+        nav_diary: "डायरी",
+        f5_title: "ऑफ़लाइन काम करता है",
+        f5_text: "पहली बार विज़िट के बाद, बिना इंटरनेट के भी CroupGuard चलता रहता है।",
+        vis_note: "आपके माइक्रोफ़ोन की लाइव आवाज़ — यह आपके डिवाइस से बाहर नहीं जाती।",
+        retry_quiet: "मुझे खाँसी सुनाई नहीं दी — आवाज़ बहुत धीमी थी।",
+        retry_short: "मुझे खाँसी नहीं सुनाई दी। कृपया 6 सेकंड में साफ़ खाँसें।",
+        retry_noisy: "सुनने के लिए बहुत शोर था। कृपया शांत जगह पर फिर से कोशिश करें।",
+        retry_detail: "कुछ सहेजा नहीं गया। कृपया और पास जाकर फिर से कोशिश करें।",
+        retry_btn: "फिर से कोशिश करें",
+        emg_title: "अभी मदद लें",
+        emg_text: "साँस लेने में दिक्कत आपातकाल हो सकती है। अभी एम्बुलेंस बुलाएँ, या निकटतम स्वास्थ्य केंद्र जाएँ।",
+        emg_call: "एम्बुलेंस बुलाएँ — 907",
+        emg_elsewhere: "इथियोपिया से बाहर हैं? स्थानीय आपातकालीन नंबर डायल करें (जैसे 112, 911 या 999)।",
+        emg_close: "बंद करें",
+        diary_title: "लक्षण डायरी",
+        diary_desc: "केवल इसी डिवाइस पर रहता है — कभी अपलोड नहीं होता। स्वास्थ्यकर्मी को रातों का हाल दिखाने में सहायक।",
+        diary_empty: "अभी कोई प्रविष्टि नहीं है। डायरी शुरू करने के लिए खांसी विश्लेषण करें।",
+        diary_chart: "हाल के परिणाम (पैमाना 0–30%)",
+        diary_clear: "डायरी साफ़ करें",
+        diary_clear_confirm: "इस डिवाइस की सभी डायरी प्रविष्टियाँ हटाएँ?",
+        summary_btn: "देखभाल सारांश देखें",
+        summary_title: "देखभाल सारांश",
+        summary_desc: "स्वास्थ्यकर्मी को यह पेज दिखाएँ या प्रिंट करें।",
+        summary_result: "खांसी विश्लेषण",
+        summary_answers: "आपके जवाब",
+        warn_title: "चेतावनी संकेत — अभी मदद लें",
+        warn1: "साँस लेने में संघर्ष या पूरा वाक्य बोलने में असमर्थ",
+        warn2: "होंठ या चेहरा नीला या स्लेटी",
+        warn3: "बहुत नींद आना, शिथिल या जगाना कठिन",
+        warn4: "ठीक से न पीना या रोने पर आँसू न आना",
+        summary_print: "प्रिंट करें / PDF सेव करें",
+        summary_note: "केवल सामान्य जानकारी — कोई चिकित्सा निदान नहीं।",
+        text_size: "अक्षर का आकार"
       },
       ar: {
         nav_why: "لماذا", nav_how: "كيف يعمل", nav_demo: "العرض التجريبي", nav_about: "حول", nav_feedback: "الملاحظات",
@@ -1073,7 +1836,42 @@
         g_home: "راقب في المنزل وانتبه لأي تغيير.",
         g_contact: "فكّر في التواصل مع عامل صحي قريبًا.",
         g_urgent: "اطلب رعاية طبية فورًا إذا كان التنفس صعبًا.",
-        triage_disclaimer: "هذه معلومات عامة فقط وليست تشخيصًا طبيًا. إذا كنت قلقًا، تواصل مع عامل صحي."
+        triage_disclaimer: "هذه معلومات عامة فقط وليست تشخيصًا طبيًا. إذا كنت قلقًا، تواصل مع عامل صحي.",
+        night_mode: "الوضع الليلي",
+        simple_mode: "الوضع المبسّط",
+        nav_diary: "اليوميات",
+        f5_title: "يعمل بدون إنترنت",
+        f5_text: "بعد الزيارة الأولى، يستمر CroupGuard في العمل حتى بدون إنترنت.",
+        vis_note: "صوت مباشر من ميكروفونك — لا يغادر جهازك أبدًا.",
+        retry_quiet: "لم أستطع سماع السعال — كان الصوت خافتًا جدًا.",
+        retry_short: "لم أسمع أي سعال. يرجى السعال بوضوح خلال الـ 6 ثوانٍ.",
+        retry_noisy: "كان الضجيج كبيرًا جدًا لسماع بوضوح. يرجى المحاولة في مكان أكثر هدوءًا.",
+        retry_detail: "لم يُحفظ أي شيء. يرجى الاقتراب والمحاولة مرة أخرى.",
+        retry_btn: "حاول مرة أخرى",
+        emg_title: "اطلب المساعدة الآن",
+        emg_text: "ضيق التنفس قد يكون حالة طارئة. اتصل بسيارة الإسعاف الآن أو توجه إلى أقرب منشأة صحية.",
+        emg_call: "اتصل بالإسعاف — 907",
+        emg_elsewhere: "خارج إثيوبيا؟ اتصل برقم الطوارئ المحلي لديك (مثل 112 أو 911 أو 999).",
+        emg_close: "إغلاق",
+        diary_title: "يوميات الأعراض",
+        diary_desc: "يُحفظ على هذا الجهاز فقط ولا يُرفع أبدًا. مفيد لعرض الليالي على العامل الصحي.",
+        diary_empty: "لا توجد سجلات بعد. أجرِ تحليل سعال لبدء اليوميات.",
+        diary_chart: "آخر النتائج (مقياس 0–30٪)",
+        diary_clear: "مسح اليوميات",
+        diary_clear_confirm: "هل تريد حذف كل سجلات اليوميات على هذا الجهاز؟",
+        summary_btn: "عرض ملخص الرعاية",
+        summary_title: "ملخص الرعاية",
+        summary_desc: "اعرض هذه الصفحة أو اطبعها للعامل الصحي.",
+        summary_result: "تحليل السعال",
+        summary_answers: "إجاباتك",
+        warn_title: "علامات تحذيرية — اطلب المساعدة الآن",
+        warn1: "يكافح للتنفس أو عاجز عن إكمال جملة كاملة",
+        warn2: "شفتان أو وجه أزرق أو رمادي",
+        warn3: "نعسان جدًا أو مترهل أو يستيقظ بصعوبة",
+        warn4: "شرب ضعيف أو غياب الدموع عند البكاء",
+        summary_print: "طباعة / حفظ كـ PDF",
+        summary_note: "معلومات عامة فقط — وليست تشخيصًا طبيًا.",
+        text_size: "حجم النص"
       },
       pt: {
         nav_why: "Por que", nav_how: "Como funciona", nav_demo: "Demonstração", nav_about: "Sobre", nav_feedback: "Feedback",
@@ -1125,7 +1923,42 @@
         g_home: "Monitore em casa e observe qualquer mudança.",
         g_contact: "Considere entrar em contato com um profissional de saúde em breve.",
         g_urgent: "Busque atendimento médico rapidamente se a respiração estiver difícil.",
-        triage_disclaimer: "Isto é apenas informação geral, não um diagnóstico médico. Se você estiver preocupado, procure um profissional de saúde."
+        triage_disclaimer: "Isto é apenas informação geral, não um diagnóstico médico. Se você estiver preocupado, procure um profissional de saúde.",
+        night_mode: "Modo noturno",
+        simple_mode: "Modo simples",
+        nav_diary: "Diário",
+        f5_title: "Funciona offline",
+        f5_text: "Após a primeira visita, o CroupGuard continua funcionando mesmo sem internet.",
+        vis_note: "Som ao vivo do seu microfone — ele nunca sai do seu dispositivo.",
+        retry_quiet: "Não ouvi a tosse: o som foi fraco demais.",
+        retry_short: "Não escutei nenhuma tosse. Tossa com clareza durante os 6 segundos.",
+        retry_noisy: "Havia muito ruído para ouvir com clareza. Tente em um lugar mais silencioso.",
+        retry_detail: "Nada foi salvo. Chegue mais perto e tente novamente.",
+        retry_btn: "Tente novamente",
+        emg_title: "Peça ajuda agora",
+        emg_text: "A dificuldade para respirar pode ser uma emergência. Ligue para uma ambulância agora ou vá ao posto de saúde mais próximo.",
+        emg_call: "Ligar para a ambulância — 907",
+        emg_elsewhere: "Fora da Etiópia? Ligue para o número de emergência do seu país (como 112, 911 ou 999).",
+        emg_close: "Fechar",
+        diary_title: "Diário de sintomas",
+        diary_desc: "Fica apenas neste dispositivo — nunca é enviado. Útil para mostrar a um profissional de saúde como têm sido as noites.",
+        diary_empty: "Ainda não há registros. Faça uma análise da tosse para começar o diário.",
+        diary_chart: "Últimos resultados (escala 0–30%)",
+        diary_clear: "Limpar diário",
+        diary_clear_confirm: "Excluir todos os registros do diário neste dispositivo?",
+        summary_btn: "Ver o resumo de cuidados",
+        summary_title: "Resumo de cuidados",
+        summary_desc: "Mostre ou imprima esta página para um profissional de saúde.",
+        summary_result: "Análise da tosse",
+        summary_answers: "Suas respostas",
+        warn_title: "Sinais de alerta: peça ajuda agora",
+        warn1: "Com dificuldade para respirar ou incapaz de falar uma frase completa",
+        warn2: "Lábios ou rosto azulados ou acinzentados",
+        warn3: "Muito sonolento, mole ou difícil de acordar",
+        warn4: "Bebe mal ou não chora lágrimas ao chorar",
+        summary_print: "Imprimir / Salvar como PDF",
+        summary_note: "Apenas informação geral — não é um diagnóstico médico.",
+        text_size: "Tamanho do texto"
       },
       ru: {
         nav_why: "Зачем", nav_how: "Как это работает", nav_demo: "Демо", nav_about: "О проекте", nav_feedback: "Отзыв",
@@ -1177,7 +2010,42 @@
         g_home: "Наблюдайте дома и следите за изменениями.",
         g_contact: "Свяжитесь с медработником в ближайшее время.",
         g_urgent: "Обратитесь за медицинской помощью, если дыхание затруднено.",
-        triage_disclaimer: "Это только общая информация, а не медицинский диагноз. Если вы беспокоитесь, обратитесь к медработнику."
+        triage_disclaimer: "Это только общая информация, а не медицинский диагноз. Если вы беспокоитесь, обратитесь к медработнику.",
+        night_mode: "Ночной режим",
+        simple_mode: "Простой режим",
+        nav_diary: "Дневник",
+        f5_title: "Работает без интернета",
+        f5_text: "После первого визита CroupGuard продолжает работать даже без интернета.",
+        vis_note: "Живой звук с вашего микрофона — он никогда не покидает устройство.",
+        retry_quiet: "Я не услышал кашель: звук был слишком тихим.",
+        retry_short: "Я не услышал кашель. Пожалуйста, кашляйте отчётливо все 6 секунд.",
+        retry_noisy: "Было слишком шумно, чтобы расслышать. Попробуйте в более тихом месте.",
+        retry_detail: "Ничего не сохранено. Подойте ближе и попробуйте ещё раз.",
+        retry_btn: "Попробовать снова",
+        emg_title: "Немедленно позвоните за помощью",
+        emg_text: "Затруднённое дыхание может быть неотложной ситуацией. Немедленно вызовите скорую или обратитесь в ближайшее медицинское учреждение.",
+        emg_call: "Вызвать скорую — 907",
+        emg_elsewhere: "Вне Эфиопии? Позвоните по местному экстренному номеру (например, 112, 911 или 999).",
+        emg_close: "Закрыть",
+        diary_title: "Дневник симптомов",
+        diary_desc: "Хранится только на этом устройстве и никогда не загружается. Полезно показать медработнику, как проходят ночи.",
+        diary_empty: "Пока нет записей. Выполните анализ кашля, чтобы начать дневник.",
+        diary_chart: "Последние результаты (шкала 0–30%)",
+        diary_clear: "Очистить дневник",
+        diary_clear_confirm: "Удалить все записи дневника на этом устройстве?",
+        summary_btn: "Сводка по уходу",
+        summary_title: "Сводка по уходу",
+        summary_desc: "Покажите или распечатайте эту страницу для медработника.",
+        summary_result: "Анализ кашля",
+        summary_answers: "Ваши ответы",
+        warn_title: "Тревожные признаки — немедленно за помощью",
+        warn1: "Трудно дышит или не может произнести полное предложение",
+        warn2: "Синие или серые губы или лицо",
+        warn3: "Очень сонный, вялый или его трудно разбудить",
+        warn4: "Плохо пьёт или плачет без слёз",
+        summary_print: "Печать / Сохранить в PDF",
+        summary_note: "Только общая информация — не медицинский диагноз.",
+        text_size: "Размер шрифта"
       },
       bn: {
         nav_why: "কেন", nav_how: "কীভাবে কাজ করে", nav_demo: "ডেমো", nav_about: "পরিচিতি", nav_feedback: "মতামত",
@@ -1229,7 +2097,42 @@
         g_home: "বাড়িতে পর্যবেক্ষণ করুন এবং যেকোনো পরিবর্তন লক্ষ্য করুন।",
         g_contact: "শীঘ্রই স্বাস্থ্যকর্মীর সাথে যোগাযোগ করার কথা বিবেচনা করুন।",
         g_urgent: "শ্বাস নিতে কঠিন হলে দ্রুত চিকিৎসা সেবা নিন।",
-        triage_disclaimer: "এটি শুধু সাধারণ তথ্য, কোনো চিকিৎসা রোগনির্ণয় নয়। উদ্বিগ্ন হলে স্বাস্থ্যকর্মীর সাথে যোগাযোগ করুন।"
+        triage_disclaimer: "এটি শুধু সাধারণ তথ্য, কোনো চিকিৎসা রোগনির্ণয় নয়। উদ্বিগ্ন হলে স্বাস্থ্যকর্মীর সাথে যোগাযোগ করুন।",
+        night_mode: "রাতের মোড",
+        simple_mode: "সহজ মোড",
+        nav_diary: "ডায়েরি",
+        f5_title: "অফলাইনে কাজ করে",
+        f5_text: "প্রথম ভিজিটের পরে, ইন্টারনেট ছাড়াও CroupGuard চলতে থাকে।",
+        vis_note: "আপনার মাইক্রোফোনের সরাসরি শব্দ — এটি ডিভাইস ছাড়ে না।",
+        retry_quiet: "কাশি শুনতে পারিনি — শব্দটি খুব ধীর ছিল।",
+        retry_short: "কোনো কাশি শুনিনি। অনুগ্রহ করে ৬ সেকেন্ডে স্পষ্টভাবে কাশুন।",
+        retry_noisy: "পরিষ্কার শুনতে খুব শোর ছিল। অনুগ্রহ করে শান্ত জায়গায় আবার চেষ্টা করুন।",
+        retry_detail: "কিছু সংরক্ষিত হয়নি। অনুগ্রহ করে কাছে গিয়ে আবার চেষ্টা করুন।",
+        retry_btn: "আবার চেষ্টা করুন",
+        emg_title: "এখনই সাহায্য নিন",
+        emg_text: "শ্বাস নিতে কষ্ট জরুরি অবস্থা হতে পারে। এখনই অ্যাম্বুলেন্স ডাকুন বা নিকটতম স্বাস্থ্যকেন্দ্রে যান।",
+        emg_call: "অ্যাম্বুলেন্স ডাকুন — 907",
+        emg_elsewhere: "ইথিওপিয়ার বাইরে? স্থানীয় জরুরি নম্বরে ডাকুন (যেমন 112, 911 বা 999)।",
+        emg_close: "বন্ধ করুন",
+        diary_title: "উপসর্গের ডায়েরি",
+        diary_desc: "শুধু এই ডিভাইসে থাকে — কখনও আপলোড হয় না। রাতগুলো কেমন যাচ্ছে স্বাস্থ্যকর্মীকে দেখাতে সহায়ক।",
+        diary_empty: "এখনো কোনো এন্ট্রি নেই। ডায়েরি শুরু করতে কাশি বিশ্লেষণ করুন।",
+        diary_chart: "সাম্প্রতিক ফলাফল (স্কেল 0–30%)",
+        diary_clear: "ডায়েরি মুছুন",
+        diary_clear_confirm: "এই ডিভাইসের সব ডায়েরি এন্ট্রি মুছবেন?",
+        summary_btn: "দেখভাল সারাংশ দেখুন",
+        summary_title: "দেখভাল সারাংশ",
+        summary_desc: "স্বাস্থ্যকর্মীর জন্য এই পেজ দেখান বা প্রিন্ট করুন।",
+        summary_result: "কাশি বিশ্লেষণ",
+        summary_answers: "আপনার উত্তর",
+        warn_title: "ঘোষণা সংকেত — এখনই সাহায্য নিন",
+        warn1: "শ্বাস নিতে কষ্ট হচ্ছে বা পুরো বাক্য বলতে পারছে না",
+        warn2: "ঠোঁট বা মুখ নীল বা ধূসর",
+        warn3: "অত্যন্ত ঘুমঘুম, ঢিলা বা জাগানো কঠিন",
+        warn4: "ঠিকমতো পান করছে না বা কাঁদার সময় অশ্রু নেই",
+        summary_print: "প্রিন্ট করুন / PDF আকারে সংরক্ষণ",
+        summary_note: "শুধু সাধারণ তথ্য — কোনো চিকিৎসা রোগনির্ণয় নয়।",
+        text_size: "লেখার আকার"
       },
       ur: {
         nav_why: "کیوں", nav_how: "یہ کیسے کام کرتا ہے", nav_demo: "ڈیمو", nav_about: "تعارف", nav_feedback: "فیڈ بیک",
@@ -1281,7 +2184,42 @@
         g_home: "گھر پر نگرانی رکھیں اور کسی بھی تبدیلی پر غور دیں۔",
         g_contact: "جلد ہی صحت کے عملے سے رابطہ کرنے پر غور کریں۔",
         g_urgent: "اگر سانس لینا مشکل ہو تو فوراً طبی مراعات حاصل کریں۔",
-        triage_disclaimer: "یہ صرف عمومی معلومات ہیں، کوئی طبی تشخیص نہیں۔ اگر آپ پریشان ہیں تو صحت کے عملے سے رابطہ کریں۔"
+        triage_disclaimer: "یہ صرف عمومی معلومات ہیں، کوئی طبی تشخیص نہیں۔ اگر آپ پریشان ہیں تو صحت کے عملے سے رابطہ کریں۔",
+        night_mode: "رات کا موڈ",
+        simple_mode: "سادہ موڈ",
+        nav_diary: "ڈائری",
+        f5_title: "آف لائن کام کرتا ہے",
+        f5_text: "پہلی وزٹ کے بعد، انٹرنیٹ کے بغیر بھی CroupGuard چلتا رہتا ہے۔",
+        vis_note: "آپ کے مائیکروفون کی براہ راست آواز — یہ آپ کے ڈیوائس سے باہر نہیں جاتی۔",
+        retry_quiet: "مجھے کھانسی سنائی نہیں دی — آواز بہت دھیمی تھی۔",
+        retry_short: "مجھے کوئی کھانسی سنائی نہیں دی۔ براہ کرم 6 سیکنڈ میں واضح طور پر کھانسیں۔",
+        retry_noisy: "واضح سننے کے لیے بہت شور تھا۔ براہ کرم پرسکون جگہ پر دوبارہ کوشش کریں۔",
+        retry_detail: "کچھ محفوظ نہیں ہوا۔ براہ کرم قریب جا کر دوبارہ کوشش کریں۔",
+        retry_btn: "دوبارہ کوشش کریں",
+        emg_title: "ابھی مدد لیں",
+        emg_text: "سانس لینے میں مشکل ایمرجنسی ہو سکتی ہے۔ ابھی ایمبولینس بلائیں یا قریب ترین صحت کے مرکز جائیں۔",
+        emg_call: "ایمبولینس بلائیں — 907",
+        emg_elsewhere: "ایتھوپیا کے باہر ہیں؟ مقامی ایمرجنسی نمبر پر کال کریں (جیسے 112, 911 یا 999)۔",
+        emg_close: "بند کریں",
+        diary_title: "علامات کی ڈائری",
+        diary_desc: "صرف اسی ڈیوائس پر رہتا ہے — کبھی اپلوڈ نہیں ہوتا۔ صحت کے عملے کو راتوں کا حال دکھانے کے لیے مفید۔",
+        diary_empty: "ابھی کوئی اندراج نہیں۔ ڈائری شروع کرنے کے لیے کھانسی کا تجزیہ کریں۔",
+        diary_chart: "حالیہ نتائج (پیمانہ 0–30%)",
+        diary_clear: "ڈائری صاف کریں",
+        diary_clear_confirm: "اس ڈیوائس کے تمام ڈائری اندراجات حذف کریں؟",
+        summary_btn: "دیکھ بھال کا خلاصہ دیکھیں",
+        summary_title: "دیکھ بھال کا خلاصہ",
+        summary_desc: "صحت کے عملے کو یہ صفحہ دکھائیں یا پرنٹ کریں۔",
+        summary_result: "کھانسی کا تجزیہ",
+        summary_answers: "آپ کے جوابات",
+        warn_title: "انتباہ کے نشانیں — ابھی مدد لیں",
+        warn1: "سانس لینے میں مشکل یا مکمل جملہ بولنے سے قاصر",
+        warn2: "ہونٹ یا چہرہ نیلا یا خاکی",
+        warn3: "بہت نیند، ڈھیلاپن، یا جگانا مشکل",
+        warn4: "ٹھیک سے نہ پینا یا روٹے وقت آنسو نہ آنا",
+        summary_print: "پرنٹ کریں / PDF کے طور پر محفوظ کریں",
+        summary_note: "صرف عمومی معلومات — کوئی طبی تشخیص نہیں۔",
+        text_size: "متن کا سائز"
       },
       id: {
         nav_why: "Mengapa", nav_how: "Cara Kerja", nav_demo: "Demo", nav_about: "Tentang", nav_feedback: "Masukan",
@@ -1333,7 +2271,42 @@
         g_home: "Pantau di rumah dan perhatikan setiap perubahan.",
         g_contact: "Pertimbangkan untuk menghubungi tenaga kesehatan segera.",
         g_urgent: "Segera cari perawatan medis jika napas sulit.",
-        triage_disclaimer: "Ini hanya informasi umum, bukan diagnosis medis. Jika Anda khawatir, hubungi tenaga kesehatan."
+        triage_disclaimer: "Ini hanya informasi umum, bukan diagnosis medis. Jika Anda khawatir, hubungi tenaga kesehatan.",
+        night_mode: "Mode malam",
+        simple_mode: "Mode sederhana",
+        nav_diary: "Diario",
+        f5_title: "Berfungsi Offline",
+        f5_text: "Setelah kunjungan pertama, CroupGuard tetap berfungsi bahkan tanpa internet.",
+        vis_note: "Suara langsung dari mikrofon Anda — tidak pernah meninggalkan perangkat Anda.",
+        retry_quiet: "Saya tidak mendengar batuk: suaranya terlalu pelan.",
+        retry_short: "Saya tidak mendengar batuk. Silakan batuk dengan jelas selama 6 detik.",
+        retry_noisy: "Terlalu berisik untuk mendengar dengan jelas. Coba di tempat yang lebih tenang.",
+        retry_detail: "Tidak ada yang disimpan. Dekatkan perangkat lalu coba lagi.",
+        retry_btn: "Coba Lagi",
+        emg_title: "Minta bantuan sekarang",
+        emg_text: "Sesak napas bisa menjadi keadaan darurat. Panggil ambulans sekarang atau pergi ke fasilitas kesehatan terdekat.",
+        emg_call: "Panggil Ambulans — 907",
+        emg_elsewhere: "Di luar Etiopia? Telepon nomor darurat setempat (seperti 112, 911, atau 999).",
+        emg_close: "Tutup",
+        diary_title: "Diario Gejala",
+        diary_desc: "Hanya disimpan di perangkat ini — tidak pernah diunggah. Berguna untuk menunjukkan kepada tenaga kesehatan bagaimana malam-malamnya.",
+        diary_empty: "Belum ada catatan. Jalankan analisis batuk untuk memulai diari.",
+        diary_chart: "Hasil terakhir (skala 0–30%)",
+        diary_clear: "Hapus diari",
+        diary_clear_confirm: "Hapus semua catatan diari di perangkat ini?",
+        summary_btn: "Lihat Ringkasan Perawatan",
+        summary_title: "Ringkasan Perawatan",
+        summary_desc: "Tunjukkan atau cetak halaman ini untuk tenaga kesehatan.",
+        summary_result: "Analisis Batuk",
+        summary_answers: "Jawaban Anda",
+        warn_title: "Tanda peringatan — minta bantuan sekarang",
+        warn1: "Sesak napas atau tidak mampu berbicara kalimat utuh",
+        warn2: "Bibir atau wajah kebiruan atau keabuan",
+        warn3: "Sangat mengantuk, lemas, atau sulit dibangunkan",
+        warn4: "Minum sedikit atau tidak menangis saat menangis",
+        summary_print: "Cetak / Simpan sebagai PDF",
+        summary_note: "Hanya informasi umum — bukan diagnosis medis.",
+        text_size: "Ukuran teks"
       }
     };
 
@@ -1352,15 +2325,26 @@
       document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
         el.placeholder = t(el.getAttribute("data-i18n-placeholder"));
       });
+      document.querySelectorAll("[data-i18n-aria-label]").forEach(el => {
+        el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria-label")));
+      });
 
       if ("speechSynthesis" in window) window.speechSynthesis.cancel();
 
       renderResult();
       renderTriage();
+      renderDiary();
+      renderSummary();
     }
 
+    initPrefs();
     loadFeedbackCount();
     changeLanguage("en");
+    if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js").catch(function () {});
+      });
+    }
   </script>
 </body>
 </html>
