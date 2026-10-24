@@ -414,7 +414,41 @@
     let analyser = null;
     let currentLang = "en";
 
-    // ========== REAL AUDIO ANALYSIS ==========
+    // ========== VOICE HELPER ==========
+    function speak(text, langCode) {
+      if (!window.speechSynthesis) return;
+
+      // Stop any previous speech
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      // Map our language codes to speechSynthesis codes
+      const langMap = {
+        en: "en-US",
+        am: "am-ET",
+        om: "om",
+        ti: "ti",
+        zh: "zh-CN",
+        hi: "hi-IN",
+        es: "es-ES",
+        ar: "ar-SA",
+        fr: "fr-FR",
+        bn: "bn-BD",
+        pt: "pt-BR",
+        ru: "ru-RU",
+        ur: "ur-PK",
+        id: "id-ID"
+      };
+
+      utterance.lang = langMap[langCode] || "en-US";
+      utterance.rate = 0.92;
+      utterance.pitch = 1;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // ========== REAL AUDIO ANALYSIS + VOICE ==========
     async function startAnalysis() {
       const result = document.getElementById("result");
       const circle = document.getElementById("breathingCircle");
@@ -427,7 +461,6 @@
       try {
         mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-        // Set up Web Audio API
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const source = audioContext.createMediaStreamSource(mediaStream);
         analyser = audioContext.createAnalyser();
@@ -452,14 +485,18 @@
           </div>
         `;
 
+        // Speak the first message
+        speak(messages[0].replace("🎙️ ", ""), currentLang);
+
         const statusInterval = setInterval(() => {
           i++;
           if (i < messages.length) {
             document.getElementById("statusText").innerText = messages[i];
+            speak(messages[i], currentLang);
           }
-        }, 900);
+        }, 1100);
 
-        // Collect audio data for ~4.5 seconds
+        // Collect audio data
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         const timeArray = new Uint8Array(analyser.fftSize);
 
@@ -471,7 +508,6 @@
           analyser.getByteFrequencyData(dataArray);
           analyser.getByteTimeDomainData(timeArray);
 
-          // Volume (average energy)
           let sum = 0;
           for (let j = 0; j < timeArray.length; j++) {
             const val = (timeArray[j] - 128) / 128;
@@ -480,10 +516,9 @@
           const rms = Math.sqrt(sum / timeArray.length);
           volumeSum += rms;
 
-          // Rough pitch (find strongest frequency bin in mid-high range)
           let maxVal = 0;
           let maxIndex = 0;
-          for (let j = 20; j < 200; j++) { // focus on speech/cough range
+          for (let j = 20; j < 200; j++) {
             if (dataArray[j] > maxVal) {
               maxVal = dataArray[j];
               maxIndex = j;
@@ -498,7 +533,6 @@
           clearInterval(collectInterval);
           circle.classList.remove("active");
 
-          // Stop microphone
           if (mediaStream) {
             mediaStream.getTracks().forEach(track => track.stop());
             mediaStream = null;
@@ -508,17 +542,10 @@
             audioContext = null;
           }
 
-          // Calculate averages
           const avgVolume = samples > 0 ? volumeSum / samples : 0;
           const avgPitch = samples > 0 ? pitchSum / samples : 0;
 
-          // Map to percentage (higher volume + higher pitch → higher %)
-          // Volume typically 0.01–0.25, Pitch index ~30–120
-          let percent = Math.round(
-            (avgVolume * 180) + (avgPitch * 0.25)
-          );
-
-          // Keep it in a sensible range
+          let percent = Math.round((avgVolume * 180) + (avgPitch * 0.25));
           percent = Math.max(5, Math.min(percent, 68));
 
           let label, detail;
@@ -538,9 +565,13 @@
             </div>
           `;
 
+          // Speak the final result
+          const finalText = `${percent} percent. ${label}. ${detail}`;
+          speak(finalText, currentLang);
+
           btn.disabled = false;
           btn.style.opacity = "1";
-        }, 4800);
+        }, 5500);
 
       } catch (err) {
         circle.classList.remove("active");
@@ -557,7 +588,7 @@
       }
     }
 
-    // Feedback system (unchanged)
+    // Feedback
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -595,7 +626,7 @@
 
     loadFeedbackCount();
 
-    // Translations (kept short here – full ones from before still work if you already have them)
+    // Translations (English base – keep your full translations from before)
     const translations = {
       en: {
         nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
@@ -632,7 +663,7 @@
         mic_denied_title: "Microphone access was not allowed",
         mic_denied_text: "You can still try the demo. Please allow microphone access in your browser settings if you want the full experience."
       }
-      // (Keep your other language translations from before – they still work)
+      // Keep adding your other languages here as before
     };
 
     function changeLanguage(lang) {
