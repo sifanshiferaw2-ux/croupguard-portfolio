@@ -199,7 +199,7 @@
     html.night nav { background: rgba(14, 8, 5, 0.95); border-bottom-color: rgba(255, 210, 185, 0.14); }
     html.night .nav-links a { color: #c9b6ab; }
     html.night .hero { background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.13) 0%, transparent 70%); }
-    html.night .hero h1 .gradient { background: linear-gradient(135deg, #fb923c, #ef4444); }
+    html.night .hero h1 .gradient { background-image: linear-gradient(135deg, #fb923c, #ef4444); }
     html.night h2, html.night .triage-card h3, html.night .result-box .label { color: #f6c6b0; }
     html.night .btn-primary { background: linear-gradient(135deg, #f97316, #ef4444); }
     html.night .result-box .percent, html.night .count, html.night .diary-pct { color: #fb923c; }
@@ -771,7 +771,14 @@
             return;
           }
 
-          let percent = Math.round((avgVol * 120) + (maxVolume * 70) + (avgPitch * 0.15));
+          // Score = loudness + peak energy + pitch, each soft-normalised so a
+          // typical cough lands in the teens-to-twenties instead of pinning the
+          // 30% ceiling (the old raw multipliers saturated on any loud voice).
+          const clamp01 = v => Math.max(0, Math.min(1, v));
+          const loudScore = clamp01(avgVol / 0.6);
+          const peakScore = clamp01(maxVolume / 0.9);
+          const pitchScore = clamp01((avgPitch - 15) / 60);
+          let percent = 5 + Math.round(25 * (0.45 * loudScore + 0.40 * peakScore + 0.15 * pitchScore));
           percent = Math.max(5, Math.min(percent, 30));   // hard cap: never above 30%
 
           const isMild = percent >= 20;
