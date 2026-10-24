@@ -414,41 +414,60 @@
     let analyser = null;
     let currentLang = "en";
 
-    // ========== VOICE HELPER ==========
-    function speak(text, langCode) {
-      if (!window.speechSynthesis) return;
-
-      // Stop any previous speech
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-
-      // Map our language codes to speechSynthesis codes
-      const langMap = {
-        en: "en-US",
-        am: "am-ET",
-        om: "om",
-        ti: "ti",
-        zh: "zh-CN",
-        hi: "hi-IN",
-        es: "es-ES",
-        ar: "ar-SA",
-        fr: "fr-FR",
-        bn: "bn-BD",
-        pt: "pt-BR",
-        ru: "ru-RU",
-        ur: "ur-PK",
-        id: "id-ID"
+    // ========== FORCE VOICES TO LOAD ==========
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
       };
-
-      utterance.lang = langMap[langCode] || "en-US";
-      utterance.rate = 0.92;
-      utterance.pitch = 1;
-
-      window.speechSynthesis.speak(utterance);
     }
 
-    // ========== REAL AUDIO ANALYSIS + VOICE ==========
+    // ========== IMPROVED SPEAK FUNCTION ==========
+    function speak(text, langCode) {
+      if (!("speechSynthesis" in window)) return;
+
+      window.speechSynthesis.cancel();
+
+      setTimeout(() => {
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        const langMap = {
+          en: "en-US",
+          am: "am-ET",
+          om: "om",
+          ti: "ti",
+          zh: "zh-CN",
+          hi: "hi-IN",
+          es: "es-ES",
+          ar: "ar-SA",
+          fr: "fr-FR",
+          bn: "bn-BD",
+          pt: "pt-BR",
+          ru: "ru-RU",
+          ur: "ur-PK",
+          id: "id-ID"
+        };
+
+        utterance.lang = langMap[langCode] || "en-US";
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        // Try to find a good voice
+        const voices = window.speechSynthesis.getVoices();
+        let selectedVoice = voices.find(v => v.lang === utterance.lang) ||
+                            voices.find(v => v.lang.startsWith(utterance.lang.slice(0,2))) ||
+                            voices.find(v => v.lang.startsWith("en"));
+
+        if (selectedVoice) {
+          utterance.voice = selectedVoice;
+        }
+
+        window.speechSynthesis.speak(utterance);
+      }, 300);
+    }
+
+    // ========== ANALYSIS + VOICE ==========
     async function startAnalysis() {
       const result = document.getElementById("result");
       const circle = document.getElementById("breathingCircle");
@@ -470,7 +489,7 @@
         circle.classList.add("active");
 
         const messages = [
-          t.msg_recording || "🎙️ Recording... speak or cough now",
+          t.msg_recording || "Recording... speak or cough now",
           t.msg_analyzing || "Analyzing cough sample...",
           t.msg_listening || "Listening for barking features...",
           t.msg_evaluating || "Evaluating pitch and loudness...",
@@ -485,8 +504,8 @@
           </div>
         `;
 
-        // Speak the first message
-        speak(messages[0].replace("🎙️ ", ""), currentLang);
+        // Speak first message
+        speak(messages[0], currentLang);
 
         const statusInterval = setInterval(() => {
           i++;
@@ -494,9 +513,9 @@
             document.getElementById("statusText").innerText = messages[i];
             speak(messages[i], currentLang);
           }
-        }, 1100);
+        }, 1200);
 
-        // Collect audio data
+        // Collect audio features
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         const timeArray = new Uint8Array(analyser.fftSize);
 
@@ -565,21 +584,21 @@
             </div>
           `;
 
-          // Speak the final result
-          const finalText = `${percent} percent. ${label}. ${detail}`;
-          speak(finalText, currentLang);
+          // Speak final result
+          const finalSpeech = `${percent} percent. ${label}. ${detail}`;
+          speak(finalSpeech, currentLang);
 
           btn.disabled = false;
           btn.style.opacity = "1";
-        }, 5500);
+        }, 5800);
 
       } catch (err) {
         circle.classList.remove("active");
         result.innerHTML = `
           <div class="result-box">
-            <div style="font-size:1.05rem; margin-bottom:8px;">${t.mic_denied_title || "Microphone access was not allowed"}</div>
+            <div style="font-size:1.05rem; margin-bottom:8px;">Microphone access was not allowed</div>
             <div style="color:#a1a1aa; font-size:0.9rem;">
-              ${t.mic_denied_text || "You can still try the demo. Please allow microphone access in your browser settings if you want the full experience."}
+              Please allow microphone access and try again.
             </div>
           </div>
         `;
@@ -588,7 +607,7 @@
       }
     }
 
-    // Feedback
+    // Feedback system
     const COUNTER_KEY = "croupguard-feedback-2026";
     const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
 
@@ -626,7 +645,7 @@
 
     loadFeedbackCount();
 
-    // Translations (English base – keep your full translations from before)
+    // Translations
     const translations = {
       en: {
         nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
@@ -650,7 +669,7 @@
         feedback_button: "Submit Feedback",
         about_title: "About This Project",
         about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility. It is still a prototype and not a medical device. The goal is to keep improving it so more families can benefit.",
-        msg_recording: "🎙️ Recording... speak or cough now",
+        msg_recording: "Recording... speak or cough now",
         msg_analyzing: "Analyzing cough sample...",
         msg_listening: "Listening for barking features...",
         msg_evaluating: "Evaluating pitch and loudness...",
@@ -659,11 +678,8 @@
         result_low: "Low likelihood",
         result_low_detail: "Classic barking features are limited. This appears closer to a regular cough.",
         result_mild: "Mild indicators detected",
-        result_mild_detail: "Higher pitch and energy detected. Consider monitoring closely.",
-        mic_denied_title: "Microphone access was not allowed",
-        mic_denied_text: "You can still try the demo. Please allow microphone access in your browser settings if you want the full experience."
+        result_mild_detail: "Higher pitch and energy detected. Consider monitoring closely."
       }
-      // Keep adding your other languages here as before
     };
 
     function changeLanguage(lang) {
