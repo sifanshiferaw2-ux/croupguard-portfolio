@@ -86,7 +86,7 @@
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 20px; padding: 36px; margin-bottom: 28px;
     }
-    h2 { font-size: 1.5rem; margin-bottom: 16px; color: #c4b5fd; }
+    h2 { font-size: 1.5rem; margin-bottom: 16px; color: #f4f4f5; }
     .features {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;
     }
@@ -96,15 +96,57 @@
       padding: 22px; border-radius: 16px;
     }
     .feature strong { display: block; margin-bottom: 8px; color: #38bdf8; }
+
+    /* Interaction polish — deliberately quiet so the demo keeps the strongest signature */
+    .feature {
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .feature:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.16);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.35);
+    }
+    .btn-primary { transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease; }
+    .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-outline {
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.42); }
+    .btn-outline:active { transform: translateY(0); }
+    #demo .btn-primary:hover { box-shadow: 0 10px 30px rgba(236,72,153,0.4); }
+    html.night #demo .btn-primary:hover { box-shadow: 0 10px 30px rgba(249,115,22,0.42); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .breathing-circle, .breathing-circle.active { animation: none; }
+      .score-ring .ring-fill { transition: none; }
+      .feature, .btn-primary, .btn-outline { transition: none; }
+      .feature:hover, .btn-primary:hover, .btn-outline:hover { transform: none; }
+    }
     .mic-container {
       position: relative; width: 110px; height: 110px;
       margin: 0 auto 24px; display: flex; align-items: center; justify-content: center;
     }
     .breathing-circle {
       position: absolute; width: 78px; height: 78px; border-radius: 50%;
-      background: #f97316; opacity: 0; transform: scale(0.75);
+      background: transparent;
+      border: 2px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 0 22px rgba(168, 85, 247, 0.16);
+      opacity: 0.75; transform: scale(0.94);
+      animation: idle-breathe 3.4s ease-in-out infinite;
     }
-    .breathing-circle.active { animation: breathe 1.5s ease-in-out infinite; }
+    .breathing-circle.active {
+      background: #f97316; border-color: transparent;
+      box-shadow: 0 0 26px rgba(249, 115, 22, 0.5);
+      animation: breathe 1.5s ease-in-out infinite;
+    }
+    @keyframes idle-breathe {
+      0%, 100% { transform: scale(0.92); opacity: 0.5; }
+      50%      { transform: scale(1.06); opacity: 0.85; }
+    }
+    html.night .breathing-circle:not(.active) {
+      border-color: rgba(251, 146, 60, 0.45); box-shadow: 0 0 22px rgba(239, 68, 68, 0.18);
+    }
     @keyframes breathe {
       0%   { transform: scale(0.75); opacity: 0.85; }
       50%  { transform: scale(1.18); opacity: 1; }
@@ -117,8 +159,23 @@
       border: 1px solid rgba(255,255,255,0.12);
       max-width: 420px; margin-left: auto; margin-right: auto; text-align: center;
     }
-    .result-box .percent { font-size: 2.1rem; font-weight: 700; color: #ec4899; margin-bottom: 6px; }
-    .result-box .label { font-size: 1.1rem; color: #c4b5fd; margin-bottom: 8px; }
+    .score-ring { position: relative; width: 138px; height: 138px; margin: 2px auto 14px; }
+    .score-ring svg { display: block; width: 100%; height: 100%; transform: rotate(-90deg); }
+    .score-ring .ring-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 8; }
+    .score-ring .ring-fill {
+      fill: none; stroke-width: 8; stroke-linecap: round;
+      stroke-dasharray: 100; stroke-dashoffset: 100;
+      transition: stroke-dashoffset 1.05s cubic-bezier(0.25, 0.8, 0.35, 1);
+    }
+    .score-ring.low .ring-fill { stroke: #2dd4bf; }
+    .score-ring.mild .ring-fill { stroke: #f59e0b; }
+    .score-ring .ring-num {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: 1.85rem; font-weight: 800; letter-spacing: -0.02em; color: #5eead4;
+    }
+    .score-ring.mild .ring-num { color: #fbbf24; }
+    .score-ring .ring-num .pct-sign { font-size: 1.05rem; font-weight: 700; opacity: 0.85; margin-left: 1px; }
+    .result-box .label { font-size: 1.1rem; color: #e4e4e7; margin-bottom: 8px; }
     .result-box .detail { font-size: 0.9rem; color: #a1a1aa; }
 
     /* Triage */
@@ -128,7 +185,7 @@
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 16px; text-align: center;
     }
-    .triage-card h3 { font-size: 1.2rem; font-weight: 700; color: #c4b5fd; margin-bottom: 8px; }
+    .triage-card h3 { font-size: 1.2rem; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
     .triage-card > p { font-size: 0.95rem; color: #a1a1aa; margin-bottom: 18px; }
     .triage-progress {
       font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -171,14 +228,9 @@
     .guidance-icon { font-size: 1.1rem; line-height: 1.4; }
     .triage-note { font-size: 0.82rem; color: #71717a; margin-bottom: 16px; }
 
-    textarea {
-      width: 100%; padding: 18px; border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.05); color: white;
-      font-size: 1rem; margin-bottom: 16px; resize: vertical; font-family: inherit;
-    }
-    .count { font-size: 1.4rem; font-weight: 700; margin: 12px 0 18px; color: #ec4899; }
-    footer { text-align: center; padding: 50px 20px; color: #a1a1aa; }
+    footer { text-align: center; padding: 46px 20px 56px; color: #a1a1aa; border-top: 1px solid rgba(255,255,255,0.08); }
+    footer .footer-contact { margin-top: 12px; font-size: 0.98rem; }
+    footer .footer-contact a { font-weight: 600; }
     a { color: #38bdf8; }
     /* ===== Display tools (night + simple mode) ===== */
     .display-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -194,19 +246,69 @@
     .tool-btn.on { background: linear-gradient(135deg, #ec4899, #a855f7); border-color: transparent; }
     .tool-icon { font-size: 1.05rem; line-height: 1; }
 
+    /* ===== Visual hierarchy: statement -> hero card -> quiet cards ===== */
+    .nav-toggle {
+      display: none; align-items: center; justify-content: center;
+      width: 42px; height: 42px; border-radius: 12px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06);
+      color: #fff; font-size: 1.15rem; line-height: 1; font-family: inherit;
+    }
+    .nav-toggle:hover { border-color: #ec4899; }
+
+    #why {
+      background: transparent; border: none; text-align: center;
+      padding: 6px 8px 40px; margin-bottom: 26px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    #why h2 {
+      font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #a1a1aa; font-weight: 600; margin-bottom: 16px;
+    }
+    #why p {
+      max-width: 640px; margin: 0 auto; font-size: 1.16rem;
+      line-height: 1.75; color: #d4d4d8;
+    }
+
+    section.featured {
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      background:
+        radial-gradient(120% 90% at 50% 0%, rgba(168,85,247,0.16) 0%, transparent 65%),
+        rgba(255,255,255,0.04);
+      box-shadow: 0 22px 60px -28px rgba(168, 85, 247, 0.8);
+    }
+    section.featured > h2 { position: relative; padding-bottom: 15px; }
+    section.featured > h2::after {
+      content: ""; position: absolute; left: 50%; bottom: 0;
+      transform: translateX(-50%); width: 56px; height: 3px; border-radius: 3px;
+      background: linear-gradient(90deg, #ec4899, #a855f7);
+    }
+
+    section.quiet { background: rgba(255,255,255,0.022); border-color: rgba(255,255,255,0.06); }
+
+    html.night #why { border-bottom-color: rgba(255, 210, 185, 0.16); }
+    html.night #why p { color: #e6d5c9; }
+    html.night section.featured {
+      border-color: rgba(249, 115, 22, 0.5);
+      background:
+        radial-gradient(120% 90% at 50% 0%, rgba(249,115,22,0.16) 0%, transparent 65%),
+        rgba(255,205,180,0.05);
+      box-shadow: 0 22px 60px -28px rgba(239, 68, 68, 0.7);
+    }
+    html.night section.featured > h2::after { background: linear-gradient(90deg, #fb923c, #ef4444); }
+
     /* ===== Night mode — warm, dim, red-shifted for 2 a.m. use ===== */
     html.night body { background: #0e0805; color: #f6e9e1; }
     html.night nav { background: rgba(14, 8, 5, 0.95); border-bottom-color: rgba(255, 210, 185, 0.14); }
     html.night .nav-links a { color: #c9b6ab; }
     html.night .hero { background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.13) 0%, transparent 70%); }
     html.night .hero h1 .gradient { background-image: linear-gradient(135deg, #fb923c, #ef4444); }
-    html.night h2, html.night .triage-card h3, html.night .result-box .label { color: #f6c6b0; }
+    html.night h2, html.night .triage-card h3, html.night .result-box .label, html.night .summary-label { color: #f6c6b0; }
     html.night .btn-primary { background: linear-gradient(135deg, #f97316, #ef4444); }
-    html.night .result-box .percent, html.night .count, html.night .diary-pct { color: #fb923c; }
+    html.night .diary-pct { color: #fb923c; }
     html.night .feature strong, html.night a { color: #fdba74; }
     html.night .answer-btn.selected, html.night .tool-btn.on { background: linear-gradient(135deg, #f97316, #ef4444); }
     html.night .guidance-item.active { background: rgba(249, 115, 22, 0.10); border-color: rgba(249, 115, 22, 0.5); }
-    html.night select, html.night textarea { background: #1e130d; border-color: rgba(255, 210, 185, 0.22); }
+    html.night select { background: #1e130d; border-color: rgba(255, 210, 185, 0.22); }
     html.night section, html.night .triage-card, html.night .result-box,
     html.night .feature, html.night .guidance-item, html.night .diary-row,
     html.night .summary-card { background: rgba(255, 205, 180, 0.05); border-color: rgba(255, 210, 185, 0.15); }
@@ -291,10 +393,11 @@
     }
     .summary-head { display: flex; justify-content: space-between; align-items: baseline;
       gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
-    .summary-head h3 { font-size: 1.3rem; font-weight: 700; color: #c4b5fd; }
+    .summary-head h3 { font-size: 1.3rem; font-weight: 700; color: #ffffff; }
     .summary-date { font-size: 0.85rem; color: #71717a; }
     .summary-desc { font-size: 0.9rem; color: #a1a1aa; margin-bottom: 16px; }
     .summary-pct { font-size: 2rem; font-weight: 800; color: #ec4899; }
+    .summary-label { font-size: 1.02rem; font-weight: 600; color: #e4e4e7; }
     .summary-block { margin-bottom: 18px; }
     .summary-block h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.09em;
       color: #71717a; margin-bottom: 9px; }
@@ -329,9 +432,23 @@
     }
 
     @media (max-width: 700px) {
-      nav { flex-direction: column; gap: 14px; padding: 16px 20px; }
+      nav { flex-wrap: wrap; padding: 12px 16px; row-gap: 8px; }
+      .nav-toggle { display: inline-flex; margin-inline-start: auto; }
+      .nav-links {
+        display: none; width: 100%; flex-direction: column;
+        align-items: stretch; gap: 0; padding-top: 8px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 11px 4px; font-size: 1.02rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      .display-tools { justify-content: flex-start; padding-top: 12px; }
+      #language-select { width: 100%; margin-top: 10px; }
+      .hero { padding-top: 64px; }
       .hero h1 { font-size: 2.3rem; }
-      .nav-links { justify-content: center; gap: 14px; }
+    }
+    @media (max-width: 700px) {
+      html.night .nav-links { border-top-color: rgba(255, 210, 185, 0.16); }
+      html.night .nav-links a { border-bottom-color: rgba(255, 210, 185, 0.12); }
     }
     @media (max-width: 430px) {
       .answer-btn { width: 88px; height: 88px; font-size: 1.05rem; }
@@ -350,13 +467,13 @@
       </div>
       CroupGuard
     </div>
-    <div class="nav-links">
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navMenu" aria-label="Menu" data-i18n-aria-label="menu_label" onclick="toggleNavMenu()"><span aria-hidden="true">☰</span></button>
+    <div class="nav-links" id="navMenu">
       <a href="#why" data-i18n="nav_why">Why</a>
       <a href="#how" data-i18n="nav_how">How it Works</a>
       <a href="#demo" data-i18n="nav_demo">Demo</a>
       <a href="#diary" data-i18n="nav_diary">Diary</a>
       <a href="#about" data-i18n="nav_about">About</a>
-      <a href="#feedback" data-i18n="nav_feedback">Feedback</a>
       <div class="display-tools">
         <button class="tool-btn" id="nightBtn" type="button" aria-pressed="false" onclick="toggleNight()"><span class="tool-icon" aria-hidden="true">🌙</span><span data-i18n="night_mode">Night mode</span></button>
         <button class="tool-btn" id="simpleBtn" type="button" aria-pressed="false" onclick="toggleSimple()"><span class="tool-icon" aria-hidden="true">👵</span><span data-i18n="simple_mode">Simple mode</span></button>
@@ -399,7 +516,7 @@
       <p data-i18n="why_text">My family and I never recognized the early symptoms of croup. As a result, we nearly lost my younger brother three times. That experience is the reason I built CroupGuard.</p>
     </section>
 
-    <section id="demo" style="text-align:center;">
+    <section id="demo" class="featured" style="text-align:center;">
       <h2><span class="sec-emoji" aria-hidden="true">🎙️</span> <span data-i18n="demo_title">Try the Interactive Demo</span></h2>
       <p data-i18n="demo_desc" class="muted" style="margin-bottom:20px;">Tap the button and cough for 6 seconds. The microphone measures loudness and rough pitch right on your device.</p>
       <div class="mic-container">
@@ -417,7 +534,7 @@
       <p class="muted" style="margin-top:20px; font-size:0.9rem;" data-i18n="demo_note">This is only a student prototype and not a medical device.</p>
     </section>
 
-    <section id="how">
+    <section id="how" class="quiet">
       <h2><span class="sec-emoji" aria-hidden="true">✨</span> <span data-i18n="features_title">Key Features</span></h2>
       <div class="features">
         <div class="feature"><span class="feature-emoji" aria-hidden="true">🔒</span><strong data-i18n="f1_title">Privacy First</strong><p data-i18n="f1_text">Designed with on-device processing and minimal data collection.</p></div>
@@ -425,27 +542,20 @@
         <div class="feature"><span class="feature-emoji" aria-hidden="true">💡</span><strong data-i18n="f3_title">Simple & Clear</strong><p data-i18n="f3_text">Gives an estimated likelihood so families can decide when to seek care.</p></div>
         <div class="feature"><span class="feature-emoji" aria-hidden="true">⚖️</span><strong data-i18n="f4_title">Built for Equity</strong><p data-i18n="f4_text">Made so under-resourced families can access useful information more easily.</p></div>
         <div class="feature"><span class="feature-emoji" aria-hidden="true">📴</span><strong data-i18n="f5_title">Works Offline</strong><p data-i18n="f5_text">After the first visit, CroupGuard keeps working even without internet.</p></div>
+        <div class="feature"><span class="feature-emoji" aria-hidden="true">🆓</span><strong data-i18n="f6_title">Free &amp; No Sign-Up</strong><p data-i18n="f6_text">Open it and use it — no account, no paywall, no personal details.</p></div>
       </div>
     </section>
 
-    <section id="feedback">
-      <h2><span class="sec-emoji" aria-hidden="true">💬</span> <span data-i18n="feedback_title">Share Your Feedback</span></h2>
-      <p data-i18n="feedback_desc" class="muted" style="margin-bottom:8px;">Your message stays private. Only the total number is public.</p>
-      <div class="count"><span data-i18n="feedback_count_label">Feedback received:</span> <span id="feedback-count">0</span></div>
-      <textarea id="feedback-input" rows="4" data-i18n-placeholder="feedback_placeholder" placeholder="Write your feedback here..."></textarea>
-      <button class="btn-primary" onclick="submitFeedback()" data-i18n="feedback_button">Submit Feedback</button>
-    </section>
 
-    <section id="diary">
+    <section id="diary" class="quiet">
       <h2><span class="sec-emoji" aria-hidden="true">📓</span> <span data-i18n="diary_title">Symptom Diary</span></h2>
       <p class="muted" data-i18n="diary_desc" style="margin-bottom:6px;">Kept only on this device — never uploaded. Useful for showing a health worker how the nights have been going.</p>
       <div id="diary-body"></div>
     </section>
 
-    <section id="about">
+    <section id="about" class="quiet">
       <h2><span class="sec-emoji" aria-hidden="true">🎓</span> <span data-i18n="about_title">About This Project</span></h2>
       <p data-i18n="about_text">CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility.</p>
-      <p style="margin-top:16px;"><span data-i18n="about_contact">Contact:</span> <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a></p>
     </section>
   </div>
 
@@ -460,7 +570,13 @@
     </div>
   </div>
 
-  <footer data-i18n="footer_text">CroupGuard • Student Project</footer>
+  <footer>
+    <p data-i18n="footer_text">CroupGuard • Student Project</p>
+    <p class="footer-contact">
+      <span data-i18n="footer_contact">Any questions or concerns? Contact me anytime:</span>
+      <a href="mailto:sifanshiferaw2@gmail.com">sifanshiferaw2@gmail.com</a>
+    </p>
+  </footer>
 
   <script>
     let mediaStream = null;
@@ -549,10 +665,17 @@
         const detail = t(lastResult.level === "mild" ? "result_mild_detail" : "result_low_detail");
         el.innerHTML = `
           <div class="result-box">
-            <div class="percent">${lastResult.percent}%</div>
+            <div class="score-ring ${lastResult.level}" data-percent="${lastResult.percent}">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="ring-track" cx="60" cy="60" r="54"></circle>
+                <circle class="ring-fill" cx="60" cy="60" r="54" pathLength="100"></circle>
+              </svg>
+              <div class="ring-num"><span class="ring-count">0</span><span class="pct-sign">%</span></div>
+            </div>
             <div class="label">${label}</div>
             <div class="detail">${detail}</div>
           </div>`;
+        animateScoreRing(el);
       } else if (retryReason) {
         el.innerHTML = `
           <div class="result-box">
@@ -563,6 +686,34 @@
       } else {
         el.innerHTML = "";
       }
+    }
+
+    // Draws the score ring and counts the number up. The ring maps 5-30% onto
+    // its 0-30 scale, so the arc length matches the score's place on the scale.
+    function animateScoreRing(el) {
+      const ring = el.querySelector(".score-ring");
+      if (!ring) return;
+      const fill = ring.querySelector(".ring-fill");
+      const countEl = ring.querySelector(".ring-count");
+      const target = parseInt(ring.dataset.percent, 10) || 0;
+      const frac = Math.max(0, Math.min(target / 30, 1));   // scale tops out at 30%
+      const reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+      if (reduce) {
+        fill.style.strokeDashoffset = String(100 - frac * 100);
+        countEl.textContent = String(target);
+        return;
+      }
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        fill.style.strokeDashoffset = String(100 - frac * 100);
+      }));
+      const dur = 950, t0 = performance.now();
+      (function step(now) {
+        const p = Math.min((now - t0) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        countEl.textContent = String(Math.round(target * eased));
+        if (p < 1) requestAnimationFrame(step);
+        else countEl.textContent = String(target);
+      })(t0);
     }
 
     function guidanceKey() {
@@ -1039,7 +1190,7 @@
           <div class="summary-block">
             <h4>${t("summary_result")}</h4>
             <div class="summary-pct">${lastResult.percent}%</div>
-            <div style="color:#c4b5fd; font-weight:600;">${label}</div>
+            <div class="summary-label">${label}</div>
             <div class="muted" style="font-size:0.92rem; margin-top:4px;">${detail}</div>
           </div>
           <div class="summary-block">
@@ -1062,43 +1213,10 @@
         </div>`;
     }
 
-    // Feedback
-    const COUNTER_KEY = "croupguard-feedback-2026";
-    const FORMSPREE_URL = "https://formspree.io/f/xjybeldv";
-
-    async function loadFeedbackCount() {
-      try {
-        const res = await fetch(`https://countapi.mileshilliard.com/api/v1/get/${COUNTER_KEY}`);
-        const data = await res.json();
-        document.getElementById("feedback-count").textContent = data.value || 0;
-      } catch {
-        document.getElementById("feedback-count").textContent = "0";
-      }
-    }
-
-    async function submitFeedback() {
-      const msg = document.getElementById("feedback-input").value.trim();
-      if (!msg) return alert(t("feedback_empty"));
-      try {
-        await fetch(FORMSPREE_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify({ message: msg })
-        });
-        const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${COUNTER_KEY}`);
-        const data = await res.json();
-        document.getElementById("feedback-count").textContent = data.value;
-        document.getElementById("feedback-input").value = "";
-        alert(t("feedback_thanks"));
-      } catch {
-        alert(t("feedback_error"));
-      }
-    }
-
     // ========== TRANSLATIONS (14 languages, complete) ==========
     const translations = {
       en: {
-        nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About", nav_feedback: "Feedback",
+        nav_why: "Why", nav_how: "How it Works", nav_demo: "Demo", nav_about: "About",
         hero_line1: "Making early cough guidance", hero_line2: "more accessible",
         hero_sub: "A student project exploring how privacy-first design and multilingual support can help families better understand concerning coughs.",
         btn_demo: "Try the Demo", btn_goal: "See the Goal",
@@ -1113,18 +1231,10 @@
         f2_title: "Language Access", f2_text: "Supports multiple languages including Ethiopian languages.",
         f3_title: "Simple & Clear", f3_text: "Gives an estimated likelihood so families can decide when to seek care.",
         f4_title: "Built for Equity", f4_text: "Made so under-resourced families can access useful information more easily.",
-        feedback_title: "Share Your Feedback",
-        feedback_desc: "Your message stays private. Only the total number is public.",
-        feedback_count_label: "Feedback received:",
-        feedback_button: "Submit Feedback",
-        feedback_placeholder: "Write your feedback here...",
-        feedback_empty: "Please write something first.",
-        feedback_thanks: "Thank you!",
-        feedback_error: "Something went wrong. Please try again.",
         about_title: "About This Project",
         about_text: "CroupGuard is a student project created by Sifan Shiferaw. It started from a personal family experience and grew into a tool focused on early awareness, privacy, and language accessibility.",
-        about_contact: "Contact:",
         footer_text: "CroupGuard • Student Project",
+        footer_contact: "Any questions or concerns? Contact me anytime:", menu_label: "Menu",
         mic_error: "Microphone access was not allowed. Please allow the microphone and try again.",
         please_cough: "Please cough now...",
         listening: "Listening for 6 seconds",
@@ -1153,6 +1263,8 @@
         nav_diary: "Diary",
         f5_title: "Works Offline",
         f5_text: "After the first visit, CroupGuard keeps working even without internet.",
+        f6_title: "Free & No Sign-Up",
+        f6_text: "Open it and use it — no account, no paywall, no personal details.",
         vis_note: "Live sound from your microphone — it never leaves your device.",
         retry_quiet: "I couldn't hear the cough — the sound was too quiet.",
         retry_short: "I didn't hear a cough. Please cough clearly during the 6 seconds.",
@@ -1185,7 +1297,7 @@
         text_size: "Text size"
       },
       am: {
-        nav_why: "ለምን", nav_how: "እንዴት እንደሚሰራ", nav_demo: "ሙከራ", nav_about: "ስለ", nav_feedback: "አስተያየት",
+        nav_why: "ለምን", nav_how: "እንዴት እንደሚሰራ", nav_demo: "ሙከራ", nav_about: "ስለ",
         hero_line1: "የቀደመ የሳል መመሪያን", hero_line2: "ተደራሽ ማድረግ",
         hero_sub: "ግላዊነትን ያማከለ እና በብዙ ቋንቋ የሚሠራ ዕቅድ አሳሳቢ ሳሎችን ቤተሰቦች እንዴት እንደሚረዱ ለማሳያ የተማሪ ፕሮጀክት ነው።",
         btn_demo: "ሙከራ ይሞክሩ", btn_goal: "ግቡን ይመልከቱ",
@@ -1200,18 +1312,10 @@
         f2_title: "የቋንቋ መዳረሻ", f2_text: "የኢትዮጵያ ቋንቋዎችን ጨምሮ በርካታ ቋንቋዎችን ይደግፋል።",
         f3_title: "ቀላል እና ግልጽ", f3_text: "ቤተሰቦች መቼ እርዳታ እንዲፈልጉ ያስፈልጋቸውን ጊዜ ለመውሰድ የሚገመግም ዕድል ይሰጣል።",
         f4_title: "ለእኩልነት የተሰራ", f4_text: "በሚገባ ዕዳጋ የሌላቸው ቤተሰቦች በቀላሉ ጥቅማ መረጃ እንዲደርሷቸው ለማድረግ ተሠራ።",
-        feedback_title: "አስተያየትዎን ያጋሩ",
-        feedback_desc: "መልእክትዎ ግላዊ ነው። ድምር ብቻ ነው የተላለፈው።",
-        feedback_count_label: "የተቀበሉ አስተያየቶች:",
-        feedback_button: "አስተያየት ላክ",
-        feedback_placeholder: "አስተያየትዎን እዚህ ይጻፉ...",
-        feedback_empty: "እባክዎ መጀመሪያ በቃ ይጻፉ።",
-        feedback_thanks: "እናመሰግናለን!",
-        feedback_error: "ስህተት ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።",
         about_title: "ስለ ፕሮጀክቱ",
         about_text: "CroupGuard በሲፋን ሽፈራው የተሰራ የተማሪ ፕሮጀክት ነው። ከየቤተሰብ ተሞክሮ ተነስቶ በቀደም ልማት፣ በግላዊነት እና በቋንቋ መዳረሻ ላይ ያተኮረ መሣሪያ ሆኖ ነው።",
-        about_contact: "አድራሻ:",
         footer_text: "CroupGuard • የተማሪ ፕሮጀክት",
+        footer_contact: "አይበሪ ጥስ ሞት ተለበ ካትበ? ሁበቀቺ መድ ካቲያር:", menu_label: "ምባራ",
         mic_error: "የማይክሮፎን መድረስ አልተፈቀደም። እባክዎ ማይክሮፎኑን ይፈቀዱ እንደገና ይሞክሩ።",
         please_cough: "እባክዎ አሁን ይሳሉ...",
         listening: "ለ6 ሰከንድ በማዳመጥ ላይ",
@@ -1240,6 +1344,8 @@
         nav_diary: "ዳይሪ",
         f5_title: "ከኢንተርኔት ውጭ ይሰራል",
         f5_text: "ከመጀመሪያው ጉብኝት በኋላ CroupGuard ኢንተርኔት ሳይኖር ይሰራል።",
+        f6_title: "ነፃ ነው • ምዝገባ አያስፈልግም",
+        f6_text: "ቁጠባ ብለው ይክፈቱት — መለያ የለም፣ መክፈያ የለም፣ የግል መረጃዎች አያስፈልግም።",
         vis_note: "ከማይክሮፎኑ የቀጥታ ድምጽ — መሣሪያውን አይለቅም።",
         retry_quiet: "ሳሉን አልሰማሁም — ድምፁ በጣም ዝቅተኛ ነበር።",
         retry_short: "ሳል አልሰማሁም። እባክዎ በ 6 ሰከንድ ውስጥ ግልጽ ይሳሉ።",
@@ -1272,7 +1378,7 @@
         text_size: "የፊደል መጠን"
       },
       om: {
-        nav_why: "Maaliif", nav_how: "Akkamitti hojjeta", nav_demo: "Deemo", nav_about: "Waa'ee isaa", nav_feedback: "Yaada",
+        nav_why: "Maaliif", nav_how: "Akkamitti hojjeta", nav_demo: "Deemo", nav_about: "Waa'ee isaa",
         hero_line1: "Kunnuu danguuwwaa duraa", hero_line2: "bilisummaa taasisuu",
         hero_sub: "Projektii barataa kun, naannummaa dhuunfaa fi deeggarsa afaanotaan kunnuu dhangalaawaa yeroo duraa namni akkamitti hiikuu fi dinqisiifachuu danda'a bira yaadu.",
         btn_demo: "Deemo haa tuquu", btn_goal: "Guma haa ilaalu",
@@ -1287,18 +1393,10 @@
         f2_title: "Seenuu afaanota", f2_text: "Afaanota Itoophiyaa waliin afaanota badhaasa deeggara.",
         f3_title: "Salphaa fi ifa", f3_text: "Amantummaa qunnamtiif yeroo gargaarsa baraduu akka murteessan maatii walqunnamtiif yookaan faayidaa.",
         f4_title: "Walfakkaatawii ijaarame", f4_text: "Goma caalaa qabuuf maatiin ibsa faayidaa qophaa'uu salphaa taasuu.",
-        feedback_title: "Yaada kee walqunnamti",
-        feedback_desc: "Ergaa kee dhuunfaadha. Lakkoofsi qofa dhiheessama.",
-        feedback_count_label: "Yaada akkaargamee:",
-        feedback_button: "Yaada ergi",
-        feedback_placeholder: "Yaada kee asitti barreessi...",
-        feedback_empty: "Maaloo fuuduraan wabii barreessi.",
-        feedback_thanks: "Galatoomaa!",
-        feedback_error: "Waan biratti raawwatame. Maaloo irra deebi'aa yaalaa.",
         about_title: "Waa'ee projektii kunii",
         about_text: "CroupGuard projektii barataa Sifan Shiferaw ijaarameeti. Kun biyyuu maatii dhunfaatiin bilisaa fi dura yeroo yaadachuu, naannummaa dhuunfaa fi seenuu afaanota irratti xiyyeeffate gargaaraa taate.",
-        about_contact: "Nu qunnamti:",
         footer_text: "CroupGuard • Projektiin barataa",
+        footer_contact: "Gaaffii yookaan hammaa jiru? Aamaatti nu qunnami:", menu_label: "Tarreessuu",
         mic_error: "Seenuu mikrofoo'nii hin kennamine. Maaloo mikrofoo'nii kenni, irra deebi'aa yaala.",
         please_cough: "Maaloo amma kunnuu!",
         listening: "Guyyaa 6 haa eegu",
@@ -1327,6 +1425,8 @@
         nav_diary: "Diarii",
         f5_title: "Balbalaatin hojjeta",
         f5_text: "Ibsa duraa booda CroupGuard internet ilaaluu hin baanu ta'e hojjeta.",
+        f6_title: "Bilaayii • Walqaamisee hin barbaachisu",
+        f6_text: "Banadhaa ka'iitti fayyadamii — herrega hin qabnu, kaffaltii hin qabnu, odeeffannoo dhuunfaa hin barbaachisu.",
         vis_note: "Dhagaa warra kee keessaa bilisaa — warra kee keessaa qofaati.",
         retry_quiet: "Kunnuu hin dhageeffanne — dhangalaan xiqqaa dha.",
         retry_short: "Kunnuu hin dhageeffanne. Maaloo yeroo 6 keessa bu'uurummaan kunnuu.",
@@ -1359,7 +1459,7 @@
         text_size: "Hammata barreeessaa"
       },
       ti: {
-        nav_why: "ስለ እንታይ", nav_how: "እንዴት እዩ ዘሰርሕ", nav_demo: "ናሙና", nav_about: "ብዛዕባ", nav_feedback: "ሓሳብ",
+        nav_why: "ስለ እንታይ", nav_how: "እንዴት እዩ ዘሰርሕ", nav_demo: "ናሙና", nav_about: "ብዛዕባ",
         hero_line1: "ቀድሚ ዝበልጸ መመሪያ ዝግመጥ", hero_line2: "ብቐሊሉ ንምድራጹ",
         hero_sub: "ግላጺ ምትእስሳርን ብብዙሕ ቋንቋ ዝሰርሕ ዕቅድን ብምኽንያት ቤተሰባት እንታይ ከምዝቐንሱ ናይ ቅድሚ ግምጋም ብዘይኾነ መመሪያ እንዴት እንደይሕግዙ ዝመርምር ዓሰልተኛ ፕሮጀክት እዩ።",
         btn_demo: "ናሙና ፈትን", btn_goal: "ዕርእስቲ ርእይ",
@@ -1374,18 +1474,10 @@
         f2_title: "ዝደርስ ቋንቋ", f2_text: "ብዙሕ ቋንቋ ንቋንቋታት ኢትዮጵያ ጨምሮ ይደርስ።",
         f3_title: "ቀሊልን ግልጺን", f3_text: "ቤተሰባት መዓስ ክርእሱ ከም ዘኽእሉን ዕቅድ ዝዀነ ዕድል ይሃብ።",
         f4_title: "ንእስነት ዝዀነ", f4_text: "ንጕደላ ዘይኮኑ ቤተሰባት ብቐሊሉ ጥቅሚ መረጃ ንምርካብ ተሰሪዙ።",
-        feedback_title: "ሓሳብኹም ሓባሩ",
-        feedback_desc: "መልእኽትኹም ግላጺ እዩ። ቁጽሪ ጥራይ እዩ ዝህረ።",
-        feedback_count_label: "ዝተቐበለ ሓሳብ:",
-        feedback_button: "ሓሳብ ስደድ",
-        feedback_placeholder: "ሓሳብኹም እዚ ጽሓፉ...",
-        feedback_empty: "ናይ መጀመሪያ ንሓደ ቃል ጽሓፉ።",
-        feedback_thanks: "ስለደሓኑም!",
-        feedback_error: "ሓደ ጌጋ ተፈጢሩ። እባክኩም ደጊምኩም።",
         about_title: "ብዛዕባ እዚ ፕሮጀክት",
         about_text: "CroupGuard ካብ ሲፋን ሽፈራው ዝተሰረዐ ዓሰልተኛ ፕሮጀክት እዩ። ካብ ግዕዝ ቤተሰብ ተሞክሮ ጀሚሩ ናይ ቅድሚ ስጋም ግላጺ ቋንቋ ዝተመስረተ መሳርሒ ሆኑ።",
-        about_contact: "ዝርክብ:",
         footer_text: "CroupGuard • ዓሰልተኛ ፕሮጀክት",
+        footer_contact: "ሥስ ቀር ጥስ ሞት ክርበ ሽስ? ብቺርስነበ ያላትራበ:", menu_label: "ምባራ",
         mic_error: "ማይክሮፎን መዘكب ኣይተፈቀደን። እባክኩም ማይክሮፎን ይፈቀዱ ደጊምኩም።",
         please_cough: "እባክኩም ሕጂ ግመጡ...",
         listening: "ሰለስተ ሰከንድ ይሰምዕ ኣሎ",
@@ -1414,6 +1506,8 @@
         nav_diary: "ዳይሪ",
         f5_title: "ካብ ኢንተርኔት ወጻኢ ይሰርሕ",
         f5_text: "ካብቲቀደም ዝኸደበ ጉብኝት ዘሎ ኢንተርኔት ዘይሓוץ CroupGuard ይሰርሕ ኣሎ።",
+        f6_title: "ነጻ እና መመዝገቢ ኣይሓትትን",
+        f6_text: "ክፈትካ ተጠቐም — መለለዪ የለን፣ ክፍሊ የለን፣ ዝግል ሓበሻ ኣይ ሓትትን።",
         vis_note: "ካብ ማይክሮፎንኹም ብቐጥታ ዝሰምዕ ድምጺ — ካብ መስኮትኹም ኣይወጽእን።",
         retry_quiet: "ግመጡ ኣይሰምዕኩን — ድምጺ ብዙሕ ዝቅጠለ ነይሩ።",
         retry_short: "ግመጡ ኣይሰምዕኩን። እባክኩም ኣብ 6 ሰከንድ ውሽጢ ግልጺ ግመጡ።",
@@ -1446,7 +1540,7 @@
         text_size: "መጠን ፊደል"
       },
       es: {
-        nav_why: "Por qué", nav_how: "Cómo funciona", nav_demo: "Demo", nav_about: "Acerca de", nav_feedback: "Comentarios",
+        nav_why: "Por qué", nav_how: "Cómo funciona", nav_demo: "Demo", nav_about: "Acerca de",
         hero_line1: "Hacer que la guía temprana de la tos", hero_line2: "sea más accesible",
         hero_sub: "Un proyecto estudiantil que explora cómo el diseño centrado en la privacidad y el soporte multilingüe pueden ayudar a las familias a entender mejor las tos preocupantes.",
         btn_demo: "Probar la Demo", btn_goal: "Ver el Objetivo",
@@ -1461,18 +1555,10 @@
         f2_title: "Acceso a idiomas", f2_text: "Compatible con varios idiomas, incluidos los idiomas etíopes.",
         f3_title: "Simple y claro", f3_text: "Ofrece una probabilidad estimada para ayudar a las familias a decidir cuándo buscar atención.",
         f4_title: "Creado para la equidad", f4_text: "Hecho para que las familias con menos recursos puedan acceder más fácilmente a información útil.",
-        feedback_title: "Comparte tus comentarios",
-        feedback_desc: "Tu mensaje permanece privado. Solo el número total es público.",
-        feedback_count_label: "Comentarios recibidos:",
-        feedback_button: "Enviar comentarios",
-        feedback_placeholder: "Escribe tu comentario aquí...",
-        feedback_empty: "Por favor escribe algo primero.",
-        feedback_thanks: "¡Gracias!",
-        feedback_error: "Algo salió mal. Inténtalo de nuevo.",
         about_title: "Acerca de este proyecto",
         about_text: "CroupGuard es un proyecto estudiantil creado por Sifan Shiferaw. Nació de una experiencia familiar y se convirtió en una herramienta centrada en la conciencia temprana, la privacidad y el acceso a idiomas.",
-        about_contact: "Contacto:",
         footer_text: "CroupGuard • Proyecto estudiantil",
+        footer_contact: "¿Tienes preguntas o dudas de cualquier tipo? Contáctame cuando quieras:", menu_label: "Menú",
         mic_error: "No se permitió el acceso al micrófono. Permite el micrófono e inténtalo de nuevo.",
         please_cough: "Por favor tose ahora...",
         listening: "Escuchando durante 6 segundos",
@@ -1501,6 +1587,8 @@
         nav_diary: "Diario",
         f5_title: "Funciona sin conexión",
         f5_text: "Tras la primera visita, CroupGuard sigue funcionando incluso sin internet.",
+        f6_title: "Gratis y sin registro",
+        f6_text: "Ábrelo y úsalo — sin cuenta, sin muros de pago, sin datos personales.",
         vis_note: "Sonido en vivo de tu micrófono: nunca sale de tu dispositivo.",
         retry_quiet: "No pude oír la tos: el sonido fue demasiado bajo.",
         retry_short: "No escuché ninguna tos. Tose con claridad durante los 6 segundos.",
@@ -1533,7 +1621,7 @@
         text_size: "Tamaño del texto"
       },
       fr: {
-        nav_why: "Pourquoi", nav_how: "Comment ça marche", nav_demo: "Démo", nav_about: "À propos", nav_feedback: "Commentaires",
+        nav_why: "Pourquoi", nav_how: "Comment ça marche", nav_demo: "Démo", nav_about: "À propos",
         hero_line1: "Rendre les conseils précoces sur la toux", hero_line2: "plus accessibles",
         hero_sub: "Un projet étudiant qui explore comment une conception respectueuse de la vie privée et la prise en charge de plusieurs langues peuvent aider les familles à mieux comprendre les toux préoccupantes.",
         btn_demo: "Essayer la démo", btn_goal: "Voir l'objectif",
@@ -1548,18 +1636,10 @@
         f2_title: "Accès aux langues", f2_text: "Prend en charge plusieurs langues, y compris les langues éthiopiennes.",
         f3_title: "Simple et clair", f3_text: "Donne une probabilité estimée pour aider les familles à décider quand consulter.",
         f4_title: "Conçu pour l'équité", f4_text: "Créé pour que les familles défavorisées accèdent plus facilement à des informations utiles.",
-        feedback_title: "Partagez vos commentaires",
-        feedback_desc: "Votre message reste privé. Seul le nombre total est public.",
-        feedback_count_label: "Commentaires reçus :",
-        feedback_button: "Envoyer les commentaires",
-        feedback_placeholder: "Écrivez votre commentaire ici...",
-        feedback_empty: "Veuillez d'abord écrire quelque chose.",
-        feedback_thanks: "Merci !",
-        feedback_error: "Une erreur s'est produite. Veuillez réessayer.",
         about_title: "À propos de ce projet",
         about_text: "CroupGuard est un projet étudiant créé par Sifan Shiferaw. Il est né d'une expérience familiale et est devenu un outil axé sur la sensibilisation précoce, la confidentialité et l'accessibilité linguistique.",
-        about_contact: "Contact :",
         footer_text: "CroupGuard • Projet étudiant",
+        footer_contact: "Des questions ou des préoccupations, quelle qu'elles soient ? Contactez-moi à tout moment :", menu_label: "Menu",
         mic_error: "L'accès au micro n'a pas été autorisé. Veuillez autoriser le micro et réessayer.",
         please_cough: "Veuillez tousser maintenant...",
         listening: "Écoute pendant 6 secondes",
@@ -1588,6 +1668,8 @@
         nav_diary: "Journal",
         f5_title: "Fonctionne hors ligne",
         f5_text: "Après la première visite, CroupGuard continue de fonctionner même sans internet.",
+        f6_title: "Gratuit et sans inscription",
+        f6_text: "Ouvrez-le et utilisez-le — aucun compte, aucun paiement, aucune donnée personnelle.",
         vis_note: "Son en direct de votre micro : il ne quitte jamais votre appareil.",
         retry_quiet: "Je n'ai pas entendu la toux : le son était trop faible.",
         retry_short: "Je n'ai entendu aucune toux. Tousser clairement pendant les 6 secondes.",
@@ -1620,7 +1702,7 @@
         text_size: "Taille du texte"
       },
       zh: {
-        nav_why: "为什么", nav_how: "工作原理", nav_demo: "演示", nav_about: "关于", nav_feedback: "反馈",
+        nav_why: "为什么", nav_how: "工作原理", nav_demo: "演示", nav_about: "关于",
         hero_line1: "让早期咳嗽指导", hero_line2: "更加触手可及",
         hero_sub: "一个学生项目，探索隐私优先的设计和多语言支持如何帮助家庭更好地理解令人担忧的咳嗽。",
         btn_demo: "试用演示", btn_goal: "了解目标",
@@ -1635,18 +1717,10 @@
         f2_title: "语言可及", f2_text: "支持多种语言，包括埃塞俄比亚语言。",
         f3_title: "简单清晰", f3_text: "给出一个估计的可能性，帮助家庭决定何时就医。",
         f4_title: "为公平而建", f4_text: "让资源有限的家庭也能更方便地获取有用的信息。",
-        feedback_title: "分享您的反馈",
-        feedback_desc: "您的留言保持私密，只有总数是公开的。",
-        feedback_count_label: "已收到反馈：",
-        feedback_button: "提交反馈",
-        feedback_placeholder: "在此写下您的反馈……",
-        feedback_empty: "请先写点什么。",
-        feedback_thanks: "谢谢！",
-        feedback_error: "出了点问题，请再试一次。",
         about_title: "关于这个项目",
         about_text: "CroupGuard 是由 Sifan Shiferaw 创建的学生项目。它源于一次家庭经历，并发展成一个关注早期认知、隐私和语言可及性的工具。",
-        about_contact: "联系方式：",
         footer_text: "CroupGuard • 学生项目",
+        footer_contact: "有任何问题或疑虑？随时联系我：", menu_label: "菜单",
         mic_error: "未获得麦克风权限。请允许麦克风后重试。",
         please_cough: "请现在咳嗽……",
         listening: "正在聆听 6 秒",
@@ -1675,6 +1749,8 @@
         nav_diary: "日记",
         f5_title: "离线也能用",
         f5_text: "首次访问后，即使没有网络 CroupGuard 也能继续使用。",
+        f6_title: "免费且无需注册",
+        f6_text: "打开即用 — 不需要账号、不收费、不收集个人信息。",
         vis_note: "来自麦克风的实时声音——绝不离开您的设备。",
         retry_quiet: "我没有听到咳嗽声——声音太小了。",
         retry_short: "我没有听到咳嗽。请在 6 秒内清楚地咳嗽。",
@@ -1707,7 +1783,7 @@
         text_size: "字体大小"
       },
       hi: {
-        nav_why: "क्यों", nav_how: "कैसे काम करता है", nav_demo: "डेमो", nav_about: "परिचय", nav_feedback: "प्रतिक्रिया",
+        nav_why: "क्यों", nav_how: "कैसे काम करता है", nav_demo: "डेमो", nav_about: "परिचय",
         hero_line1: "शुरुआती खांसी मार्गदर्शन को", hero_line2: "अधिक सुलभ बनाना",
         hero_sub: "एक छात्र परियोजना जो यह पता लगाती है कि गोपनीयता-प्रथम डिज़ाइन और बहुभाषी समर्थन चिंताजनक खांसी को बेहतर ढंग से समझने में परिवारों की कैसे मदद कर सकते हैं।",
         btn_demo: "डेमो आज़माएँ", btn_goal: "लक्ष्य देखें",
@@ -1722,18 +1798,10 @@
         f2_title: "भाषा तक पहुँच", f2_text: "इथियोपियाई भाषाओं सहित कई भाषाओं का समर्थन करता है।",
         f3_title: "सरल और स्पष्ट", f3_text: "एक अनुमानित संभावना देता है ताकि परिवार तय कर सकें कि कब सहायता लेनी है।",
         f4_title: "समानता के लिए बनाया गया", f4_text: "ताकि कम संसाधनों वाले परिवार भी उपयोगी जानकारी आसानी से पा सकें।",
-        feedback_title: "अपनी प्रतिक्रिया साझा करें",
-        feedback_desc: "आपका संदेश निजी रहता है। केवल कुल संख्या सार्वजनिक है।",
-        feedback_count_label: "मिली प्रतिक्रियाएँ:",
-        feedback_button: "प्रतिक्रिया भेजें",
-        feedback_placeholder: "यहाँ अपनी प्रतिक्रिया लिखें...",
-        feedback_empty: "कृपया पहले कुछ लिखें।",
-        feedback_thanks: "धन्यवाद!",
-        feedback_error: "कुछ गलत हो गया। कृपया फिर से प्रयास करें।",
         about_title: "इस परियोजना के बारे में",
         about_text: "CroupGuard Sifan Shiferaw द्वारा बनाई गई एक छात्र परियोजना है। इसकी शुरुआत एक निजी पारिवारिक अनुभव से हुई और यह जल्दी पहचान, गोपनीयता और भाषाई पहुँच पर केंद्रित एक उपकरण बन गई।",
-        about_contact: "संपर्क:",
         footer_text: "CroupGuard • छात्र परियोजना",
+        footer_contact: "कोई भी प्रश्न या चिंता होतो कभी भी संपर्क करें:", menu_label: "मेनू",
         mic_error: "माइक्रोफ़ोन की अनुमति नहीं मिली। कृपया माइक्रोफ़ोन की अनुमति दें और फिर से प्रयास करें।",
         please_cough: "कृपया अभी खाँसें...",
         listening: "6 सेकंड तक सुन रहे हैं",
@@ -1762,6 +1830,8 @@
         nav_diary: "डायरी",
         f5_title: "ऑफ़लाइन काम करता है",
         f5_text: "पहली बार विज़िट के बाद, बिना इंटरनेट के भी CroupGuard चलता रहता है।",
+        f6_title: "मुफ़्त और बिना साइन-अप",
+        f6_text: "खोलिए और इस्तेमाल कीजिए — कोई अकाउंट नहीं, कोई शुल्क नहीं, कोई व्यक्तिगत जानकारी नहीं।",
         vis_note: "आपके माइक्रोफ़ोन की लाइव आवाज़ — यह आपके डिवाइस से बाहर नहीं जाती।",
         retry_quiet: "मुझे खाँसी सुनाई नहीं दी — आवाज़ बहुत धीमी थी।",
         retry_short: "मुझे खाँसी नहीं सुनाई दी। कृपया 6 सेकंड में साफ़ खाँसें।",
@@ -1794,7 +1864,7 @@
         text_size: "अक्षर का आकार"
       },
       ar: {
-        nav_why: "لماذا", nav_how: "كيف يعمل", nav_demo: "العرض التجريبي", nav_about: "حول", nav_feedback: "الملاحظات",
+        nav_why: "لماذا", nav_how: "كيف يعمل", nav_demo: "العرض التجريبي", nav_about: "حول",
         hero_line1: "جعل إرشادات السعال المبكر", hero_line2: "أكثر سهولة في الوصول",
         hero_sub: "مشروع طلابي يستكشف كيف يمكن للتصميم المعتمد على الخصوصية ودعم اللغات المتعددة أن يساعد الأسر على فهم السعال المقلق بشكل أفضل.",
         btn_demo: "جرّب العرض", btn_goal: "اطّلع على الهدف",
@@ -1809,18 +1879,10 @@
         f2_title: "الوصول إلى اللغات", f2_text: "يدعم عدة لغات، بما في ذلك اللغات الإثيوبية.",
         f3_title: "بسيط وواضح", f3_text: "يُعطي احتمالية تقديرية حتى تقرر الأسر متى تطلب الرعاية.",
         f4_title: "مصمم من أجل العدالة", f4_text: "صُمّم لتتمكن الأسر ذات الموارد المحدودة من الوصول إلى معلومات مفيدة بسهولة أكبر.",
-        feedback_title: "شارك ملاحظاتك",
-        feedback_desc: "رسالتك تبقى خاصة. المجموع فقط هو المنشور.",
-        feedback_count_label: "الملاحظات المستلمة:",
-        feedback_button: "إرسال الملاحظة",
-        feedback_placeholder: "اكتب ملاحظتك هنا...",
-        feedback_empty: "يرجى كتابة شيء أولاً.",
-        feedback_thanks: "شكرًا لك!",
-        feedback_error: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
         about_title: "عن هذا المشروع",
         about_text: "CroupGuard هو مشروع طلابي أنشأه Sifan Shiferaw. بدأ من تجربة عائلية شخصية وتطور إلى أداة تركز على الوعي المبكر والخصوصية وإتاحة اللغة.",
-        about_contact: "الاتصال:",
         footer_text: "CroupGuard • مشروع طلابي",
+        footer_contact: "لديك أي أسئلة أو مخاور بأي شكل؟ تواصل معي في أي وقت:", menu_label: "القائمة",
         mic_error: "لم يُسمح باستخدام الميكروفون. يرجى السماح بالميكروفون والمحاولة مرة أخرى.",
         please_cough: "يرجى السعال الآن...",
         listening: "جارٍ الاستماع لمدة 6 ثوانٍ",
@@ -1849,6 +1911,8 @@
         nav_diary: "اليوميات",
         f5_title: "يعمل بدون إنترنت",
         f5_text: "بعد الزيارة الأولى، يستمر CroupGuard في العمل حتى بدون إنترنت.",
+        f6_title: "مجاني وبدون تسجيل",
+        f6_text: "افتحه واستخدمه — بدون حساب، بدون رسوم، بدون بيانات شخصية.",
         vis_note: "صوت مباشر من ميكروفونك — لا يغادر جهازك أبدًا.",
         retry_quiet: "لم أستطع سماع السعال — كان الصوت خافتًا جدًا.",
         retry_short: "لم أسمع أي سعال. يرجى السعال بوضوح خلال الـ 6 ثوانٍ.",
@@ -1881,7 +1945,7 @@
         text_size: "حجم النص"
       },
       pt: {
-        nav_why: "Por que", nav_how: "Como funciona", nav_demo: "Demonstração", nav_about: "Sobre", nav_feedback: "Feedback",
+        nav_why: "Por que", nav_how: "Como funciona", nav_demo: "Demonstração", nav_about: "Sobre",
         hero_line1: "Tornar a orientação precoce sobre a tosse", hero_line2: "mais acessível",
         hero_sub: "Um projeto estudantil que explora como o design focado na privacidade e o suporte a vários idiomas podem ajudar as famílias a entender melhor toses preocupantes.",
         btn_demo: "Testar a demonstração", btn_goal: "Ver o objetivo",
@@ -1896,18 +1960,10 @@
         f2_title: "Acesso a idiomas", f2_text: "Suporta vários idiomas, incluindo línguas etíopes.",
         f3_title: "Simples e claro", f3_text: "Dá uma probabilidade estimada para que as famílias decidam quando buscar atendimento.",
         f4_title: "Feito para a equidade", f4_text: "Feito para que famílias com menos recursos acessem informações úteis com mais facilidade.",
-        feedback_title: "Compartilhe seu feedback",
-        feedback_desc: "Sua mensagem permanece privada. Apenas o número total é público.",
-        feedback_count_label: "Feedbacks recebidos:",
-        feedback_button: "Enviar feedback",
-        feedback_placeholder: "Escreva seu feedback aqui...",
-        feedback_empty: "Por favor, escreva algo primeiro.",
-        feedback_thanks: "Obrigado!",
-        feedback_error: "Algo deu errado. Tente novamente.",
         about_title: "Sobre este projeto",
         about_text: "O CroupGuard é um projeto estudantil criado por Sifan Shiferaw. Começou com uma experiência familiar e se tornou uma ferramenta focada em conscientização precoce, privacidade e acessibilidade de idiomas.",
-        about_contact: "Contato:",
         footer_text: "CroupGuard • Projeto estudantil",
+        footer_contact: "Tem alguma dúvida ou preocupação? Contacte-me quando quiser:", menu_label: "Menu",
         mic_error: "O acesso ao microfone não foi permitido. Permita o microfone e tente novamente.",
         please_cough: "Por favor, tosa agora...",
         listening: "Ouvindo por 6 segundos",
@@ -1936,6 +1992,8 @@
         nav_diary: "Diário",
         f5_title: "Funciona offline",
         f5_text: "Após a primeira visita, o CroupGuard continua funcionando mesmo sem internet.",
+        f6_title: "Grátis e sem cadastro",
+        f6_text: "Abra e use — sem conta, sem paywall, sem dados pessoais.",
         vis_note: "Som ao vivo do seu microfone — ele nunca sai do seu dispositivo.",
         retry_quiet: "Não ouvi a tosse: o som foi fraco demais.",
         retry_short: "Não escutei nenhuma tosse. Tossa com clareza durante os 6 segundos.",
@@ -1968,7 +2026,7 @@
         text_size: "Tamanho do texto"
       },
       ru: {
-        nav_why: "Зачем", nav_how: "Как это работает", nav_demo: "Демо", nav_about: "О проекте", nav_feedback: "Отзыв",
+        nav_why: "Зачем", nav_how: "Как это работает", nav_demo: "Демо", nav_about: "О проекте",
         hero_line1: "Делать ранние рекомендации при кашле", hero_line2: "более доступными",
         hero_sub: "Студенческий проект, который исследует, как приватный дизайн и поддержка нескольких языков могут помочь семьям лучше понять тревожный кашель.",
         btn_demo: "Попробовать демо", btn_goal: "Узнать цель",
@@ -1983,18 +2041,10 @@
         f2_title: "Доступ к языкам", f2_text: "Поддерживает несколько языков, включая языки Эфиопии.",
         f3_title: "Просто и понятно", f3_text: "Показывает примерную вероятность, чтобы семья понимала, когда обращаться за помощью.",
         f4_title: "Создано для равенства", f4_text: "Сделано так, чтобы семьи с ограниченными ресурсами могли легче получить полезную информацию.",
-        feedback_title: "Оставьте отзыв",
-        feedback_desc: "Ваше сообщение остаётся приватным. Публикуется только общее количество.",
-        feedback_count_label: "Получено отзывов:",
-        feedback_button: "Отправить отзыв",
-        feedback_placeholder: "Напишите свой отзыв здесь...",
-        feedback_empty: "Пожалуйста, сначала напишите что-нибудь.",
-        feedback_thanks: "Спасибо!",
-        feedback_error: "Что-то пошло не так. Попробуйте ещё раз.",
         about_title: "Об этом проекте",
         about_text: "CroupGuard — студенческий проект, созданный Сифаном Шиферау. Он начался с личной семейной истории и превратился в инструмент о раннем внимании, приватности и доступности языков.",
-        about_contact: "Контакт:",
         footer_text: "CroupGuard • Студенческий проект",
+        footer_contact: "Есть вопросы или опасения? Связитесь со мной в любое время:", menu_label: "Меню",
         mic_error: "Доступ к микрофону не был разрешён. Разрешите микрофон и попробуйте снова.",
         please_cough: "Пожалуйста, кашляйте сейчас...",
         listening: "Слушаем 6 секунд",
@@ -2023,6 +2073,8 @@
         nav_diary: "Дневник",
         f5_title: "Работает без интернета",
         f5_text: "После первого визита CroupGuard продолжает работать даже без интернета.",
+        f6_title: "Бесплатно и без регистрации",
+        f6_text: "Открывайте и пользуйтесь — без аккаунта, без платной стены, без личных данных.",
         vis_note: "Живой звук с вашего микрофона — он никогда не покидает устройство.",
         retry_quiet: "Я не услышал кашель: звук был слишком тихим.",
         retry_short: "Я не услышал кашель. Пожалуйста, кашляйте отчётливо все 6 секунд.",
@@ -2055,7 +2107,7 @@
         text_size: "Размер шрифта"
       },
       bn: {
-        nav_why: "কেন", nav_how: "কীভাবে কাজ করে", nav_demo: "ডেমো", nav_about: "পরিচিতি", nav_feedback: "মতামত",
+        nav_why: "কেন", nav_how: "কীভাবে কাজ করে", nav_demo: "ডেমো", nav_about: "পরিচিতি",
         hero_line1: "প্রাথমিক কাশি সংক্রান্ত নির্দেশনাকে", hero_line2: "আরও সহজলভ্য করা",
         hero_sub: "একটি শিক্ষার্থী প্রকল্প, যা গোপনীয়তা-কেন্দ্রিক নকশা ও বহুভাষিক সমর্থন কীভাবে পরিবারগুলোর উদ্বেগজনক কাশি ভালোভাবে বুঝতে সাহায্য করতে পারে তা তদন্ত করে।",
         btn_demo: "ডেমো দেখুন", btn_goal: "লক্ষ্য দেখুন",
@@ -2070,18 +2122,10 @@
         f2_title: "ভাষাগত প্রবেশাধিকার", f2_text: "ইথিওপীয় ভাষাসহ একাধিক ভাষা সমর্থন করে।",
         f3_title: "সহজ ও স্পষ্ট", f3_text: "পরিবার কখন সেবা নেবে সেটি ঠিক করতে একটি আনুমানিক সম্ভাব্যতা দেয়।",
         f4_title: "সমতার জন্য তৈরি", f4_text: "যেন কম সম্পদসম্পন্ন পরিবারও উপকারী তথ্য সহজে পেতে পারে।",
-        feedback_title: "আপনার মতামত শেয়ার করুন",
-        feedback_desc: "আপনার বার্তা ব্যক্তিগত থাকে। শুধু মোট সংখ্যাটি সর্বজনীন।",
-        feedback_count_label: "প্রাপ্ত মতামত:",
-        feedback_button: "মতামত পাঠান",
-        feedback_placeholder: "এখানে আপনার মতামত লিখুন...",
-        feedback_empty: "অনুগ্রহ করে আগে কিছু লিখুন।",
-        feedback_thanks: "ধন্যবাদ!",
-        feedback_error: "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।",
         about_title: "এই প্রকল্প সম্পর্কে",
         about_text: "CroupGuard Sifan Shiferaw তৈরি একটি শিক্ষার্থী প্রকল্প। এটি একটি ব্যক্তিগত পারিবারিক অভিজ্ঞতা থেকে শুরু হয়ে প্রাথমিক সচেতনতা, গোপনীয়তা ও ভাষাগত প্রবেশযোগ্যতায় কেন্দ্রীভূত একটি সরঞ্জামে পরিণত হয়েছে।",
-        about_contact: "যোগাযোগ:",
         footer_text: "CroupGuard • শিক্ষার্থী প্রকল্প",
+        footer_contact: "कोनो प्रश्न जन्‌य उद्बेग थाकले येकोनो समय आमार साथे योगायोग करुन:", menu_label: "মেনু",
         mic_error: "মাইক্রোফোনে অনুমতি দেওয়া হয়নি। অনুগ্রহ করে মাইক্রোফোনে অনুমতি দিন এবং আবার চেষ্টা করুন।",
         please_cough: "অনুগ্রহ করে এখন কাশুন...",
         listening: "৬ সেকেন্ড ধরে শুনছি",
@@ -2110,6 +2154,8 @@
         nav_diary: "ডায়েরি",
         f5_title: "অফলাইনে কাজ করে",
         f5_text: "প্রথম ভিজিটের পরে, ইন্টারনেট ছাড়াও CroupGuard চলতে থাকে।",
+        f6_title: "ফ্রি ও সাইন-আপ ছাড়া",
+        f6_text: "খুলে ব্যবহার করুন — কোনো অ্যাকাউন্ট নেই, কোনো পেওয়াল নেই, কোনো ব্যক্তিগত তথ্য নেই।",
         vis_note: "আপনার মাইক্রোফোনের সরাসরি শব্দ — এটি ডিভাইস ছাড়ে না।",
         retry_quiet: "কাশি শুনতে পারিনি — শব্দটি খুব ধীর ছিল।",
         retry_short: "কোনো কাশি শুনিনি। অনুগ্রহ করে ৬ সেকেন্ডে স্পষ্টভাবে কাশুন।",
@@ -2142,7 +2188,7 @@
         text_size: "লেখার আকার"
       },
       ur: {
-        nav_why: "کیوں", nav_how: "یہ کیسے کام کرتا ہے", nav_demo: "ڈیمو", nav_about: "تعارف", nav_feedback: "فیڈ بیک",
+        nav_why: "کیوں", nav_how: "یہ کیسے کام کرتا ہے", nav_demo: "ڈیمو", nav_about: "تعارف",
         hero_line1: "ابتدائی کھانسی کی رہنمائی کو", hero_line2: "مزید قابل رسائی بنانا",
         hero_sub: "ایک طالب علم کا منصوبہ جو یہ جانچتا ہے کہ پرائیویسی-پہلے ڈیزائن اور کثیر لسانی سپورٹ خاندانوں کو پریشان کن کھانسی بہتر سمجھنے میں کیسے مدد دے سکتے ہیں۔",
         btn_demo: "ڈیمو آزمائیں", btn_goal: "مقصد دیکھیں",
@@ -2157,18 +2203,10 @@
         f2_title: "زبان کی رسائی", f2_text: "ایتھوپین زبانوں سمیت متعدد زبانوں کی سپورٹ کرتا ہے۔",
         f3_title: "آسان اور واضح", f3_text: "خاندانوں کو یہ طے کرنے کے لیے کہ کب مراعات لینی ہے، ایک اندازہ شدہ امکان دیتا ہے۔",
         f4_title: "برابری کے لیے بنایا گیا", f4_text: "تاقی کم وسائل والے خاندان بھی مفید معلومات آسانی سے حاصل کر سکیں۔",
-        feedback_title: "اپنا فیڈ بیک شیئر کریں",
-        feedback_desc: "آپ کا پیغام خصوصی رہتا ہے۔ صرف کل تعداد عام ہے۔",
-        feedback_count_label: "موصول فیڈ بیک:",
-        feedback_button: "فیڈ بیک بھیجیں",
-        feedback_placeholder: "یہاں اپنا فیڈ بیک لکھیں...",
-        feedback_empty: "براہ کرم پہلے کچھ لکھیں۔",
-        feedback_thanks: "شکریہ!",
-        feedback_error: "کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔",
         about_title: "اس منصوبے کے بارے میں",
         about_text: "CroupGuard Sifan Shiferaw کی طرف سے بنایا گیا ایک طالب علم کا منصوبہ ہے۔ یہ ذاتی خاندانی تجربے سے شروع ہوا اور ابتدائی آگاہی، پرائیویسی اور زبان کی رسائی پر مرکز ایک آلہ بن گیا۔",
-        about_contact: "رابطہ:",
         footer_text: "CroupGuard • طالب علم کا منصوبہ",
+        footer_contact: "کوئی سوال یا فکر ہو تو کسی بهی وقت رابطہ کرین:", menu_label: "مینو",
         mic_error: "مائیکروفون کی اجازت نہیں ملی۔ براہ کرم مائیکروفون کی اجازت دیں اور دوبارہ کوشش کریں۔",
         please_cough: "براہ کرم ابھی کھانسیں...",
         listening: "6 سیکنڈ سن رہے ہیں",
@@ -2197,6 +2235,8 @@
         nav_diary: "ڈائری",
         f5_title: "آف لائن کام کرتا ہے",
         f5_text: "پہلی وزٹ کے بعد، انٹرنیٹ کے بغیر بھی CroupGuard چلتا رہتا ہے۔",
+        f6_title: "مفت اور سائن اپ کے بغیر",
+        f6_text: "کھولیں اور استعمال کریں — کوئی اکاؤنٹ نہیں، کوئی پے وال نہیں، کوئی ذاتی معلومات نہیں۔",
         vis_note: "آپ کے مائیکروفون کی براہ راست آواز — یہ آپ کے ڈیوائس سے باہر نہیں جاتی۔",
         retry_quiet: "مجھے کھانسی سنائی نہیں دی — آواز بہت دھیمی تھی۔",
         retry_short: "مجھے کوئی کھانسی سنائی نہیں دی۔ براہ کرم 6 سیکنڈ میں واضح طور پر کھانسیں۔",
@@ -2229,7 +2269,7 @@
         text_size: "متن کا سائز"
       },
       id: {
-        nav_why: "Mengapa", nav_how: "Cara Kerja", nav_demo: "Demo", nav_about: "Tentang", nav_feedback: "Masukan",
+        nav_why: "Mengapa", nav_how: "Cara Kerja", nav_demo: "Demo", nav_about: "Tentang",
         hero_line1: "Membuat panduan batuk awal", hero_line2: "lebih mudah diakses",
         hero_sub: "Proyek siswa yang meneliti bagaimana desain berbasis privasi dan dukungan multibahasa dapat membantu keluarga memahami batuk yang mengkhawatirkan dengan lebih baik.",
         btn_demo: "Coba Demo", btn_goal: "Lihat Tujuannya",
@@ -2244,18 +2284,10 @@
         f2_title: "Akses Bahasa", f2_text: "Mendukung banyak bahasa, termasuk bahasa Ethiopia.",
         f3_title: "Sederhana & Jelas", f3_text: "Memberikan perkiraan kemungkinan agar keluarga dapat memutuskan kapan harus mencari perawatan.",
         f4_title: "Dibuat untuk Keadilan", f4_text: "Dibuat agar keluarga dengan sumber terbatas dapat mengakses informasi berguna dengan lebih mudah.",
-        feedback_title: "Bagikan Masukan Anda",
-        feedback_desc: "Pesan Anda tetap pribadi. Hanya jumlah total yang bersifat publik.",
-        feedback_count_label: "Masukan diterima:",
-        feedback_button: "Kirim Masukan",
-        feedback_placeholder: "Tulis masukan Anda di sini...",
-        feedback_empty: "Silakan tulis sesuatu terlebih dahulu.",
-        feedback_thanks: "Terima kasih!",
-        feedback_error: "Terjadi kesalahan. Silakan coba lagi.",
         about_title: "Tentang Proyek Ini",
         about_text: "CroupGuard adalah proyek pelajar yang dibuat oleh Sifan Shiferaw. Proyek ini bermula dari pengalaman keluarga dan berkembang menjadi alat yang berfokus pada kewaspadaan awal, privasi, dan akses bahasa.",
-        about_contact: "Kontak:",
         footer_text: "CroupGuard • Proyek Pelajar",
+        footer_contact: "Ada pertanyaan atau kekhawatiran apa pun? Hubungi saya kapan saja:", menu_label: "Menu",
         mic_error: "Akses mikrofon tidak diizinkan. Izinkan mikrofon lalu coba lagi.",
         please_cough: "Silakan batuk sekarang...",
         listening: "Mendengarkan selama 6 detik",
@@ -2284,6 +2316,8 @@
         nav_diary: "Diario",
         f5_title: "Berfungsi Offline",
         f5_text: "Setelah kunjungan pertama, CroupGuard tetap berfungsi bahkan tanpa internet.",
+        f6_title: "Gratis & Tanpa Daftar",
+        f6_text: "Buka dan langsung pakai — tanpa akun, tanpa biaya, tanpa data pribadi.",
         vis_note: "Suara langsung dari mikrofon Anda — tidak pernah meninggalkan perangkat Anda.",
         retry_quiet: "Saya tidak mendengar batuk: suaranya terlalu pelan.",
         retry_short: "Saya tidak mendengar batuk. Silakan batuk dengan jelas selama 6 detik.",
@@ -2344,9 +2378,24 @@
       renderSummary();
     }
 
-    initPrefs();
-    loadFeedbackCount();
-    changeLanguage("en");
+    function toggleNavMenu() {
+      const menu = document.getElementById("navMenu");
+      const btn = document.getElementById("navToggle");
+      const open = menu.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.querySelector("span").textContent = open ? "✕" : "☰";
+    }
+    function closeNavMenu() {
+      const menu = document.getElementById("navMenu");
+      const btn = document.getElementById("navToggle");
+      if (!menu.classList.contains("open")) return;
+      menu.classList.remove("open");
+      btn.setAttribute("aria-expanded", "false");
+      btn.querySelector("span").textContent = "☰";
+    }
+    document.querySelectorAll(".nav-links a").forEach(a => a.addEventListener("click", closeNavMenu));
+
+    initPrefs();    changeLanguage("en");
     if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
       window.addEventListener("load", function () {
         navigator.serviceWorker.register("sw.js").catch(function () {});
