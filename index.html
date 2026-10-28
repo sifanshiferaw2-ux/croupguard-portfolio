@@ -6,6 +6,20 @@
   <title>CroupGuard</title>
   <meta name="theme-color" content="#0b0b12" />
   <meta name="description" content="CroupGuard — privacy-first, multilingual early cough guidance. A student prototype, not a medical device." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CroupGuard" />
+  <meta property="og:title" content="CroupGuard — Making early cough guidance more accessible" />
+  <meta property="og:description" content="Cough for 6 seconds and get a calm likelihood estimate with general guidance — privacy-first, fully offline, in 14 languages. A student prototype, not a medical device." />
+  <meta property="og:url" content="https://sifanshiferaw2-ux.github.io/croupguard-portfolio/" />
+  <meta property="og:image" content="https://sifanshiferaw2-ux.github.io/croupguard-portfolio/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="CroupGuard — Making early cough guidance more accessible" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CroupGuard — Making early cough guidance more accessible" />
+  <meta name="twitter:description" content="Cough for 6 seconds and get a calm likelihood estimate with general guidance — privacy-first, fully offline, in 14 languages." />
+  <meta name="twitter:image" content="https://sifanshiferaw2-ux.github.io/croupguard-portfolio/og-image.png" />
+  <link rel="canonical" href="https://sifanshiferaw2-ux.github.io/croupguard-portfolio/" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" href="icon-192.png" />
   <link rel="apple-touch-icon" href="icon-192.png" />
@@ -1126,7 +1140,7 @@
         try { dateStr = new Date(entry.ts).toLocaleString(currentLang); }
         catch (err) { dateStr = new Date(entry.ts).toLocaleString(); }
         const flags = Array.isArray(entry.answers)
-          ? entry.answers.map(a => (a ? "✅" : "❌")).join(" ")
+          ? entry.answers.map(a => (a ? "⚠️" : "✅")).join(" ")
           : "";
         const gi = entry.guidance && gIcons[entry.guidance] ? gIcons[entry.guidance] : "";
         return `<div class="diary-row"><span class="diary-when">${dateStr}</span>` +
@@ -1170,7 +1184,7 @@
       const answersHtml = triage.answers.map((a, i) => `
         <div class="summary-ans">
           <span>${t(QUESTIONS[i])}</span>
-          <span class="badge">${a ? "✅ " + t("ans_yes") : "❌ " + t("ans_no")}</span>
+          <span class="badge">${a ? "⚠️ " + t("ans_yes") : "✅ " + t("ans_no")}</span>
         </div>`).join("");
 
       const warnsHtml = ["warn1", "warn2", "warn3", "warn4"].map(k => `
